@@ -1,0 +1,43 @@
+--- upstream/Comp.lean
++++ Vendor/CookLevin/Comp.lean
+@@ -1,4 +1,5 @@
+-import Problems.PVersusNP.Millennium
++-- Modified by Monteverde: ported to Lean v4.36.0-rc2. See Vendor/CookLevin/CHANGES.md.
++import Vendor.Millennium.Millennium
+ 
+ /-!
+ # Composition of polynomial-time two-stack Turing machines
+@@ -462,7 +463,7 @@
+   funext k
+   rcases k with k | k | u
+   · by_cases h : k = M₁.k₀
+-    · subst h; simp [mkStk, compTM]
++    · subst h; simp [mkStk, compTM]; rfl -- PORT (toolchain): `simp` leaves a trivial cast.
+     · simp [mkStk, compTM, h]
+   · simp [mkStk, compTM]
+   · simp [mkStk, compTM]
+@@ -475,7 +476,7 @@
+   rcases k with k | k | u
+   · simp [mkStk, compTM]
+   · by_cases h : k = M₂.k₁
+-    · subst h; simp [mkStk, compTM]
++    · subst h; simp [mkStk, compTM]; rfl -- PORT (toolchain): `simp` leaves a trivial cast.
+     · simp [mkStk, compTM, h]
+   · simp [mkStk, compTM]
+ 
+@@ -552,9 +553,13 @@
+   · show (flip bind (compTM h₁.tm h₂.tm φ).step)^[_]
+         (some (initList (compTM h₁.tm h₂.tm φ) inp)) =
+       Option.map (haltList (compTM h₁.tm h₂.tm φ)) (some out)
+-    rw [initList_compTM, Option.map_some, haltList_compTM]
++    -- PORT (toolchain): `Option.map_some` no longer matches here; same rewrite by `change`.
++    rw [initList_compTM]
++    change _ = some (haltList (compTM h₁.tm h₂.tm φ) out)
++    rw [haltList_compTM]
+     change (flip bind (TM2.step (prog h₁.tm h₂.tm φ)))^[_] _ = _
+-    rw [iterate_add_apply, iterate_add_apply, iterate_add_apply]
++    -- PORT (toolchain): `rw` rejects the configuration types here; `erw` does the same rewrite.
++    erw [iterate_add_apply, iterate_add_apply, iterate_add_apply]
+     erw [P₁, P₂, P₃, P₄]
+     rfl
+   · -- Time bound.

@@ -40,7 +40,7 @@ independent kernel check.
 |-----------|---------|-------|
 | M0 | Pins, vendored Clay file, diff check, CI | Done |
 | M1 | L0 block code, finite work alphabets, L1 forward bridge, Clay P to cslib P | Done |
-| M2 | L1 reverse bridge (recoder machine, TM2 composition) | Not started |
+| M2 | L1 reverse bridge (recoder machine, TM2 composition), L1 iff, Clay P ↔ cslib P | Done |
 | M3 | L2 class bridges for P and NP, bits form | Not started |
 | M4 | Headline theorems, claim check, axiom check, isolation, non-vacuity tests | Not started |
 | M5 | Size count, independent kernel check, credits, release | Not started |
@@ -60,6 +60,7 @@ The claim refers to these commits. Moving a pin is a deliberate release step.
 
 ```
 Vendor/Millennium/   Clay definitions, ported to this toolchain (see CHANGES.md, port.patch)
+Vendor/CookLevin/    TM2 composition from millennium-cook-levin, ported the same way
 Monteverde/          The bridge, in four layers:
   Encoding/          L0: block code, pairs, certificates
   Function/          L1: polynomial-time functions, both directions
