@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Monteverde: the Clay P vs NP statement and P vs NP in cslib-frontier are equivalent</title>
+<meta name="description" content="A Lean 4 proof that the LeanMillenniumPrizeProblems formulation of the Clay P vs NP statement is equivalent to P vs NP in cslib-frontier, the largest Lean complexity library.">
+<meta name="theme-color" content="#0C110F">
+<meta property="og:title" content="Monteverde">
+<meta property="og:description" content="A Lean 4 proof that the Clay P vs NP statement and P vs NP in cslib-frontier are equivalent.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230C110F'/%3E%3Ccircle cx='11' cy='16' r='5' fill='%23F0A06A'/%3E%3Ccircle cx='21' cy='16' r='5' fill='%236DB3EC'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Martian+Mono:wght@300;400;500;600&display=swap">
+<style>
+:root {
+  --bg: #0C110F;
+  --surface: #121915;
+  --raised: #18211C;
+  --border: #26312B;
+  --hairline: #1C2621;
+  --btn-border: #33413A;
+  --text: #E8ECE7;
+  --body: #C9D0CA;
+  --muted: #9AA69F;
+  --faint: #7E8A83;
+  --clay: #F0A06A;
+  --cslib: #6DB3EC;
+  --bar: #4A5A51;
+  --underline: #5C6B63;
+  --display: "Martian Mono", ui-monospace, monospace;
+  --sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --pad: clamp(20px, 4vw, 40px);
+}
+* { box-sizing: border-box; }
+html { background: var(--bg); color-scheme: dark; scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--body);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 var(--pad); }
+h1, h2, h3 {
+  font-family: var(--display);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin: 0;
+}
+h1 { font-size: clamp(32px, 5.2vw, 56px); line-height: 1.12; max-width: 20ch; }
+h2 { font-size: 26px; line-height: 1.25; margin-bottom: 16px; }
+h3 { font-size: 17px; line-height: 1.35; margin-bottom: 10px; overflow-wrap: anywhere; }
+p { margin: 0 0 16px; max-width: 64ch; }
+p:last-child { margin-bottom: 0; }
+strong { color: var(--text); font-weight: 600; }
+a {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: var(--underline);
+  text-underline-offset: 3px;
+  padding-block: 12px;
+}
+a:hover { color: var(--cslib); text-decoration-color: var(--cslib); }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--cslib); outline-offset: 3px; border-radius: 4px; }
+code, .mono { font-family: var(--mono); font-size: 0.92em; }
+p code, li code, td code { color: var(--text); }
+.label {
+  font-family: var(--display);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  font-weight: 400;
+}
+.skip {
+  position: absolute; left: -9999px; top: 0;
+  background: var(--raised); color: var(--text); padding: 12px 16px; z-index: 10;
+}
+.skip:focus { left: 16px; top: 16px; }
+
+/* Header */
+header.site { border-bottom: 1px solid var(--hairline); }
+header.site .wrap {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: 8px 24px; min-height: 72px; padding-top: 8px; padding-bottom: 8px;
+}
+.wordmark {
+  font-family: var(--display); font-weight: 600; font-size: 17px; letter-spacing: -0.02em;
+  color: var(--text); text-decoration: none; display: inline-flex; align-items: center; gap: 10px;
+  min-height: 44px; padding: 0;
+}
+.wordmark .dots { display: inline-flex; gap: 4px; }
+.dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; flex: none; }
+.dot.clay { background: var(--clay); }
+.dot.cslib { background: var(--cslib); }
+nav ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0 4px; }
+nav a {
+  font-family: var(--display); font-size: 13px; font-weight: 400; color: var(--muted);
+  text-decoration: none; display: inline-flex; align-items: center; min-height: 44px; padding: 0 10px;
+}
+nav a:hover { color: var(--text); }
+
+/* Sections */
+section { padding: 72px 0; border-bottom: 1px solid var(--hairline); }
+section.hero { padding-top: 96px; }
+.intro { font-size: 18px; color: var(--body); max-width: 64ch; margin-top: 24px; }
+.section-lead { margin-bottom: 32px; }
+
+/* Buttons */
+.actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; min-height: 44px;
+  padding: 0 18px; border: 1px solid var(--btn-border); border-radius: 8px;
+  font-family: var(--display); font-size: 13px; font-weight: 500; color: var(--text);
+  text-decoration: none; background: transparent;
+}
+.btn:hover { border-color: var(--cslib); color: var(--text); }
+.btn.primary { background: var(--raised); }
+
+/* Cards */
+.card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 26px;
+}
+.grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
+.card p { font-size: 15px; }
+.card h3 { display: flex; align-items: center; gap: 10px; }
+
+/* Hero panel */
+.hero-panel {
+  margin-top: 56px; background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; overflow: hidden;
+}
+.hero-panel pre { margin: 0; padding: 28px; border-bottom: 1px solid var(--border); }
+.facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.fact { padding: 20px 28px; border-right: 1px solid var(--hairline); }
+.fact:last-child { border-right: 0; }
+.fact .value { font-family: var(--mono); color: var(--text); font-size: 14px; margin-top: 6px; line-height: 1.5; }
+
+/* Code */
+pre {
+  font-family: var(--mono); font-size: 15px; line-height: 1.75; color: var(--body);
+  overflow-x: auto; margin: 0;
+}
+pre.block {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px 26px;
+}
+.kw { color: var(--muted); }
+.thm { color: var(--text); font-weight: 700; }
+.clay { color: var(--clay); }
+.cslib { color: var(--cslib); }
+.op { color: var(--text); }
+.cm { color: var(--faint); }
+
+/* Bridge diagram */
+.scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.bridge { min-width: 860px; display: grid; grid-template-columns: 1fr 300px 1fr; }
+.bridge .head {
+  padding: 0 24px 14px; display: flex; align-items: center; gap: 10px;
+  font-family: var(--display); font-size: 13px; color: var(--text); font-weight: 500;
+}
+.bridge .head.center { justify-content: center; color: var(--muted); font-weight: 400; }
+.bridge .head.right { justify-content: flex-end; }
+.side {
+  padding: 20px 24px; border-top: 1px solid var(--hairline); position: relative;
+  font-family: var(--mono); font-size: 13.5px; line-height: 1.7;
+}
+.side.clay-side { border-left: 2px solid var(--clay); }
+.side.cslib-side { border-right: 2px solid var(--cslib); text-align: right; }
+.side .layer { font-family: var(--display); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+.side.clay-side::before, .side.cslib-side::after {
+  content: ""; position: absolute; top: 26px; width: 9px; height: 9px; border-radius: 50%;
+}
+.side.clay-side::before { left: -5.5px; background: var(--clay); }
+.side.cslib-side::after { right: -5.5px; background: var(--cslib); }
+.link-col {
+  border-top: 1px solid var(--hairline); padding: 20px 16px; display: flex; flex-direction: column;
+  justify-content: center; align-items: center; text-align: center; gap: 4px;
+}
+.link-col .arrow { font-family: var(--mono); color: var(--text); font-size: 18px; line-height: 1; }
+.link-col code { font-size: 12.5px; color: var(--text); font-weight: 500; }
+
+/* Tables */
+.table-box { overflow-x: auto; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 15px; }
+th {
+  font-family: var(--display); font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--muted); font-weight: 400; text-align: left; padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+}
+td { padding: 14px 20px; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+tr:last-child td { border-bottom: 0; }
+td.num, th.num { text-align: right; font-family: var(--mono); white-space: nowrap; }
+td .file { font-family: var(--mono); font-size: 13.5px; color: var(--faint); }
+
+/* Bars */
+.bars { display: grid; gap: 18px; }
+.bar-row { display: grid; grid-template-columns: minmax(180px, 280px) 1fr 96px; gap: 20px; align-items: center; }
+.bar-name { color: var(--text); font-size: 15px; }
+.bar-name small { display: block; color: var(--faint); font-family: var(--mono); font-size: 12px; }
+.bar-track { height: 10px; }
+.bar-fill { height: 10px; background: var(--bar); border-radius: 0 4px 4px 0; }
+.bar-fill.cslib-bar { background: var(--cslib); }
+.bar-num { font-family: var(--mono); color: var(--text); text-align: right; font-size: 15px; }
+
+/* Lists */
+ul.plain { margin: 0; padding-left: 20px; max-width: 64ch; }
+ul.plain li { margin-bottom: 10px; }
+ul.plain li::marker { color: var(--faint); }
+
+/* Footer */
+footer { padding: 56px 0 72px; color: var(--muted); font-size: 14px; }
+footer .cols { display: grid; grid-template-columns: 2fr 1fr; gap: 32px; }
+footer pre { font-size: 13px; line-height: 1.6; color: var(--faint); }
+
+@media (max-width: 900px) {
+  .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .fact:nth-child(2) { border-right: 0; }
+  .fact:nth-child(-n+2) { border-bottom: 1px solid var(--hairline); }
+  footer .cols { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .grid-2, .grid-4, .facts { grid-template-columns: 1fr; }
+  .fact { border-right: 0; border-bottom: 1px solid var(--hairline); }
+  .fact:last-child { border-bottom: 0; }
+  .hero-panel pre { padding: 20px; font-size: 13.5px; }
+  pre { font-size: 13.5px; }
+  .bar-row { grid-template-columns: 1fr 80px; gap: 8px 12px; }
+  .bar-name { grid-column: 1 / -1; }
+  section { padding: 56px 0; }
+  section.hero { padding-top: 64px; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site">
+  <div class="wrap">
+    <a class="wordmark" href="#top"><span class="dots" aria-hidden="true"><span class="dot clay"></span><span class="dot cslib"></span></span>monteverde</a>
+    <nav aria-label="Sections">
+      <ul>
+        <li><a href="#theorems">Theorems</a></li>
+        <li><a href="#bridge">Bridge</a></li>
+        <li><a href="#proof">Proof</a></li>
+        <li><a href="#trust">Trust</a></li>
+        <li><a href="#size">Size</a></li>
+        <li><a href="https://github.com/wbnns/monteverde">GitHub</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="hero" id="top">
+  <div class="wrap">
+    <h1>The Clay P vs NP statement and P vs NP in cslib-frontier are equivalent.</h1>
+    <p class="intro">Monteverde proves in Lean 4 that the
+      LeanMillenniumPrizeProblems formulation of the Clay P vs NP
+      statement is equivalent to P vs NP in cslib-frontier, the
+      largest Lean complexity library. It does not resolve P vs NP. It connects the two
+      statements, so that a Lean result about one is a Lean result about the other.</p>
+    <div class="actions">
+      <a class="btn primary" href="https://github.com/wbnns/monteverde">View on GitHub</a>
+      <a class="btn" href="https://github.com/wbnns/monteverde/releases/tag/v1.1.0">Release v1.1.0</a>
+      <a class="btn" href="https://github.com/wbnns/monteverde/tree/main/Monteverde/Statements">Read the statements</a>
+    </div>
+
+    <div class="hero-panel" id="theorems">
+<pre><code><span class="cm">-- Monteverde/Statements/Defs.lean</span>
+<span class="kw">def</span> <span class="cslib">CslibPEqNP</span> : Prop :=
+  ∀ {α : Type} (enc : α ↪ List Bool), <span class="cslib">Cslib.Complexity.P</span> enc = <span class="cslib">Cslib.Complexity.NP</span> enc
+
+<span class="cm">-- Monteverde/Headline/</span>
+<span class="kw">theorem</span> <span class="thm">clay_iff_cslib</span> : <span class="clay">Millennium.ClayPVersusNP</span> <span class="op">↔</span> <span class="cslib">CslibPEqNP</span>
+<span class="kw">theorem</span> <span class="thm">clay_negative_iff_cslib</span> :
+    <span class="clay">Millennium.ClayPVersusNP.Formulations.NegativeBranch</span> <span class="op">↔</span> ¬ <span class="cslib">CslibPEqNP</span>
+<span class="kw">theorem</span> <span class="thm">cslibPEqNP_iff_bits</span> : <span class="cslib">CslibPEqNP</span> <span class="op">↔</span> <span class="cslib">P encBits = NP encBits</span></code></pre>
+      <div class="facts">
+        <div class="fact"><div class="label">Axioms</div><div class="value">propext, Classical.choice, Quot.sound</div></div>
+        <div class="fact"><div class="label">Independent check</div><div class="value">nanoda: 16,507 declarations, no errors</div></div>
+        <div class="fact"><div class="label">Lean</div><div class="value">v4.36.0-rc2</div></div>
+        <div class="fact"><div class="label">License</div><div class="value">Apache-2.0</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="statements">
+  <div class="wrap">
+    <h2>Two definitions of P and NP</h2>
+    <p class="section-lead">Both libraries build on Mathlib, but they define P and NP in
+      different ways. Monteverde proves that the differences do not matter: the classes agree,
+      so the two P = NP statements agree.</p>
+    <div class="grid-2">
+      <div class="card">
+        <h3><span class="dot clay" aria-hidden="true"></span>Clay</h3>
+        <p>As LeanMillenniumPrizeProblems formalizes Cook's problem description. Mathlib's multi-stack Turing machine <code>FinTM2</code>. Inputs are words over any
+          finite alphabet. NP uses Cook's checking relation: certificates over any finite
+          alphabet, with length at most <code>|w|^k</code>, checked on the pair word
+          <code>w#y</code>.</p>
+        <p><code class="clay">ClayPVersusNP</code> says P = NP for every alphabet with at
+          least two symbols.</p>
+      </div>
+      <div class="card">
+        <h3><span class="dot cslib" aria-hidden="true"></span>cslib-frontier</h3>
+        <p>A binary multi-tape Turing machine. Inputs are any type with an injective binary
+          encoding <code>enc : α ↪ List Bool</code>. NP uses a Boolean verifier with binary
+          certificates of length exactly <code>p(n)</code>.</p>
+        <p>cslib-frontier has no named P = NP proposition. Its theorems state it for every
+          encoding, so <code class="cslib">CslibPEqNP</code> takes that form.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="bridge">
+  <div class="wrap">
+    <h2>The bridge</h2>
+    <p class="section-lead">Four layers connect the two sides. Each layer uses only the layers
+      under it, and each link is a Lean theorem.</p>
+    <div class="scroll" role="region" aria-label="Bridge diagram, scrolls sideways" tabindex="0">
+      <div class="bridge">
+        <div class="head"><span class="dot clay" aria-hidden="true"></span>Clay</div>
+        <div class="head center">Monteverde</div>
+        <div class="head right">cslib-frontier<span class="dot cslib" aria-hidden="true"></span></div>
+
+        <div class="side clay-side"><div class="layer">Statements</div><span class="clay">ClayPVersusNP</span><br><span class="clay">NegativeBranch</span></div>
+        <div class="link-col"><span class="arrow" aria-hidden="true">↔</span><code>clay_iff_cslib</code><code>clay_negative_iff_cslib</code></div>
+        <div class="side cslib-side"><div class="layer">Statements</div><span class="cslib">CslibPEqNP</span><br><span class="cslib">P encBits = NP encBits</span></div>
+
+        <div class="side clay-side"><div class="layer">Classes</div><span class="clay">InPolynomialTime</span><br><span class="clay">InNondeterministicPolynomialTime</span><br><span class="clay">PolynomialTimeReducible</span></div>
+        <div class="link-col"><span class="arrow" aria-hidden="true">↔</span><code>clayP_iff_cslib</code><code>clayNP_iff_cslib</code><code>clayReducible_iff_cslib</code></div>
+        <div class="side cslib-side"><div class="layer">Classes</div><span class="cslib">P (blockEnc Γ)</span><br><span class="cslib">NP (blockEnc Γ)</span><br><span class="cslib">PolyTimeReducible</span></div>
+
+        <div class="side clay-side"><div class="layer">Functions</div><span class="clay">TM2ComputableInPolyTime e eo f</span></div>
+        <div class="link-col"><span class="arrow" aria-hidden="true">↔</span><code>tm2_iff_computableInPolyTime_words</code></div>
+        <div class="side cslib-side"><div class="layer">Functions</div><span class="cslib">ComputableInPolyTime f</span></div>
+
+        <div class="side clay-side"><div class="layer">Encodings</div><span class="clay">words over Γ</span><br><span class="clay">w#y</span>, certificates over Γ₁</div>
+        <div class="link-col"><span class="arrow" aria-hidden="true">↔</span><code>blockEnc</code><code>pairWord</code><code>certDecoder</code></div>
+        <div class="side cslib-side"><div class="layer">Encodings</div><span class="cslib">List Bool</span><br><span class="cslib">encPair</span>, binary certificates</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="proof">
+  <div class="wrap">
+    <h2>How the proof works</h2>
+    <p class="section-lead">About 2,100 lines of new Lean, in <code>Monteverde/</code>.</p>
+    <div class="grid-2">
+      <div class="card">
+        <h3>Encodings</h3>
+        <p>The block code writes the symbol with index <code>i</code> as the bits
+          <code>(1 1)^i 0</code>, and a word as the concatenation of its symbols. Clay's pair
+          word <code>w#y</code> converts to <code>encPair</code> and back in polynomial time.
+          A new total decoder reads certificates over any finite alphabet.</p>
+      </div>
+      <div class="card">
+        <h3>Functions</h3>
+        <p>Forward: Mathlib's <code>FinTM2</code> makes only the input alphabet finite. A push
+          writes a function of the finite state, so only finitely many symbols can reach a
+          stack; Monteverde restricts the stacks to them, then applies cslib-frontier's bridge.
+          Reverse: a recoder, cslib-frontier's compiler and a decoder run in sequence, joined
+          by the TM2 composition theorem from millennium-cook-levin.</p>
+      </div>
+      <div class="card">
+        <h3>Classes</h3>
+        <p>P follows from the function bridge. For NP, the cslib-frontier verifier decodes a
+          Clay certificate and runs the Clay checker, and padding fixes the length. The other
+          way, Clay certificates are bits, and the bound <code>|w|^k</code> covers the
+          verifier's length once <code>|w| ≥ 2</code>. Words of length 0 and 1 use a lookup
+          table.</p>
+      </div>
+      <div class="card">
+        <h3>Statements</h3>
+        <p>From Clay: apply the Clay statement at the alphabet <code>Bool</code> to the binary
+          image of SAT, then use cslib-frontier's Cook-Levin theorem to get P = NP for every
+          encoding. To Clay: for each alphabet <code>Γ</code>, use the encoding
+          <code>blockEnc Γ</code> and the class bridges.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="use">
+  <div class="wrap">
+    <h2>Use it</h2>
+    <p class="section-lead">A Lean result on one side now transfers to the other. These
+      examples are checked in CI.</p>
+<pre class="block"><code><span class="kw">import</span> Monteverde
+
+<span class="cm">-- A cslib-frontier proof of P = NP on binary strings gives the Clay statement.</span>
+<span class="kw">example</span> (h : <span class="cslib">P encBits = NP encBits</span>) : <span class="clay">Millennium.ClayPVersusNP</span> :=
+  <span class="thm">clay_iff_cslib</span>.mpr (<span class="thm">cslibPEqNP_iff_bits</span>.mpr h)
+
+<span class="cm">-- A problem in cslib-frontier NP but not in P gives the negative Clay statement.</span>
+<span class="kw">example</span> {α : Type} (enc : α ↪ List Bool) (A : Set α) (hNP : A ∈ <span class="cslib">NP</span> enc) (hP : A ∉ <span class="cslib">P</span> enc) :
+    <span class="clay">Millennium.ClayPVersusNP.Formulations.NegativeBranch</span> :=
+  <span class="thm">clay_negative_iff_cslib</span>.mpr fun h => hP (<span class="kw">by</span> rw [h enc]; exact hNP)</code></pre>
+    <ul class="plain" style="margin-top:28px">
+      <li>The theorems do not resolve P vs NP.</li>
+      <li>They do not prove that Mathlib's <code>FinTM2</code> model agrees with Cook's
+        one-tape Turing machine. That is a choice of the LeanMillenniumPrizeProblems
+        formulation, and the result is about that formulation.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="trust">
+  <div class="wrap">
+    <h2>What you must trust</h2>
+    <p class="section-lead">Lean checks every proof, so the risk is a wrong statement. To trust
+      the result, read four short statement files, the vendored Clay definitions, and
+      cslib-frontier's definitions of P and NP. You do not need to read the proofs.</p>
+    <div class="table-box">
+      <table>
+        <thead><tr><th scope="col">Check</th><th scope="col">It fails when</th></tr></thead>
+        <tbody>
+          <tr><td>Exact types<br><span class="file">Audit/ClaimCheck.lean</span></td><td>A main theorem is renamed or its type changes.</td></tr>
+          <tr><td>Axioms<br><span class="file">Audit/Axioms.lean</span></td><td>A theorem uses an axiom other than <code>propext</code>, <code>Classical.choice</code>, <code>Quot.sound</code>. A <code>sorry</code> fails too.</td></tr>
+          <tr><td>Statement isolation<br><span class="file">Audit/Isolation.lean</span></td><td>A statement file imports a proof, or a theorem's type is not exactly its statement, term for term.</td></tr>
+          <tr><td>Vendored files<br><span class="file">scripts/diff_vendor.sh</span></td><td>The vendored Clay file differs from upstream by an unlisted change.</td></tr>
+          <tr><td>Independent kernel check<br><span class="file">scripts/kernel_check.sh</span></td><td>nanoda, a Lean type checker written in Rust, rejects the exported proofs.</td></tr>
+          <tr><td>Non-vacuity<br><span class="file">Tests/NonVacuity.lean</span></td><td>A simple language is not in P, SAT is not in NP, or the halting problem is in NP, on either side.</td></tr>
+          <tr><td>Cook-Levin cross-check<br><span class="file">CrossCheck/CookLevin.lean</span></td><td>The two independent Lean proofs of Cook-Levin do not transfer through the bridge. Today each library's SAT is NP-complete for the other library's definitions.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:24px">A <a href="https://github.com/wbnns/monteverde/blob/main/Audit/cook_text_audit.md">line-by-line audit</a> maps Cook's official Clay problem description to the Lean definitions.</p>
+  </div>
+</section>
+
+<section id="size">
+  <div class="wrap">
+    <h2>The largest Lean complexity library</h2>
+    <p class="section-lead">Theorem and lemma declarations in each public Lean complexity
+      library, counted in full clones at pinned commits on November 22, 2026.</p>
+    <div class="bars">
+      <div class="bar-row"><div class="bar-name">cslib-frontier<small>CslibFrontier/Computability</small></div><div class="bar-track" aria-hidden="true"><div class="bar-fill cslib-bar" style="width:100%"></div></div><div class="bar-num">49,439</div></div>
+      <div class="bar-row"><div class="bar-name">descriptive-complexity<small>PierreSenellart, incl. lax/ archive copies</small></div><div class="bar-track" aria-hidden="true"><div class="bar-fill" style="width:64.6%"></div></div><div class="bar-num">31,938</div></div>
+      <div class="bar-row"><div class="bar-name">starpos/lean-np-complete</div><div class="bar-track" aria-hidden="true"><div class="bar-fill" style="width:11.06%"></div></div><div class="bar-num">5,467</div></div>
+      <div class="bar-row"><div class="bar-name">CSLib</div><div class="bar-track" aria-hidden="true"><div class="bar-fill" style="width:7.0%"></div></div><div class="bar-num">3,463</div></div>
+      <div class="bar-row"><div class="bar-name">konard/p-vs-np</div><div class="bar-track" aria-hidden="true"><div class="bar-fill" style="width:4.94%"></div></div><div class="bar-num">2,444</div></div>
+    </div>
+    <p style="margin-top:28px">Full table and method: <a href="https://github.com/wbnns/monteverde/blob/main/Audit/size_table.md">Audit/size_table.md</a>.</p>
+  </div>
+</section>
+
+<section id="build">
+  <div class="wrap">
+    <h2>Build it</h2>
+    <p class="section-lead">You need <a href="https://github.com/leanprover/elan">elan</a>.</p>
+<pre class="block"><code>git clone https://github.com/wbnns/monteverde &amp;&amp; cd monteverde
+lake exe cache get                        <span class="cm"># Mathlib build cache</span>
+lake build Vendor Monteverde Audit Tests  <span class="cm"># the proofs and their checks</span>
+lake env lean Audit/Axioms.lean           <span class="cm"># print the axioms</span></code></pre>
+    <div class="table-box" style="margin-top:28px">
+      <table>
+        <thead><tr><th scope="col">Pinned component</th><th scope="col">Commit</th></tr></thead>
+        <tbody>
+          <tr><td>cslib-frontier</td><td class="mono">9bfe667f8c66a8a2a3e17391ce9a5cc965190544</td></tr>
+          <tr><td>LeanMillenniumPrizeProblems (vendored)</td><td class="mono">603053dc267cf3efe422f438eb78098c0ececd6f</td></tr>
+          <tr><td>millennium-cook-levin (vendored)</td><td class="mono">879c4835640119ad009abeb62ebd7a96f87eb9e8</td></tr>
+          <tr><td>Mathlib (through cslib-frontier)</td><td class="mono">bbff2954fe5ee3b7a4b33cc26ef873a1c3277d91</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap cols">
+    <div>
+      <p>Monteverde is by Will Binns, released under the Apache License 2.0. It builds on
+        LeanMillenniumPrizeProblems (Robert Joseph George), cslib-frontier (including Erik
+        Demaine's TM2 bridge and Samuel Schlesinger's P, NP and reductions),
+        millennium-cook-levin (Joshua Tan) and Mathlib. See
+        <a href="https://github.com/wbnns/monteverde/blob/main/CREDITS.md">CREDITS.md</a>.</p>
+    </div>
+    <div>
+      <div class="label" style="margin-bottom:10px">Cite</div>
+<pre><code>@software{monteverde,
+  author  = {Binns, Will},
+  version = {1.1.0},
+  date    = {2026-11-22},
+  url     = {https://github.com/wbnns/monteverde}
+}</code></pre>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
