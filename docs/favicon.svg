@@ -1,19 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- A hanging bridge in the Monteverde cloud forest, Costa Rica: the amber bank is Clay,
-       the blue bank is cslib-frontier, and the bridge between them is Monteverde. -->
-  <defs><clipPath id="r"><rect width="64" height="64" rx="14"/></clipPath></defs>
-  <g clip-path="url(#r)">
-    <rect width="64" height="64" fill="#0C110F"/>
-    <path d="M0 30 L9 21 L18 26 L28 14 L38 24 L47 18 L56 23 L64 19 V40 H0 Z" fill="#18211C"/>
-    <path d="M0 40 H13 Q16 40 16 43 V64 H0 Z" fill="#F0A06A"/>
-    <path d="M64 40 H51 Q48 40 48 43 V64 H64 Z" fill="#6DB3EC"/>
-    <rect x="11.5" y="29" width="3.5" height="12" fill="#F0A06A"/>
-    <rect x="49" y="29" width="3.5" height="12" fill="#6DB3EC"/>
-    <path d="M13.25 30.5 Q22.6 39.5 32 39.5" fill="none" stroke="#F0A06A" stroke-width="2.5"/>
-    <path d="M32 39.5 Q41.4 39.5 50.75 30.5" fill="none" stroke="#6DB3EC" stroke-width="2.5"/>
-    <path d="M24 37.8 V48.5" stroke="#F0A06A" stroke-width="2"/>
-    <path d="M40 37.8 V48.5" stroke="#6DB3EC" stroke-width="2"/>
-    <path d="M14 41.5 Q23 50.5 32 50.5" fill="none" stroke="#F0A06A" stroke-width="3.5"/>
-    <path d="M32 50.5 Q41 50.5 50 41.5" fill="none" stroke="#6DB3EC" stroke-width="3.5"/>
-  </g>
+  <!-- Two peaks of the Cordillera de Tilarán, where Monteverde sits (Costa Rica).
+       Amber is Clay, blue is cslib-frontier. -->
+  <rect width="64" height="64" rx="14" fill="#0C110F"/>
+  <path d="M25 47 L42 19 L59 47 Z" fill="#6DB3EC" stroke="#6DB3EC" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M5 47 L23 16 L41 47 Z" fill="#F0A06A" stroke="#0C110F" stroke-width="3.5" stroke-linejoin="round" paint-order="stroke"/>
+  <path d="M5 47 L23 16 L41 47 Z" fill="#F0A06A" stroke="#F0A06A" stroke-width="2.5" stroke-linejoin="round"/>
 </svg>
