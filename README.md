@@ -9,13 +9,18 @@ that a result about one is a result about the other.
 
 ## Target claim
 
-When milestone M5 is done, this sentence is true:
-
 > I proved in Lean that the LeanMillenniumPrizeProblems formulation of the Clay P vs NP
 > statement is equivalent to P vs NP in cslib-frontier, the largest Lean complexity library.
 
-"The largest" stays in the claim only if the size count at release puts cslib-frontier first.
-Otherwise the claim says "a major Lean complexity library".
+Evidence for each part of the claim:
+
+| Part | Evidence |
+|------|----------|
+| "I proved in Lean" | The headline theorems compile with no `sorry` and use only `propext`, `Classical.choice`, `Quot.sound` (`Audit/Axioms.lean`). nanoda, a type checker written in Rust, checks the lean4export export of the headline theorems: 16,507 declarations, no errors (`kernel-check` workflow). Reused work is credited in `CREDITS.md`. |
+| "the LeanMillenniumPrizeProblems formulation" | The theorems use `Millennium.ClayPVersusNP` and `Millennium.ClayPVersusNP.Formulations.NegativeBranch` from commit `603053d`. `scripts/diff_vendor.sh` shows that the vendored file differs from upstream only by the toolchain fixes in `Vendor/Millennium/CHANGES.md`. |
+| "is equivalent to" | Two `↔` theorems, one for each official target (`Audit/ClaimCheck.lean`). |
+| "P vs NP in cslib-frontier" | `CslibPEqNP` is the form of `NPComplete.mem_P_iff`, and `cslibPEqNP_iff_bits` covers `P encBits = NP encBits`. |
+| "the largest Lean complexity library" | `Audit/size_table.md`, at pinned commits on November 22, 2026: cslib-frontier Computability has 49,439 theorems and lemmas; the next largest, descriptive-complexity, has 12,671. |
 
 ## Headline theorems
 
@@ -43,7 +48,7 @@ independent kernel check.
 | M2 | L1 reverse bridge (recoder machine, TM2 composition), L1 iff, Clay P ↔ cslib P | Done |
 | M3 | L2 class bridges for P and NP (pair words, certificate decoder), bits form | Done |
 | M4 | Headline theorems, claim check, axiom check, isolation, non-vacuity tests | Done |
-| M5 | Size count, independent kernel check, credits, release | Not started |
+| M5 | Size count, independent kernel check, credits, release | Done |
 
 ## Audit
 
