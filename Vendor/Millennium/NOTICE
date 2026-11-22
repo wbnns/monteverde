@@ -1,0 +1,11 @@
+This directory contains a modified copy of Problems/PVersusNP/Millennium.lean from
+LeanMillenniumPrizeProblems (https://github.com/lean-dojo/LeanMillenniumPrizeProblems),
+commit 603053dc267cf3efe422f438eb78098c0ececd6f, licensed under the Apache License 2.0
+(see LICENSE in this directory).
+
+Monteverde ported the file to Lean v4.36.0-rc2. The changes are listed in CHANGES.md and the
+full diff is port.patch.
+
+MathlibCompat.lean contains definitions copied from Mathlib (https://github.com/leanprover-community/mathlib4),
+Mathlib/Computability/Encoding.lean at commit fabf563a7c95a166b8d7b6efca11c8b4dc9d911f,
+Copyright (c) 2020 Pim Spelier, Daan van Gent, licensed under the Apache License 2.0.

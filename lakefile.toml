@@ -1,0 +1,33 @@
+name = "monteverde"
+version = "0.1.0"
+defaultTargets = ["Vendor", "Monteverde"]
+
+[leanOptions]
+autoImplicit = false
+
+# cslib-frontier brings cslib and Mathlib through its own pins. Never pin them here.
+# Move this pin only as a deliberate release step (see README).
+[[require]]
+name = "cslib-frontier"
+git = "https://github.com/cslib-community/cslib-frontier"
+rev = "9bfe667f8c66a8a2a3e17391ce9a5cc965190544"
+
+# Vendored upstream sources (Clay definitions, TM2 composition), ported to this toolchain.
+[[lean_lib]]
+name = "Vendor"
+globs = ["Vendor.+"]
+allowNonModules = true
+
+[[lean_lib]]
+name = "Monteverde"
+allowNonModules = true
+
+[[lean_lib]]
+name = "Audit"
+globs = ["Audit.+"]
+allowNonModules = true
+
+[[lean_lib]]
+name = "Tests"
+globs = ["Tests.+"]
+allowNonModules = true

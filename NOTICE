@@ -1,0 +1,7 @@
+Monteverde
+Copyright 2026 Will Binns
+
+This product includes software from third parties under the Apache License 2.0:
+- LeanMillenniumPrizeProblems (Vendor/Millennium/, see Vendor/Millennium/NOTICE)
+- Mathlib (Vendor/Millennium/MathlibCompat.lean)
+See CREDITS.md for every reused definition and theorem.
