@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Monteverde: two Lean statements of P vs NP, proved equivalent</title>
-<meta name="description" content="A Lean 4 proof that the LeanMillenniumPrizeProblems Clay P vs NP statement is equivalent to P vs NP in cslib-frontier.">
+<title>Monteverde: ClayPVersusNP ↔ CslibPEqNP in Lean 4</title>
+<meta name="description" content="A Lean 4 proof that ClayPVersusNP, the LeanMillenniumPrizeProblems formalization of Cook's P vs NP statement, is equivalent to P = NP for every encoding in cslib-frontier. Axioms: propext, Classical.choice, Quot.sound.">
 <meta name="author" content="Will Binns">
 <meta name="theme-color" content="#0C110F">
 <meta name="color-scheme" content="dark">
@@ -13,19 +13,19 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Monteverde">
 <meta property="og:url" content="https://monteverde.willbinns.org/">
-<meta property="og:title" content="Monteverde: two Lean statements of P vs NP, proved equivalent">
-<meta property="og:description" content="A Lean 4 proof that the LeanMillenniumPrizeProblems Clay P vs NP statement is equivalent to P vs NP in cslib-frontier.">
+<meta property="og:title" content="Monteverde: ClayPVersusNP ↔ CslibPEqNP in Lean 4">
+<meta property="og:description" content="A Lean 4 proof that ClayPVersusNP, the LeanMillenniumPrizeProblems formalization of Cook's P vs NP statement, is equivalent to P = NP for every encoding in cslib-frontier. Axioms: propext, Classical.choice, Quot.sound.">
 <meta property="og:image" content="https://monteverde.willbinns.org/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Monteverde. Two Lean statements of P vs NP, proved equivalent. theorem clay_iff_cslib : Millennium.ClayPVersusNP ↔ CslibPEqNP">
+<meta property="og:image:alt" content="ClayPVersusNP ↔ CslibPEqNP. The LeanMillenniumPrizeProblems formalization of Cook's P vs NP statement is equivalent to P = NP in cslib-frontier. Lean 4; axioms propext, Classical.choice, Quot.sound.">
 <meta property="og:locale" content="en_US">
 
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Monteverde: two Lean statements of P vs NP, proved equivalent">
-<meta name="twitter:description" content="A Lean 4 proof that the LeanMillenniumPrizeProblems Clay P vs NP statement is equivalent to P vs NP in cslib-frontier.">
+<meta name="twitter:title" content="Monteverde: ClayPVersusNP ↔ CslibPEqNP in Lean 4">
+<meta name="twitter:description" content="A Lean 4 proof that ClayPVersusNP, the LeanMillenniumPrizeProblems formalization of Cook's P vs NP statement, is equivalent to P = NP for every encoding in cslib-frontier. Axioms: propext, Classical.choice, Quot.sound.">
 <meta name="twitter:image" content="https://monteverde.willbinns.org/og.png">
-<meta name="twitter:image:alt" content="Monteverde. Two Lean statements of P vs NP, proved equivalent.">
+<meta name="twitter:image:alt" content="ClayPVersusNP ↔ CslibPEqNP. The LeanMillenniumPrizeProblems formalization of Cook's P vs NP statement is equivalent to P = NP in cslib-frontier. Lean 4; axioms propext, Classical.choice, Quot.sound.">
 
 <link rel="icon" href="/favicon.ico" sizes="48x48">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -38,7 +38,7 @@
   "@context": "https://schema.org",
   "@type": "SoftwareSourceCode",
   "name": "Monteverde",
-  "description": "A Lean 4 proof that the LeanMillenniumPrizeProblems Clay P vs NP statement is equivalent to P vs NP in cslib-frontier.",
+  "description": "A Lean 4 proof that ClayPVersusNP, the LeanMillenniumPrizeProblems formalization of Cook's P vs NP statement, is equivalent to P = NP for every encoding in cslib-frontier. Axioms: propext, Classical.choice, Quot.sound.",
   "url": "https://monteverde.willbinns.org/",
   "codeRepository": "https://github.com/wbnns/monteverde",
   "programmingLanguage": "Lean 4",
@@ -169,6 +169,8 @@ section.hero { padding-top: 96px; }
 .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
 .grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
 .card p { font-size: 15px; }
+.card p.file { font-size: 13px; color: var(--faint); margin-top: 4px; }
+sub, sup { font-size: 0.72em; line-height: 0; }
 .card h3 { display: flex; align-items: center; gap: 10px; }
 
 /* Hero panel */
@@ -298,13 +300,12 @@ footer pre { font-size: 13px; line-height: 1.6; color: var(--faint); }
     <a class="wordmark" href="#top"><img class="mark" src="/favicon.svg" alt="" width="36" height="36">monteverde</a>
     <nav aria-label="Sections">
       <ul>
-        <li><a href="#theorems">Theorems</a></li>
-        <li><a href="#bridge">Bridge</a></li>
-        <li><a href="#proof">Proof</a></li>
+        <li><a href="#definitions">Definitions</a></li>
         <li><a href="#results">Results</a></li>
-        <li><a href="#trust">Checks</a></li>
-        <li><a href="#ecosystem">Ecosystem</a></li>
-        <li><a href="#together">Community</a></li>
+        <li><a href="#proof">Proof</a></li>
+        <li><a href="#trust">Verification</a></li>
+        <li><a href="#cook">Cook's text</a></li>
+        <li><a href="#directions">Directions</a></li>
         <li><a href="https://github.com/wbnns/monteverde">GitHub</a></li>
       </ul>
     </nav>
@@ -315,17 +316,19 @@ footer pre { font-size: 13px; line-height: 1.6; color: var(--faint); }
 <section class="hero" id="top">
   <div class="wrap">
     <h1>Two Lean statements of P vs NP, proved equivalent.</h1>
-    <p class="intro">Monteverde proves in Lean 4 that the
-      LeanMillenniumPrizeProblems formulation of the Clay P vs NP
-      statement is equivalent to P vs NP in cslib-frontier, the
-      largest Lean complexity library. A Lean proof of P = NP, or of P ≠ NP, in one formulation
-      is now a proof in the other, and membership in P and NP carries over between the two
-      libraries for languages over finite alphabets. It does not resolve P vs NP.</p>
+    <p class="intro">Let <code class="clay">ClayPVersusNP</code> be the LeanMillenniumPrizeProblems
+      formalization of Cook's problem: P<sub>Σ</sub> = NP<sub>Σ</sub> for every finite alphabet
+      Σ with |Σ| ≥ 2, over Mathlib's multi-stack machines and Cook's checking relations. Let
+      <code class="cslib">CslibPEqNP</code> be P(enc) = NP(enc) for every injective binary
+      encoding enc, over cslib-frontier's multi-tape machines. Monteverde proves in Lean 4 that
+      the two propositions are equivalent, using only <code>propext</code>,
+      <code>Classical.choice</code> and <code>Quot.sound</code>. The equivalence is at the level
+      of statements; it does not decide either side.</p>
     <div class="actions">
-      <a class="btn primary" href="https://github.com/wbnns/monteverde">View on GitHub</a>
-      <a class="btn" href="https://github.com/wbnns/monteverde/releases/tag/v1.1.0">Release v1.1.0</a>
-      <a class="btn" href="https://github.com/wbnns/monteverde/tree/main/Monteverde/Statements">Read the statements</a>
-      <a class="btn" href="#involved">Get involved</a>
+      <a class="btn primary" href="https://github.com/wbnns/monteverde">Repository</a>
+      <a class="btn" href="https://github.com/wbnns/monteverde/tree/main/Monteverde/Statements">Statements</a>
+      <a class="btn" href="https://github.com/wbnns/monteverde/releases/tag/v1.1.0">v1.1.0</a>
+      <a class="btn" href="#directions">Open directions</a>
     </div>
 
     <div class="hero-panel" id="theorems">
@@ -348,39 +351,84 @@ footer pre { font-size: 13px; line-height: 1.6; color: var(--faint); }
   </div>
 </section>
 
-<section id="statements">
+<section id="definitions">
   <div class="wrap">
-    <h2>Two definitions of P and NP</h2>
-    <p class="section-lead">Both libraries build on Mathlib, but they define P and NP in
-      different ways. Monteverde proves that the differences do not matter: the classes agree,
-      so the two P = NP statements agree.</p>
+    <h2>Definitions</h2>
+    <p class="section-lead">Both sides build on Mathlib. They differ in the machine model, the
+      encoding of instances, and the form of certificates.</p>
     <div class="grid-2">
       <div class="card">
-        <h3><span class="dot clay" aria-hidden="true"></span>Clay</h3>
-        <p>As LeanMillenniumPrizeProblems formalizes Cook's problem description. Mathlib's multi-stack Turing machine <code>FinTM2</code>. Inputs are words over any
-          finite alphabet. NP uses Cook's checking relation: certificates over any finite
-          alphabet, with length at most <code>|w|^k</code>, checked on the pair word
-          <code>w#y</code>.</p>
-        <p><code class="clay">ClayPVersusNP</code> says P = NP for every alphabet with at
-          least two symbols.</p>
+        <h3><span class="dot clay" aria-hidden="true"></span>Clay (LeanMillenniumPrizeProblems)</h3>
+        <p>Machines are Mathlib's <code>FinTM2</code>: finitely many stacks, finite control,
+          and a finite input alphabet; other stack alphabets are arbitrary types. For a finite Σ
+          and L ⊆ Σ*, L ∈ P<sub>Σ</sub> iff some <code>FinTM2</code> decides L within p(|w|)
+          steps, for a polynomial p.</p>
+        <p>L ∈ NP<sub>Σ</sub> iff there are a finite Σ<sub>1</sub>, k ∈ ℕ and R ⊆ Σ* × Σ<sub>1</sub>*
+          with L<sub>R</sub> = { w#y : R(w, y) } ∈ P over Σ ⊔ {#} ⊔ Σ<sub>1</sub>, and
+          w ∈ L ⇔ ∃ y, |y| ≤ |w|<sup>k</sup> ∧ R(w, y).</p>
+        <p><code class="clay">ClayPVersusNP</code> :≡ ∀ Σ finite, |Σ| ≥ 2, ∀ L ⊆ Σ*,
+          L ∈ P<sub>Σ</sub> ⇔ L ∈ NP<sub>Σ</sub>.</p>
       </div>
       <div class="card">
         <h3><span class="dot cslib" aria-hidden="true"></span>cslib-frontier</h3>
-        <p>A binary multi-tape Turing machine. Inputs are any type with an injective binary
-          encoding <code>enc : α ↪ List Bool</code>. NP uses a Boolean verifier with binary
-          certificates of length exactly <code>p(n)</code>.</p>
-        <p>cslib-frontier has no named P = NP proposition. Its theorems state it for every
-          encoding, so <code class="cslib">CslibPEqNP</code> takes that form.</p>
+        <p>Machines are multi-tape Turing machines over {0, 1} with finitely many states.
+          For an injective enc : α ↪ {0, 1}*, f is polynomial-time from enc to enc′ if such a
+          machine computes enc′ ∘ f from enc within polynomially bounded time and space.</p>
+        <p>A ∈ P(enc) iff 1<sub>A</sub> is polynomial-time from enc. A ∈ NP(enc) iff there are a
+          polynomial p and a polynomial-time V on encPair(enc, bits) with
+          a ∈ A ⇔ ∃ c ∈ {0, 1}<sup>p(|enc a|)</sup>, V(a, c) = 1.</p>
+        <p><code class="cslib">CslibPEqNP</code> :≡ ∀ α, ∀ enc : α ↪ {0, 1}*,
+          P(enc) = NP(enc). This is the form in which cslib-frontier's own theorems
+          (<code>NPComplete.mem_P_iff</code>) state P = NP.</p>
       </div>
     </div>
   </div>
 </section>
 
+<section id="results">
+  <div class="wrap">
+    <h2>Results</h2>
+    <p class="section-lead">Write β<sub>Γ</sub> : Γ* ↪ {0, 1}* for the block code: the symbol of
+      index i maps to (11)<sup>i</sup>0, and words map to concatenations. All names below are in
+      the namespace <code>Monteverde</code>.</p>
+    <div class="grid-2">
+      <div class="card">
+        <h3>Theorem 1 (functions)</h3>
+        <p>For finite Γ, Δ, injective e : α → Γ*, e′ : β → Δ* and f : α → β: f has a polynomial-time
+          <code>FinTM2</code> from e to e′ iff f is polynomial-time in cslib-frontier from
+          β<sub>Γ</sub> ∘ e to β<sub>Δ</sub> ∘ e′.</p>
+        <p class="file"><code>tm2_iff_computableInPolyTime_words</code></p>
+      </div>
+      <div class="card">
+        <h3>Theorem 2 (classes)</h3>
+        <p>For finite Γ with |Γ| ≥ 2 and L ⊆ Γ*: L ∈ P<sub>Γ</sub> ⇔ L ∈ P(β<sub>Γ</sub>) and
+          L ∈ NP<sub>Γ</sub> ⇔ L ∈ NP(β<sub>Γ</sub>). Polynomial-time many-one reductions
+          correspond in the same way, for any finite alphabets.</p>
+        <p class="file"><code>clayP_iff_cslib</code>, <code>clayNP_iff_cslib</code>, <code>clayReducible_iff_cslib</code></p>
+      </div>
+      <div class="card">
+        <h3>Theorem 3 (binary form)</h3>
+        <p><code class="cslib">CslibPEqNP</code> ⇔ P(bits) = NP(bits).</p>
+        <p class="file"><code>cslibPEqNP_iff_bits</code></p>
+      </div>
+      <div class="card">
+        <h3>Theorem 4 (main)</h3>
+        <p><code class="clay">ClayPVersusNP</code> ⇔ <code class="cslib">CslibPEqNP</code>,
+          hence also NegativeBranch ⇔ ¬<code class="cslib">CslibPEqNP</code>.</p>
+        <p class="file"><code>clay_iff_cslib</code>, <code>clay_negative_iff_cslib</code></p>
+      </div>
+    </div>
+    <p style="margin-top:28px">A further lemma has independent interest: every polynomial-time
+      <code>FinTM2</code> certificate with a finite output alphabet has one with the same
+      function and time bound whose stack alphabets are all finite
+      (<code>TM2ComputableInPolyTime.exists_finite</code>).</p>
+  </div>
+</section>
+
 <section id="bridge">
   <div class="wrap">
-    <h2>The bridge</h2>
-    <p class="section-lead">Four layers connect the two sides. Each layer uses only the layers
-      under it, and each link is a Lean theorem.</p>
+    <h2>Structure of the proof</h2>
+    <p class="section-lead">Four layers; each uses only those below it.</p>
     <div class="scroll" role="region" aria-label="Bridge diagram, scrolls sideways" tabindex="0">
       <div class="bridge">
         <div class="head left"><span class="dot clay" aria-hidden="true"></span>Clay</div>
@@ -409,38 +457,40 @@ footer pre { font-size: 13px; line-height: 1.6; color: var(--faint); }
 
 <section id="proof">
   <div class="wrap">
-    <h2>How the proof works</h2>
-    <p class="section-lead">About 2,100 lines of new Lean, in <code>Monteverde/</code>.</p>
+    <h2>Proof sketch</h2>
     <div class="grid-2">
       <div class="card">
-        <h3>Encodings</h3>
-        <p>The block code writes the symbol with index <code>i</code> as the bits
-          <code>(1 1)^i 0</code>, and a word as the concatenation of its symbols. Clay's pair
-          word <code>w#y</code> converts to <code>encPair</code> and back in polynomial time.
-          A new total decoder reads certificates over any finite alphabet.</p>
+        <h3>Finite alphabets</h3>
+        <p><code>FinTM2</code> requires only the input alphabet to be finite. Every push writes
+          g(σ) for one of finitely many statements g and a state σ in a finite set, so the
+          symbols that can ever reach stack k lie in a finite set S<sub>k</sub>. Restricting
+          each stack to S<sub>k</sub> ∪ (input symbols) gives a machine with the same run, step
+          for step. cslib-frontier's TM2 bridge then applies.</p>
       </div>
       <div class="card">
-        <h3>Functions</h3>
-        <p>Forward: Mathlib's <code>FinTM2</code> makes only the input alphabet finite. A push
-          writes a function of the finite state, so only finitely many symbols can reach a
-          stack; Monteverde restricts the stacks to them, then applies cslib-frontier's bridge.
-          Reverse: a recoder, cslib-frontier's compiler and a decoder run in sequence, joined
-          by the TM2 composition theorem from millennium-cook-levin.</p>
+        <h3>The reverse direction</h3>
+        <p>A cslib-frontier function becomes a <code>FinTM2</code> by composing three machines: a
+          recoder Γ* → β<sub>Γ</sub>(Γ*) (2n + m + 2 steps), cslib-frontier's binary compiler,
+          and a decoder β<sub>Δ</sub>(Δ*) → Δ* (≤ 7n + 2 steps), joined by Tan's composition
+          theorem for polynomial-time TM2 machines. For empty Δ the only output is ε, and a
+          draining machine suffices.</p>
       </div>
       <div class="card">
-        <h3>Classes</h3>
-        <p>P follows from the function bridge. For NP, the cslib-frontier verifier decodes a
-          Clay certificate and runs the Clay checker, and padding fixes the length. The other
-          way, Clay certificates are bits, and the bound <code>|w|^k</code> covers the
-          verifier's length once <code>|w| ≥ 2</code>. Words of length 0 and 1 use a lookup
-          table.</p>
+        <h3>NP</h3>
+        <p>Clay to cslib-frontier: the verifier decodes a binary certificate as y ∈ Σ<sub>1</sub>*,
+          checks |y| ≤ |w|<sup>k</sup>, and runs the Clay checker on w#y; a padding lemma turns
+          a bound into an exact length p(n). Conversely, take Σ<sub>1</sub> = {0, 1} and
+          R(w, c) :⇔ |c| = q(|β w|) ∧ V(w, c). As |β w| ≤ (2|Σ| + 1)|w|, there is k with
+          q(|β w|) ≤ |w|<sup>k</sup> for |w| ≥ 2. The finitely many words with |w| ≤ 1, where
+          |w|<sup>k</sup> ≤ 1, are decided by table with the empty certificate.</p>
       </div>
       <div class="card">
-        <h3>Statements</h3>
-        <p>From Clay: apply the Clay statement at the alphabet <code>Bool</code> to the binary
-          image of SAT, then use cslib-frontier's Cook-Levin theorem to get P = NP for every
-          encoding. To Clay: for each alphabet <code>Γ</code>, use the encoding
-          <code>blockEnc Γ</code> and the class bridges.</p>
+        <h3>The main theorem</h3>
+        <p>⇒: apply <code class="clay">ClayPVersusNP</code> at Σ = {0, 1} to the binary image of
+          SAT. Its NP membership transfers to the Clay side by Theorem 2, the hypothesis puts it
+          in P<sub>{0,1}</sub>, and Theorem 2 brings it back. Since SAT is NP-complete in
+          cslib-frontier, P(enc) = NP(enc) for every enc. ⇐: for each Σ, use enc = β<sub>Σ</sub>
+          and Theorem 2.</p>
       </div>
     </div>
   </div>
@@ -448,9 +498,8 @@ footer pre { font-size: 13px; line-height: 1.6; color: var(--faint); }
 
 <section id="use">
   <div class="wrap">
-    <h2>Use it</h2>
-    <p class="section-lead">A Lean result on one side now transfers to the other. These
-      examples are checked in CI.</p>
+    <h2>Using the results</h2>
+    <p class="section-lead">Checked in CI (<code>Tests/ReadmeExamples.lean</code>).</p>
 <pre class="block"><code><span class="kw">import</span> Monteverde
 
 <span class="cm">-- A cslib-frontier proof of P = NP on binary strings gives the Clay statement.</span>
@@ -461,69 +510,81 @@ footer pre { font-size: 13px; line-height: 1.6; color: var(--faint); }
 <span class="kw">example</span> {α : Type} (enc : α ↪ List Bool) (A : Set α) (hNP : A ∈ <span class="cslib">NP</span> enc) (hP : A ∉ <span class="cslib">P</span> enc) :
     <span class="clay">Millennium.ClayPVersusNP.Formulations.NegativeBranch</span> :=
   <span class="thm">clay_negative_iff_cslib</span>.mpr fun h => hP (<span class="kw">by</span> rw [h enc]; exact hNP)</code></pre>
-    <ul class="plain" style="margin-top:28px">
-      <li>The theorems do not resolve P vs NP. They make sure that work toward it, in either
-        library, is not split between two incompatible statements.</li>
-      <li>One question stays open, and it is a good next project: a Lean proof that Mathlib's
-        multi-stack <code>FinTM2</code> model and Cook's one-tape Turing machine simulate each
-        other in polynomial time. See <a href="#involved">Get involved</a>.</li>
-    </ul>
-  </div>
-</section>
-
-<section id="results">
-  <div class="wrap">
-    <h2>Reusable results</h2>
-    <p class="section-lead">All names are in the namespace <code>Monteverde</code>. Each one is
-      proved with only the three standard axioms.</p>
-    <div class="table-box">
-      <table>
-        <thead><tr><th scope="col">Result</th><th scope="col">What it says</th></tr></thead>
-        <tbody>
-          <tr><td><code>clayP_iff_cslib</code><br><code>clayNP_iff_cslib</code></td><td>A language over a finite alphabet with at least two symbols is in Clay P (NP) exactly when it is in cslib-frontier P (NP) under the block code.<br><span class="file">Classes/P.lean, Classes/NP.lean</span></td></tr>
-          <tr><td><code>clayReducible_iff_cslib</code></td><td>Clay polynomial-time reductions are cslib-frontier reductions, for any finite alphabets.<br><span class="file">Classes/Reduction.lean</span></td></tr>
-          <tr><td><code>tm2_iff_computableInPolyTime_words</code></td><td>Mathlib TM2 polynomial time between words is cslib-frontier polynomial time under the block codes, for any finite alphabets.<br><span class="file">Function/Bridge.lean</span></td></tr>
-          <tr><td><code>TM2ComputableInPolyTime.exists_finite</code></td><td>Every polynomial-time <code>FinTM2</code> certificate with a finite output alphabet has one with all stack alphabets finite.<br><span class="file">Function/Finitize.lean</span></td></tr>
-          <tr><td><code>cslibPEqNP_of_image_SAT_mem_P</code></td><td>SAT in P on binary strings gives <code>CslibPEqNP</code>.<br><span class="file">Headline/Bits.lean</span></td></tr>
-          <tr><td><code>blockEnc</code>, <code>certDecoder</code>, <code>pairWord</code></td><td>The block code, a decoder for certificates over any finite alphabet, and Clay's pair word <code>w#y</code>, each with polynomial-time conversions.<br><span class="file">Encoding/</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-    <p style="margin-top:24px">The <a href="https://github.com/wbnns/monteverde#readme">README</a> is the full reference: exact definitions on both sides, every theorem, the trust model, and notes for contributors.</p>
   </div>
 </section>
 
 <section id="trust">
   <div class="wrap">
-    <h2>How it is checked</h2>
-    <p class="section-lead">Lean checks every proof, so what matters is the statements. They
-      are four short files, the vendored Clay definitions, and cslib-frontier's definitions of
-      P and NP. The proofs can be read, but they do not have to be. CI runs these checks on
-      every change.</p>
+    <h2>Verification</h2>
+    <p class="section-lead">The trusted base is the statement files, the vendored Clay
+      definitions and cslib-frontier's definitions of P and NP. Everything else is checked by
+      the kernel.</p>
     <div class="table-box">
       <table>
-        <thead><tr><th scope="col">Check</th><th scope="col">It fails when</th></tr></thead>
+        <thead><tr><th scope="col">Check</th><th scope="col">What it establishes</th></tr></thead>
         <tbody>
-          <tr><td>Exact types<br><span class="file">Audit/ClaimCheck.lean</span></td><td>A main theorem is renamed or its type changes.</td></tr>
-          <tr><td>Axioms<br><span class="file">Audit/Axioms.lean</span></td><td>A theorem uses an axiom other than <code>propext</code>, <code>Classical.choice</code>, <code>Quot.sound</code>. A <code>sorry</code> fails too.</td></tr>
-          <tr><td>Statement isolation<br><span class="file">Audit/Isolation.lean</span></td><td>A statement file imports a proof, or a theorem's type is not exactly its statement, term for term.</td></tr>
-          <tr><td>Vendored files<br><span class="file">scripts/diff_vendor.sh</span></td><td>The vendored Clay file differs from upstream by an unlisted change.</td></tr>
-          <tr><td>Independent kernel check<br><span class="file">scripts/kernel_check.sh</span></td><td>nanoda, a Lean type checker written in Rust, rejects the exported proofs.</td></tr>
-          <tr><td>Non-vacuity<br><span class="file">Tests/NonVacuity.lean</span></td><td>A simple language is not in P, SAT is not in NP, or the halting problem is in NP, on either side.</td></tr>
-          <tr><td>Cook-Levin cross-check<br><span class="file">CrossCheck/CookLevin.lean</span></td><td>The two independent Lean proofs of Cook-Levin do not transfer through the bridge. Today each library's SAT is NP-complete for the other library's definitions.</td></tr>
+          <tr><td>Axioms<br><span class="file">Audit/Axioms.lean</span></td><td>Each theorem depends only on <code>propext</code>, <code>Classical.choice</code>, <code>Quot.sound</code>.</td></tr>
+          <tr><td>Independent kernel<br><span class="file">scripts/kernel_check.sh</span></td><td>nanoda, a Lean type checker written in Rust, accepts the lean4export export: 16,507 declarations.</td></tr>
+          <tr><td>Statement isolation<br><span class="file">Audit/Isolation.lean</span></td><td>The statements import no proof, and each theorem's type equals its statement as a term.</td></tr>
+          <tr><td>Vendored definitions<br><span class="file">scripts/diff_vendor.sh</span></td><td>The Clay file equals upstream commit <code>603053d</code> up to listed toolchain fixes, none of which touches a definition.</td></tr>
+          <tr><td>Non-vacuity<br><span class="file">Tests/NonVacuity.lean</span></td><td>On both sides, a simple language is in P, SAT is in NP, and the halting problem is not in NP.</td></tr>
+          <tr><td>Cook-Levin cross-check<br><span class="file">CrossCheck/CookLevin.lean</span></td><td>Tan's SAT is NP-complete for cslib-frontier's definitions, and cslib-frontier's SAT is NP-complete for the Clay definitions; Clay's P ⊆ NP holds unconditionally.</td></tr>
         </tbody>
       </table>
     </div>
-    <p style="margin-top:24px">A <a href="https://github.com/wbnns/monteverde/blob/main/Audit/cook_text_audit.md">line-by-line audit</a> maps Cook's official Clay problem description to the Lean definitions.</p>
+  </div>
+</section>
+
+<section id="cook">
+  <div class="wrap">
+    <h2>Relation to Cook's text</h2>
+    <p class="section-lead">The <a href="https://github.com/wbnns/monteverde/blob/main/Audit/cook_text_audit.md">Cook text audit</a>
+      maps each clause of Cook's official problem description to the Lean definitions. The
+      differences that matter:</p>
+    <ul class="plain">
+      <li><strong>Machine model.</strong> Mathlib's multi-stack <code>FinTM2</code> replaces
+        the one-tape machine. The models simulate each other with polynomial overhead, but no
+        Lean proof of this exists yet.</li>
+      <li><strong>Alphabets.</strong> The Lean target quantifies over all Σ with |Σ| ≥ 2; Cook
+        fixes one Σ and remarks that the choice does not matter. The proof of Theorem 4 shows
+        this for the Lean model: the case Σ = {0, 1} already implies all others.</li>
+      <li><strong>Certificate bound.</strong> The literal bound |y| ≤ |w|<sup>k</sup> allows at
+        most one symbol when |w| ≤ 1. It defines the same NP as a polynomial bound.</li>
+      <li><strong>Checking relation.</strong> The decider for L<sub>R</sub> need only be correct
+        on well-formed w#y, a linear-time-checkable promise.</li>
+      <li><strong>P ⊆ NP.</strong> The Clay file proves it from a composition hypothesis, which
+        Tan's composition theorem discharges.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="directions">
+  <div class="wrap">
+    <h2>Open directions</h2>
+    <p class="section-lead">Monteverde is a stable reference at v1.1.0, released under Apache
+      2.0. The way to extend it is a fork: no permission is needed; please keep
+      <code>NOTICE</code> and <code>CREDITS.md</code>.</p>
+    <ul class="plain">
+      <li><strong>The machine model.</strong> A Lean proof that <code>FinTM2</code> and a
+        one-tape Turing machine simulate each other in polynomial time would close the one gap
+        between Cook's text and the Lean statement.</li>
+      <li><strong>Other formalizations.</strong> Bridges of the same kind to the single-tape
+        model of CSLib, or to the definitions of starpos/lean-np-complete.</li>
+      <li><strong>Other classes.</strong> coNP, the polynomial hierarchy, or space classes,
+        through the function bridge.</li>
+      <li><strong>Review.</strong> An independent review of the Cook text audit by a
+        complexity theorist, published anywhere.</li>
+    </ul>
+    <p style="margin-top:24px"><a href="https://github.com/wbnns/monteverde/fork">Fork the repository</a></p>
   </div>
 </section>
 
 <section id="ecosystem">
   <div class="wrap">
-    <h2>A growing ecosystem</h2>
-    <p class="section-lead">Lean complexity theory is a shared effort across many public
-      projects. Monteverde builds on cslib-frontier, the largest of them. Theorem and lemma
-      declarations, counted in full clones at pinned commits on November 22, 2026:</p>
+    <h2>Lean complexity libraries</h2>
+    <p class="section-lead">Theorem and lemma declarations in public Lean complexity libraries,
+      counted in full clones at pinned commits on November 22, 2026
+      (<a href="https://github.com/wbnns/monteverde/blob/main/Audit/size_table.md">method</a>).</p>
     <div class="bars">
       <div class="bar-row"><div class="bar-name"><a href="https://github.com/cslib-community/cslib-frontier">cslib-frontier</a><small>CslibFrontier/Computability</small></div><div class="bar-track" aria-hidden="true"><div class="bar-fill" style="width:100%"></div></div><div class="bar-num">49,439</div></div>
       <div class="bar-row"><div class="bar-name"><a href="https://github.com/PierreSenellart/descriptive-complexity">descriptive-complexity</a><small>PierreSenellart, incl. lax/ archive copies</small></div><div class="bar-track" aria-hidden="true"><div class="bar-fill" style="width:64.6%"></div></div><div class="bar-num">31,938</div></div>
@@ -531,16 +592,14 @@ footer pre { font-size: 13px; line-height: 1.6; color: var(--faint); }
       <div class="bar-row"><div class="bar-name"><a href="https://github.com/leanprover/cslib">CSLib</a></div><div class="bar-track" aria-hidden="true"><div class="bar-fill" style="width:7.0%"></div></div><div class="bar-num">3,463</div></div>
       <div class="bar-row"><div class="bar-name"><a href="https://github.com/konard/p-vs-np">konard/p-vs-np</a></div><div class="bar-track" aria-hidden="true"><div class="bar-fill" style="width:4.94%"></div></div><div class="bar-num">2,444</div></div>
     </div>
-    <p style="margin-top:28px">Full table and method: <a href="https://github.com/wbnns/monteverde/blob/main/Audit/size_table.md">Audit/size_table.md</a>.</p>
   </div>
 </section>
 
 <section id="together">
   <div class="wrap">
-    <h2>Built together</h2>
-    <p class="section-lead">Monteverde stands on the work of others. Every reused definition
-      and theorem is credited, with its author and source commit, in
-      <a href="https://github.com/wbnns/monteverde/blob/main/CREDITS.md">CREDITS.md</a>.</p>
+    <h2>Credits</h2>
+    <p class="section-lead">Every reused definition and theorem is listed, with its author and
+      source commit, in <a href="https://github.com/wbnns/monteverde/blob/main/CREDITS.md">CREDITS.md</a>.</p>
     <div class="grid-2">
       <div class="card">
         <h3><span class="dot clay" aria-hidden="true"></span>LeanMillenniumPrizeProblems</h3>
@@ -564,43 +623,12 @@ footer pre { font-size: 13px; line-height: 1.6; color: var(--faint); }
       </div>
     </div>
 
-    <h3 id="involved" style="margin-top:56px;font-size:20px">Get involved</h3>
-    <p>There is room for more work, and the best way to do it is in your own fork.
-      Monteverde is open source under the Apache License 2.0: fork it, change it, and publish
-      your version. You do not need permission. Please keep the credits
-      (<code>NOTICE</code>, <code>CREDITS.md</code>).</p>
-    <div class="grid-2" style="margin-top:24px">
-      <div class="card">
-        <h3>Build on the bridges</h3>
-        <p>Add Monteverde as a dependency, or copy the parts you need. Use
-          <code>clayP_iff_cslib</code>, <code>clayNP_iff_cslib</code> and the function bridge
-          so that results about P, NP and reductions carry over between the two libraries.</p>
-      </div>
-      <div class="card">
-        <h3>Publish a review</h3>
-        <p>The <a href="https://github.com/wbnns/monteverde/blob/main/Audit/cook_text_audit.md">Cook text audit</a>
-          maps Cook's official text to the Lean definitions. If you work in complexity theory,
-          write up your review of it and share it wherever you like.</p>
-      </div>
-      <div class="card">
-        <h3>Close the machine-model gap</h3>
-        <p>Prove in Lean that Mathlib's <code>FinTM2</code> model and Cook's one-tape Turing
-          machine simulate each other in polynomial time. This is the one gap between Cook's
-          text and the Lean statement, and a good project for a fork or for Mathlib.</p>
-      </div>
-      <div class="card">
-        <h3>Fork it</h3>
-        <p>This repository stays as a stable reference at v1.1.0, so issues and pull requests
-          here may not get a reply. <a href="https://github.com/wbnns/monteverde/fork">Fork it</a>
-          and take it further in your own direction.</p>
-      </div>
-    </div>
   </div>
 </section>
 
 <section id="build">
   <div class="wrap">
-    <h2>Build it</h2>
+    <h2>Build</h2>
     <p class="section-lead">You need <a href="https://github.com/leanprover/elan">elan</a>.</p>
 <pre class="block"><code>git clone https://github.com/wbnns/monteverde &amp;&amp; cd monteverde
 lake exe cache get                        <span class="cm"># Mathlib build cache</span>
