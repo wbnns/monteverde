@@ -1,10 +1,15 @@
 import Monteverde.Encoding.BlockEnc
+import Monteverde.Encoding.Pair
+import Monteverde.Encoding.Certificate
 import Monteverde.Function.Finitize
 import Monteverde.Function.Forward
 import Monteverde.Function.Recoder
 import Monteverde.Function.Reverse
 import Monteverde.Function.Bridge
 import Monteverde.Classes.P
+import Monteverde.Classes.NP
+import Monteverde.Statements.Defs
+import Monteverde.Statements.Bits
 
 /-!
 # Monteverde
