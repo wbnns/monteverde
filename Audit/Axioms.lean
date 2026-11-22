@@ -1,8 +1,8 @@
 import Monteverde.Classes.Reduction
 import Monteverde.Function.Bridge
-import Monteverde.Statements.Bits
-import Monteverde.Statements.Clay
-import Monteverde.Statements.NegativeBranch
+import Monteverde.Headline.Bits
+import Monteverde.Headline.Clay
+import Monteverde.Headline.NegativeBranch
 
 /-!
 # Axiom check
@@ -34,3 +34,10 @@ elab "#check_axioms" : command => do
     logInfo m!"{n}: {axs}"
 
 #check_axioms
+
+/-! The design doc asks for `#print axioms` on every headline theorem. `#check_axioms` above is
+the check that fails CI; these lines print the same result for a reader. -/
+
+#print axioms Monteverde.cslibPEqNP_iff_bits
+#print axioms Monteverde.clay_iff_cslib
+#print axioms Monteverde.clay_negative_iff_cslib

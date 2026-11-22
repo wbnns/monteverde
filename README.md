@@ -20,7 +20,7 @@ Evidence for each part of the claim:
 | "the LeanMillenniumPrizeProblems formulation" | The theorems use `Millennium.ClayPVersusNP` and `Millennium.ClayPVersusNP.Formulations.NegativeBranch` from commit `603053d`. `scripts/diff_vendor.sh` shows that the vendored file differs from upstream only by the toolchain fixes in `Vendor/Millennium/CHANGES.md`. |
 | "is equivalent to" | Two `↔` theorems, one for each official target (`Audit/ClaimCheck.lean`). |
 | "P vs NP in cslib-frontier" | `CslibPEqNP` is the form of `NPComplete.mem_P_iff`, and `cslibPEqNP_iff_bits` covers `P encBits = NP encBits`. |
-| "the largest Lean complexity library" | `Audit/size_table.md`, at pinned commits on November 22, 2026: cslib-frontier Computability has 49,439 theorems and lemmas; the next largest, descriptive-complexity, has 12,671 (31,938 if you also count its `lax/` archive copies, which its source archive leaves out). |
+| "the largest Lean complexity library" | `Audit/size_table.md`, at pinned commits on November 22, 2026: cslib-frontier Computability has 49,439 theorems and lemmas; the next largest, descriptive-complexity, has 31,938 (12,671 without its `lax/` archive copies). Counts come from full clones. |
 
 ## Headline theorems
 
@@ -49,7 +49,7 @@ independent kernel check.
 | M3 | L2 class bridges for P and NP (pair words, certificate decoder), bits form | Done |
 | M4 | Headline theorems, claim check, axiom check, isolation, non-vacuity tests | Done |
 | M5 | Size count, independent kernel check, credits, release | Done |
-| After M5 | L1 for word outputs (decoder machine), reduction bridge | Done |
+| After M5 | L1 for word outputs over every finite alphabet (decoder and drain machines), reduction bridge, statements split from proofs | Done |
 | After M5 | Cook-Levin cross-check, Cook text audit, weekly watch for related work | Done |
 
 ## Audit
@@ -58,18 +58,19 @@ independent kernel check.
 |-------|------|----------------------|
 | Claim check | `Audit/ClaimCheck.lean` | A headline theorem is renamed or its type changes. |
 | Axiom check | `Audit/Axioms.lean` | A checked theorem uses an axiom other than `propext`, `Classical.choice`, `Quot.sound` (a `sorry` is the axiom `sorryAx`). |
-| Statement isolation | `Audit/Isolation.lean`, `scripts/check_isolation.sh` | A headline type mentions a theorem or a bridge definition, or `Statements/Defs.lean` imports more than cslib-frontier's class definitions. |
+| Statement isolation | `Audit/Isolation.lean`, `scripts/check_isolation.sh` | A file in `Statements/` imports anything other than the vendored Clay definitions and cslib-frontier's class definitions; a headline theorem's type is not exactly its statement in `Statements/`; or a statement mentions a theorem or a bridge definition. |
 | Vendored files | `scripts/diff_vendor.sh` | A vendored file differs from its upstream commit by an unlisted change. |
 | Non-vacuity | `Tests/NonVacuity.lean` | A simple language is not in P, SAT is not in NP, or the halting problem is in NP, on either side. |
 | Independent kernel check | `scripts/kernel_check.sh`, `.github/workflows/kernel-check.yml` | nanoda (a Rust type checker, not the Lean kernel) rejects the lean4export export of the headline theorems. |
 | Size count | `Audit/size_count.py`, `Audit/size_table.md` | (`--check`) cslib-frontier is not the largest library in the table. |
 | Drift | `.github/workflows/drift.yml` | Weekly: the project no longer builds against cslib-frontier main. This does not move the pin. |
 | Cook-Levin cross-check | `CrossCheck/CookLevin.lean`, `CrossCheck/Axioms.lean` (CI job "Cook-Levin cross-check") | The Cook-Levin proofs of millennium-cook-levin and cslib-frontier do not transfer to each other through the bridges. A test, not part of the claim. |
-| Watch | `.github/workflows/watch.yml` | Nothing fails. Weekly, it opens an issue here if cslib-frontier issues or pull requests, or konard/p-vs-np commits, mention Clay or Millennium. The Lean Zulip stays a manual check. |
+| Watch | `.github/workflows/watch.yml` | Nothing fails. Weekly, it opens an issue here if cslib-frontier issues or pull requests, konard/p-vs-np commits or Lean Zulip messages mention Clay or Millennium. The Zulip search needs the repository secrets `ZULIP_EMAIL` and `ZULIP_API_KEY` (a Zulip bot); without them the job skips Zulip and says so. |
 
 Cook text audit (optional in the design doc): `Audit/cook_text_audit.md` maps each clause of
 Cook's official Clay text to the Lean definitions, in 24 rows, and explains each of the 8
-differences. The reviewer is not chosen yet.
+differences. Claude reviewed it on November 22, 2026: every quote against Cook's PDF and every
+line reference against the files (see the "Review" section of the file).
 
 Cook-Levin cross-check: millennium-cook-levin proves Cook-Levin against the Clay definitions, and
 cslib-frontier proves it against its own. `CrossCheck/CookLevin.lean` moves each proof through
@@ -78,10 +79,15 @@ the bridges. millennium-cook-levin's SAT is NP-complete for the cslib-frontier d
 (`satWords_clayNPComplete`). On each side, the two SAT languages are in P together, exactly
 when P = NP. The file also proves Clay's P ⊆ NP with no hypothesis.
 
-Statement isolation note: Lean puts a theorem's statement and proof in one declaration, so the
-files in `Statements/` import the proofs. The check applies to the statements themselves: every
-constant in a headline type must be a definition from the vendored Clay file, cslib-frontier,
-Mathlib, or `Statements/Defs.lean`.
+Statement isolation: each headline statement is a definition in `Monteverde/Statements/`, one
+per file. Those files import only the vendored Clay definitions and cslib-frontier's class
+definitions, never a proof. The theorems that prove the statements are in
+`Monteverde/Headline/`, one per file. `Audit/Isolation.lean` fails the build unless each
+theorem's type is exactly its statement, term for term.
+
+Roadmap after the M2 spike: the design doc asked for a one-week spike on the recoder machine,
+then new estimates for M2 to M5. The recoder took less than a day, so the original milestone
+order stayed, and M2 to M5 were done on November 22, 2026.
 
 ## Pinned versions
 
@@ -105,7 +111,8 @@ Monteverde/          The bridge, in four layers:
   Encoding/          L0: block code, pairs, certificates
   Function/          L1: polynomial-time functions, both directions
   Classes/           L2: P, NP and reductions
-  Statements/        L3: one headline theorem per file
+  Statements/        L3: the headline statements, one per file (definitions only)
+  Headline/          L3: the headline theorems, one per file
 Audit/               Claim check, axiom check, isolation check, size count
 Tests/               Name probe and non-vacuity tests
 CrossCheck/          Cook-Levin cross-check (a test, not part of the claim)
@@ -131,8 +138,8 @@ The first build compiles the needed part of cslib-frontier (about 300 modules).
 | Question | State |
 |----------|-------|
 | Final package name | Decided: Monteverde. |
-| Offer the bridges upstream to cslib-frontier after release? | Open. The project owner decides. |
-| Do the optional Cook text audit, and with which reviewer? | The audit is in `Audit/cook_text_audit.md`. The reviewer is open. |
+| Offer the bridges upstream to cslib-frontier after release? | On hold, by the project owner's decision. |
+| Do the optional Cook text audit, and with which reviewer? | Done: `Audit/cook_text_audit.md`, reviewed by Claude. A review by a complexity theorist is optional. |
 
 ## Credits and license
 

@@ -1,6 +1,8 @@
-import Monteverde.Statements.Bits
-import Monteverde.Statements.Clay
-import Monteverde.Statements.NegativeBranch
+import Monteverde.Classes.Reduction
+import Monteverde.Function.Bridge
+import Monteverde.Headline.Bits
+import Monteverde.Headline.Clay
+import Monteverde.Headline.NegativeBranch
 
 /-!
 # Claim check
@@ -39,3 +41,36 @@ example (Γ : Type) [Fintype Γ] [Nontrivial Γ] (L : Millennium.Language (List 
     Millennium.InNondeterministicPolynomialTime (Millennium.fin_encoding_string Γ) L ↔
       {w | L w} ∈ NP (Monteverde.blockEnc Γ) :=
   Monteverde.clayNP_iff_cslib Γ L
+
+/-! ### The isolated statements (`Monteverde/Statements/`) -/
+
+example : Monteverde.Statements.CslibPEqNPIffBits := Monteverde.cslibPEqNP_iff_bits
+example : Monteverde.Statements.ClayIffCslib := Monteverde.clay_iff_cslib
+example : Monteverde.Statements.ClayNegativeIffCslib := Monteverde.clay_negative_iff_cslib
+
+/-! ### The class bridge interface, word for word as the design doc writes it
+
+The design doc writes `setOf L`. Mathlib deprecated the name `setOf` (an alias of `Set.ofPred`)
+on 2026-07-09, so the theorems write `{w | L w}`, the same set. These examples check the design
+doc's exact text against the theorems. -/
+
+set_option linter.deprecated false in
+example (Γ : Type) [Fintype Γ] [Nontrivial Γ] (L : Millennium.Language (List Γ)) :
+    Millennium.InPolynomialTime (Millennium.fin_encoding_string Γ) L ↔
+      setOf L ∈ Cslib.Complexity.P (Monteverde.blockEnc Γ) :=
+  Monteverde.clayP_iff_cslib Γ L
+
+set_option linter.deprecated false in
+example (Γ : Type) [Fintype Γ] [Nontrivial Γ] (L : Millennium.Language (List Γ)) :
+    Millennium.InNondeterministicPolynomialTime (Millennium.fin_encoding_string Γ) L ↔
+      setOf L ∈ Cslib.Complexity.NP (Monteverde.blockEnc Γ) :=
+  Monteverde.clayNP_iff_cslib Γ L
+
+/-! ### L1 for every finite alphabet (design doc, layer L1) -/
+
+example {α β Γ Δ : Type} [Fintype Γ] [Fintype Δ] {e : α → List Γ} {eo : β → List Δ}
+    (he : Function.Injective e) (heo : Function.Injective eo) (f : α → β) :
+    Nonempty (Turing.TM2ComputableInPolyTime e eo f) ↔
+      ComputableInPolyTime f ((⟨e, he⟩ : α ↪ List Γ).trans (Monteverde.blockEnc Γ))
+        ((⟨eo, heo⟩ : β ↪ List Δ).trans (Monteverde.blockEnc Δ)) :=
+  Monteverde.tm2_iff_computableInPolyTime_words he heo f

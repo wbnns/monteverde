@@ -10,8 +10,7 @@ words (`Millennium.PolynomialTimeReducible` with `fin_encoding_string`) is exact
 cslib-frontier polynomial-time reduction under the block codes (`PolyTimeReducible`).
 
 Both directions go through the L1 bridge for word outputs,
-`Monteverde.tm2_iff_computableInPolyTime_words`. The target alphabet `Δ` must have a symbol for
-the direction from cslib-frontier to Clay (see `Monteverde.Decoder`).
+`Monteverde.tm2_iff_computableInPolyTime_words`.
 -/
 
 namespace Monteverde
@@ -31,7 +30,7 @@ theorem polyTimeReducible_of_clay
     Function.injective_id (hf : TM2ComputableInPolyTime id id f), hL⟩
 
 /-- **cslib-frontier reduction to Clay reduction.** -/
-theorem clay_of_polyTimeReducible [Nonempty Δ]
+theorem clay_of_polyTimeReducible
     (h : PolyTimeReducible (blockEnc Γ) (blockEnc Δ) {w | L₁ w} {w | L₂ w}) :
     Millennium.PolynomialTimeReducible (Millennium.fin_encoding_string Γ)
       (Millennium.fin_encoding_string Δ) L₁ L₂ := by
@@ -41,7 +40,7 @@ theorem clay_of_polyTimeReducible [Nonempty Δ]
   exact ⟨f, h', hL⟩
 
 /-- **L2 for reductions.** -/
-theorem clayReducible_iff_cslib [Nonempty Δ] :
+theorem clayReducible_iff_cslib :
     Millennium.PolynomialTimeReducible (Millennium.fin_encoding_string Γ)
         (Millennium.fin_encoding_string Δ) L₁ L₂ ↔
       PolyTimeReducible (blockEnc Γ) (blockEnc Δ) {w | L₁ w} {w | L₂ w} :=

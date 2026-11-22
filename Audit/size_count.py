@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Count theorem and lemma declarations in public Lean complexity libraries.
 
-Reads Audit/size_pins.json, streams each repository's tarball at its pinned commit from
-GitHub (nothing is written to disk), counts declaration lines in .lean files, and writes
+Reads Audit/size_pins.json, makes a shallow clone of each repository at its pinned commit in a
+temporary directory (deleted afterwards), counts declaration lines in all .lean files, and writes
 Audit/size_table.md. The claim may say "the largest Lean complexity library" only if
 cslib-frontier is first in this table.
 
@@ -13,8 +13,8 @@ import json
 import pathlib
 import re
 import sys
-import tarfile
-import urllib.request
+import subprocess
+import tempfile
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 DECL = re.compile(
@@ -24,21 +24,23 @@ DECL = re.compile(
 
 
 def count(repo: str, commit: str, subdir: str) -> tuple[int, int]:
-    url = f"https://codeload.github.com/{repo}/tar.gz/{commit}"
-    request = urllib.request.Request(url, headers={"User-Agent": "monteverde-size-count"})
-    decls = files = 0
-    with urllib.request.urlopen(request, timeout=600) as response:
-        with tarfile.open(fileobj=response, mode="r|gz") as tar:
-            for member in tar:
-                if not member.isfile() or not member.name.endswith(".lean"):
-                    continue
-                # Strip the top-level "<repo>-<commit>/" directory.
-                path = member.name.split("/", 1)[1] if "/" in member.name else member.name
-                if subdir and not path.startswith(subdir.rstrip("/") + "/"):
-                    continue
-                data = tar.extractfile(member).read()
-                files += 1
-                decls += sum(1 for line in data.splitlines() if DECL.match(line))
+    """Count declaration lines in every .lean file of a full clone at the pinned commit.
+
+    A clone has every tracked file. (GitHub's source archives leave out paths marked
+    `export-ignore`, so they can undercount.)"""
+    with tempfile.TemporaryDirectory() as tmp:
+        git = ["git", "-C", tmp, "-c", "advice.detachedHead=false"]
+        subprocess.run(["git", "init", "-q", tmp], check=True)
+        subprocess.run(git + ["remote", "add", "origin", f"https://github.com/{repo}"], check=True)
+        subprocess.run(git + ["fetch", "-q", "--depth", "1", "origin", commit], check=True)
+        subprocess.run(git + ["checkout", "-q", "FETCH_HEAD"], check=True)
+        root = pathlib.Path(tmp) / subdir if subdir else pathlib.Path(tmp)
+        decls = files = 0
+        for path in root.rglob("*.lean"):
+            if ".git" in path.relative_to(tmp).parts or not path.is_file():
+                continue
+            files += 1
+            decls += sum(1 for line in path.read_bytes().splitlines() if DECL.match(line))
     return decls, files
 
 

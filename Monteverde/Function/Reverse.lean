@@ -1,6 +1,7 @@
 import Monteverde.Encoding.BlockEnc
 import Monteverde.Function.Recoder
 import Monteverde.Function.Decoder
+import Monteverde.Function.Drain
 import Vendor.CookLevin.Comp
 import CslibFrontier.Computability.Machines.Turing.TM2.Reverse.Transfer
 
@@ -37,14 +38,17 @@ theorem tm2_of_computableInPolyTime {α Γ : Type} [Fintype Γ] {e : α → List
   exact PvsNP.tm2ComputableInPolyTime_comp h₁ h₂
 
 /-- **L1 reverse, word outputs.** A cslib-frontier polynomial-time function under the block codes
-is a Mathlib TM2 polynomial-time function between the words themselves. The output alphabet must
-have a symbol, because the decoder machine keeps a symbol index in its state. -/
-theorem tm2_of_computableInPolyTime_words {α β Γ Δ : Type} [Fintype Γ] [Fintype Δ] [Nonempty Δ]
+is a Mathlib TM2 polynomial-time function between the words themselves. If the output alphabet
+is empty, the drain machine does the work; else the recoder, the cslib-frontier machine and the
+decoder machine run in sequence. -/
+theorem tm2_of_computableInPolyTime_words {α β Γ Δ : Type} [Fintype Γ] [Fintype Δ]
     {e : α → List Γ} {eo : β → List Δ} (he : Function.Injective e) (heo : Function.Injective eo)
     {f : α → β}
     (hc : ComputableInPolyTime f ((⟨e, he⟩ : α ↪ List Γ).trans (blockEnc Γ))
       ((⟨eo, heo⟩ : β ↪ List Δ).trans (blockEnc Δ))) :
     Nonempty (TM2ComputableInPolyTime e eo f) := by
+  rcases isEmpty_or_nonempty Δ with hΔ | hΔ
+  · exact ⟨Drain.drainer e eo f⟩
   obtain ⟨h₂, -⟩ := hc.exists_tm2ComputableInPolyTime
   have h₁ : TM2ComputableInPolyTime e ((⟨e, he⟩ : α ↪ List Γ).trans (blockEnc Γ)) id :=
     Recoder.recoder (fun a => frame (encFinite Γ a)) e
