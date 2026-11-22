@@ -33,5 +33,5 @@ source commit. The final list, with every author taken from git history, is part
 
 - Source: https://github.com/JoshuaTan42/millennium-cook-levin, commit `879c4835640119ad009abeb62ebd7a96f87eb9e8`
 - License: Apache-2.0
-- Reused (planned for M2, not vendored yet): `Comp.lean`, the composition of polynomial-time TM2 machines
-  (Joshua Tan).
+- Reused: `Comp.lean` (vendored in `Vendor/CookLevin/`), the composition of polynomial-time TM2
+  machines, `PvsNP.tm2ComputableInPolyTime_comp` (Joshua Tan).

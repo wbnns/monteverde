@@ -1,0 +1,7 @@
+This directory contains a modified copy of Comp.lean from millennium-cook-levin
+(https://github.com/JoshuaTan42/millennium-cook-levin), commit
+879c4835640119ad009abeb62ebd7a96f87eb9e8, Copyright 2026 Joshua Tan, licensed under the Apache
+License 2.0 (see LICENSE in this directory).
+
+Monteverde ported the file to Lean v4.36.0-rc2. The changes are listed in CHANGES.md and the
+full diff is port.patch.
