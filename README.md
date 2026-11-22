@@ -42,8 +42,23 @@ independent kernel check.
 | M1 | L0 block code, finite work alphabets, L1 forward bridge, Clay P to cslib P | Done |
 | M2 | L1 reverse bridge (recoder machine, TM2 composition), L1 iff, Clay P ↔ cslib P | Done |
 | M3 | L2 class bridges for P and NP (pair words, certificate decoder), bits form | Done |
-| M4 | Headline theorems, claim check, axiom check, isolation, non-vacuity tests | Not started |
+| M4 | Headline theorems, claim check, axiom check, isolation, non-vacuity tests | Done |
 | M5 | Size count, independent kernel check, credits, release | Not started |
+
+## Audit
+
+| Check | File | What fails the build |
+|-------|------|----------------------|
+| Claim check | `Audit/ClaimCheck.lean` | A headline theorem is renamed or its type changes. |
+| Axiom check | `Audit/Axioms.lean` | A checked theorem uses an axiom other than `propext`, `Classical.choice`, `Quot.sound` (a `sorry` is the axiom `sorryAx`). |
+| Statement isolation | `Audit/Isolation.lean`, `scripts/check_isolation.sh` | A headline type mentions a theorem or a bridge definition, or `Statements/Defs.lean` imports more than cslib-frontier's class definitions. |
+| Vendored files | `scripts/diff_vendor.sh` | A vendored file differs from its upstream commit by an unlisted change. |
+| Non-vacuity | `Tests/NonVacuity.lean` | A simple language is not in P, SAT is not in NP, or the halting problem is in NP, on either side. |
+
+Statement isolation note: Lean puts a theorem's statement and proof in one declaration, so the
+files in `Statements/` import the proofs. The check applies to the statements themselves: every
+constant in a headline type must be a definition from the vendored Clay file, cslib-frontier,
+Mathlib, or `Statements/Defs.lean`.
 
 ## Pinned versions
 
@@ -77,8 +92,9 @@ You need [elan](https://github.com/leanprover/elan). Then:
 
 ```bash
 lake exe cache get        # Mathlib build cache
-lake build Vendor Monteverde Tests
+lake build Vendor Monteverde Audit Tests
 scripts/diff_vendor.sh    # vendored files against their upstream commits
+scripts/check_isolation.sh
 ```
 
 The first build compiles the needed part of cslib-frontier (about 300 modules).

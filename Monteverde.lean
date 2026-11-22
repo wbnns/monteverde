@@ -10,6 +10,8 @@ import Monteverde.Classes.P
 import Monteverde.Classes.NP
 import Monteverde.Statements.Defs
 import Monteverde.Statements.Bits
+import Monteverde.Statements.Clay
+import Monteverde.Statements.NegativeBranch
 
 /-!
 # Monteverde

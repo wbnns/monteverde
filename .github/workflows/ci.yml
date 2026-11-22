@@ -44,7 +44,7 @@ jobs:
       - name: Build
         run: |
           set -o pipefail
-          lake build Vendor Monteverde Tests 2>&1 | tee build.log
+          lake build Vendor Monteverde Audit Tests 2>&1 | tee build.log
 
       - name: No sorry and no new axioms
         run: |
@@ -57,3 +57,11 @@ jobs:
 
       - name: Vendored files match upstream
         run: scripts/diff_vendor.sh
+
+      - name: Statement isolation (imports)
+        run: scripts/check_isolation.sh
+
+      - name: Show the audit results
+        run: |
+          lake env lean Audit/Axioms.lean
+          lake env lean Audit/Isolation.lean
