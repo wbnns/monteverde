@@ -565,30 +565,34 @@ footer pre { font-size: 13px; line-height: 1.6; color: var(--faint); }
     </div>
 
     <h3 id="involved" style="margin-top:56px;font-size:20px">Get involved</h3>
-    <p>There is room for more work, and help is welcome.</p>
+    <p>There is room for more work, and the best way to do it is in your own fork.
+      Monteverde is open source under the Apache License 2.0: fork it, change it, and publish
+      your version. You do not need permission. Please keep the credits
+      (<code>NOTICE</code>, <code>CREDITS.md</code>).</p>
     <div class="grid-2" style="margin-top:24px">
       <div class="card">
         <h3>Build on the bridges</h3>
-        <p>Use <code>clayP_iff_cslib</code>, <code>clayNP_iff_cslib</code> and the function
-          bridge in your own project, so that results about P, NP and reductions carry over
-          between the two libraries.</p>
+        <p>Add Monteverde as a dependency, or copy the parts you need. Use
+          <code>clayP_iff_cslib</code>, <code>clayNP_iff_cslib</code> and the function bridge
+          so that results about P, NP and reductions carry over between the two libraries.</p>
       </div>
       <div class="card">
-        <h3>Review the Cook text audit</h3>
-        <p>The <a href="https://github.com/wbnns/monteverde/blob/main/Audit/cook_text_audit.md">audit</a>
-          maps Cook's official text to the Lean definitions. A review by someone in complexity
-          theory adds confidence for everyone.</p>
+        <h3>Publish a review</h3>
+        <p>The <a href="https://github.com/wbnns/monteverde/blob/main/Audit/cook_text_audit.md">Cook text audit</a>
+          maps Cook's official text to the Lean definitions. If you work in complexity theory,
+          write up your review of it and share it wherever you like.</p>
       </div>
       <div class="card">
         <h3>Close the machine-model gap</h3>
         <p>Prove in Lean that Mathlib's <code>FinTM2</code> model and Cook's one-tape Turing
           machine simulate each other in polynomial time. This is the one gap between Cook's
-          text and the Lean statement.</p>
+          text and the Lean statement, and a good project for a fork or for Mathlib.</p>
       </div>
       <div class="card">
-        <h3>Ask, suggest, report</h3>
-        <p>Open an <a href="https://github.com/wbnns/monteverde/issues">issue</a> with a
-          question, an idea or a problem. Pull requests are welcome too.</p>
+        <h3>Fork it</h3>
+        <p>This repository stays as a stable reference at v1.1.0, so issues and pull requests
+          here may not get a reply. <a href="https://github.com/wbnns/monteverde/fork">Fork it</a>
+          and take it further in your own direction.</p>
       </div>
     </div>
   </div>
