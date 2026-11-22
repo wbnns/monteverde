@@ -1,0 +1,5 @@
+/.lake/
+/.scratch/
+*.olean
+__pycache__/
+/audit-out/
