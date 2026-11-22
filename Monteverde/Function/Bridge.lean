@@ -20,4 +20,15 @@ theorem tm2_iff_computableInPolyTime {α Γ : Type} [Fintype Γ] {e : α → Lis
       ComputableInPolyTime f ((⟨e, he⟩ : α ↪ List Γ).trans (blockEnc Γ)) encBool :=
   ⟨fun ⟨h⟩ => computableInPolyTime_of_tm2 he h, tm2_of_computableInPolyTime he⟩
 
+/-- **L1, word outputs.** TM2 polynomial time from words over `Γ` to words over `Δ` is
+cslib-frontier polynomial time under the block codes of both alphabets. -/
+theorem tm2_iff_computableInPolyTime_words {α β Γ Δ : Type} [Fintype Γ] [Fintype Δ] [Nonempty Δ]
+    {e : α → List Γ} {eo : β → List Δ} (he : Function.Injective e) (heo : Function.Injective eo)
+    (f : α → β) :
+    Nonempty (TM2ComputableInPolyTime e eo f) ↔
+      ComputableInPolyTime f ((⟨e, he⟩ : α ↪ List Γ).trans (blockEnc Γ))
+        ((⟨eo, heo⟩ : β ↪ List Δ).trans (blockEnc Δ)) :=
+  ⟨fun ⟨h⟩ => computableInPolyTime_of_tm2_words he heo h,
+    tm2_of_computableInPolyTime_words he heo⟩
+
 end Monteverde

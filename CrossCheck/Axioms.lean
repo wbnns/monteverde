@@ -15,7 +15,9 @@ elab "#check_crosscheck_axioms" : command => do
       ``Monteverde.CrossCheck.clay_P_subset_NP,
       ``Monteverde.CrossCheck.mcl_SAT_mem_NP, ``Monteverde.CrossCheck.mcl_SAT_mem_P_iff,
       ``Monteverde.CrossCheck.satWords_clayP_iff, ``Monteverde.CrossCheck.cook_levin_agree_clay,
-      ``Monteverde.CrossCheck.cook_levin_agree_cslib] do
+      ``Monteverde.CrossCheck.cook_levin_agree_cslib,
+      ``Monteverde.CrossCheck.mcl_SAT_npComplete,
+      ``Monteverde.CrossCheck.satWords_clayNPComplete] do
     let axs ← liftCoreM (collectAxioms n)
     let bad := axs.filter fun a => !allowedAxioms.contains a
     unless bad.isEmpty do

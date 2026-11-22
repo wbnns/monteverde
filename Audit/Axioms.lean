@@ -1,3 +1,5 @@
+import Monteverde.Classes.Reduction
+import Monteverde.Function.Bridge
 import Monteverde.Statements.Bits
 import Monteverde.Statements.Clay
 import Monteverde.Statements.NegativeBranch
@@ -19,7 +21,8 @@ def allowedAxioms : List Name := [``propext, ``Classical.choice, ``Quot.sound]
 def checkedDecls : List Name :=
   [``Monteverde.cslibPEqNP_iff_bits, ``Monteverde.clay_iff_cslib,
     ``Monteverde.clay_negative_iff_cslib, ``Monteverde.clayP_iff_cslib,
-    ``Monteverde.clayNP_iff_cslib, ``Monteverde.tm2_iff_computableInPolyTime]
+    ``Monteverde.clayNP_iff_cslib, ``Monteverde.tm2_iff_computableInPolyTime,
+    ``Monteverde.tm2_iff_computableInPolyTime_words, ``Monteverde.clayReducible_iff_cslib]
 
 /-- Fail unless every checked declaration uses only the allowed axioms. -/
 elab "#check_axioms" : command => do

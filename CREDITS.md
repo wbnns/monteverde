@@ -74,9 +74,10 @@ commit. Authors come from file headers, `CITATION.cff` and git history at the pi
 
 ## New in Monteverde
 
-The block code wrapper, the finitization of TM2 work alphabets, the recoder machine, the pair-word
-conversions, the certificate decoder, the forward and reverse bridges, the class bridges, the
-statements, the audit and the Cook-Levin cross-check are new work in this repository.
+The block code wrapper, the finitization of TM2 work alphabets, the recoder and decoder
+machines, the pair-word conversions, the certificate decoder, the forward and reverse bridges,
+the class and reduction bridges, the statements, the audit and the Cook-Levin cross-check are new
+work in this repository.
 
 `Audit/cook_text_audit.md` quotes short phrases from Stephen Cook, "The P versus NP Problem", the
 official Clay Mathematics Institute problem description.

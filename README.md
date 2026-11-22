@@ -49,6 +49,7 @@ independent kernel check.
 | M3 | L2 class bridges for P and NP (pair words, certificate decoder), bits form | Done |
 | M4 | Headline theorems, claim check, axiom check, isolation, non-vacuity tests | Done |
 | M5 | Size count, independent kernel check, credits, release | Done |
+| After M5 | L1 for word outputs (decoder machine), reduction bridge | Done |
 | After M5 | Cook-Levin cross-check, Cook text audit, weekly watch for related work | Done |
 
 ## Audit
@@ -72,10 +73,10 @@ differences. The reviewer is not chosen yet.
 
 Cook-Levin cross-check: millennium-cook-levin proves Cook-Levin against the Clay definitions, and
 cslib-frontier proves it against its own. `CrossCheck/CookLevin.lean` moves each proof through
-the bridges and shows that they agree: in Clay and in cslib-frontier, millennium-cook-levin's SAT
-is in P exactly when cslib-frontier's SAT is in P, exactly when P = NP. The check works at the
-level of P membership. It does not move many-one reductions, because the function bridge covers
-yes/no outputs only. It also proves Clay's P ⊆ NP with no hypothesis.
+the bridges. millennium-cook-levin's SAT is NP-complete for the cslib-frontier definitions
+(`mcl_SAT_npComplete`), and cslib-frontier's SAT is NP-complete for the Clay definitions
+(`satWords_clayNPComplete`). On each side, the two SAT languages are in P together, exactly
+when P = NP. The file also proves Clay's P ⊆ NP with no hypothesis.
 
 Statement isolation note: Lean puts a theorem's statement and proof in one declaration, so the
 files in `Statements/` import the proofs. The check applies to the statements themselves: every
@@ -103,7 +104,7 @@ Vendor/CookLevin/    millennium-cook-levin, ported the same way: TM2 composition
 Monteverde/          The bridge, in four layers:
   Encoding/          L0: block code, pairs, certificates
   Function/          L1: polynomial-time functions, both directions
-  Classes/           L2: P and NP
+  Classes/           L2: P, NP and reductions
   Statements/        L3: one headline theorem per file
 Audit/               Claim check, axiom check, isolation check, size count
 Tests/               Name probe and non-vacuity tests

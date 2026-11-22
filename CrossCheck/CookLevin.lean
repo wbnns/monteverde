@@ -17,19 +17,20 @@ There are two independent Cook-Levin proofs:
   cslib-frontier definitions. `satWords` is the binary image of this `SAT`.
 
 The two SAT languages use different encodings, and neither library has a Lean reduction between
-them. NP-completeness of a language `S` says: `S` is in P exactly when P = NP. So the test
-transfers each Cook-Levin proof through the Monteverde bridges and checks this:
+them. The test transfers each Cook-Levin proof through the Monteverde bridges:
 
 1. `mcl_SAT_mem_NP`: the Clay proof that `PvsNP.SAT` is in NP gives cslib-frontier NP.
-2. `mcl_SAT_mem_P_iff`: in cslib-frontier, `PvsNP.SAT` is in P exactly when P = NP. This is the
-   Clay Cook-Levin theorem, moved to cslib-frontier by `clayP_iff_cslib` and `clay_iff_cslib`.
+2. `mcl_SAT_mem_P_iff`: in cslib-frontier, `PvsNP.SAT` is in P exactly when P = NP.
 3. `satWords_clayP_iff`: in Clay, the cslib-frontier SAT is in P exactly when the Clay statement
-   holds. This is the cslib-frontier Cook-Levin theorem, moved to Clay.
-4. `cook_levin_agree`: the two SAT languages are in P together, on each side.
+   holds.
+4. `cook_levin_agree_clay`, `cook_levin_agree_cslib`: the two SAT languages are in P together,
+   on each side.
+5. `mcl_SAT_npComplete`: millennium-cook-levin's SAT is NP-complete for the cslib-frontier
+   definitions. `satWords_clayNPComplete`: cslib-frontier's SAT is NP-complete for the Clay
+   definitions. These move many-one reductions with the reduction bridge
+   `Monteverde.clayReducible_iff_cslib`.
 
-The transfer works at the level of P membership, which is what NP-completeness says about
-P vs NP. Many-one reductions are not transferred: the function bridge in `Function/` covers
-yes/no outputs only.
+It also proves Clay's P ⊆ NP with no hypothesis (`clay_P_subset_NP`).
 -/
 
 namespace Monteverde.CrossCheck
@@ -92,5 +93,48 @@ theorem cook_levin_agree_clay :
 theorem cook_levin_agree_cslib :
     {w | PvsNP.SAT w} ∈ P (blockEnc Bool) ↔ satWords ∈ P encBits :=
   mcl_SAT_mem_P_iff.trans satWords_mem_P_iff.symm
+
+/-! ### 5. Full NP-completeness, moved both ways
+
+With the L1 bridge for word outputs, reductions move too (`Monteverde.clayReducible_iff_cslib`).
+So each library's SAT is NP-complete on the other side. Each proof uses both Cook-Levin proofs:
+one for hardness, and the other to reach the other library's SAT. -/
+
+/-- cslib-frontier's SAT reduces to millennium-cook-levin's SAT, in cslib-frontier. -/
+theorem SAT_reduces_to_mcl_SAT :
+    PolyTimeReducible encCNF (blockEnc Bool) SAT {w | PvsNP.SAT w} := by
+  have h₁ : PolyTimeReducible encCNF encBits SAT satWords :=
+    ⟨encCNF, ComputableInPolyTime.of_eq fun _ => rfl,
+      fun a => (encCNF.injective.mem_set_image).symm⟩
+  have h₂ : PolyTimeReducible encBits (blockEnc Bool) satWords satWords :=
+    ⟨fun w => w, bits_to_blockEnc, fun _ => Iff.rfl⟩
+  have h₃ : PolyTimeReducible (blockEnc Bool) (blockEnc Bool) satWords {w | PvsNP.SAT w} :=
+    polyTimeReducible_of_clay (PvsNP.cook_levin.2 (fin_encoding_string Bool) _ satWords_clayNP)
+  exact (h₁.trans h₂).trans h₃
+
+/-- **millennium-cook-levin's Cook-Levin theorem, in cslib-frontier.** Its SAT is NP-complete
+for the cslib-frontier definitions. -/
+theorem mcl_SAT_npComplete : NPComplete (blockEnc Bool) {w | PvsNP.SAT w} :=
+  ⟨mcl_SAT_mem_NP, CookLevin.SAT_npComplete.2.trans SAT_reduces_to_mcl_SAT⟩
+
+/-- millennium-cook-levin's SAT reduces to cslib-frontier's SAT, in Clay. -/
+theorem mcl_SAT_reduces_to_satWords :
+    PolynomialTimeReducible (fin_encoding_string Bool) (fin_encoding_string Bool) PvsNP.SAT
+      (· ∈ satWords) := by
+  have h₁ : PolyTimeReducible (blockEnc Bool) encCNF {w | PvsNP.SAT w} SAT :=
+    CookLevin.SAT_npComplete.2 _ _ mcl_SAT_mem_NP
+  have h₂ : PolyTimeReducible encCNF encBits SAT satWords :=
+    ⟨encCNF, ComputableInPolyTime.of_eq fun _ => rfl,
+      fun a => (encCNF.injective.mem_set_image).symm⟩
+  have h₃ : PolyTimeReducible encBits (blockEnc Bool) satWords satWords :=
+    ⟨fun w => w, bits_to_blockEnc, fun _ => Iff.rfl⟩
+  exact clay_of_polyTimeReducible ((h₁.trans h₂).trans h₃)
+
+/-- **cslib-frontier's Cook-Levin theorem, in Clay.** Its SAT is NP-complete for the Clay
+definitions. -/
+theorem satWords_clayNPComplete :
+    NondeterministicPolynomialTimeComplete (fin_encoding_string Bool) (· ∈ satWords) :=
+  NondeterministicPolynomialTimeComplete.transfer _ _ _ _ PvsNP.comp PvsNP.cook_levin
+    satWords_clayNP mcl_SAT_reduces_to_satWords
 
 end Monteverde.CrossCheck
