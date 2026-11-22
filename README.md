@@ -54,6 +54,9 @@ independent kernel check.
 | Statement isolation | `Audit/Isolation.lean`, `scripts/check_isolation.sh` | A headline type mentions a theorem or a bridge definition, or `Statements/Defs.lean` imports more than cslib-frontier's class definitions. |
 | Vendored files | `scripts/diff_vendor.sh` | A vendored file differs from its upstream commit by an unlisted change. |
 | Non-vacuity | `Tests/NonVacuity.lean` | A simple language is not in P, SAT is not in NP, or the halting problem is in NP, on either side. |
+| Independent kernel check | `scripts/kernel_check.sh`, `.github/workflows/kernel-check.yml` | nanoda (a Rust type checker, not the Lean kernel) rejects the lean4export export of the headline theorems. |
+| Size count | `Audit/size_count.py`, `Audit/size_table.md` | (`--check`) cslib-frontier is not the largest library in the table. |
+| Drift | `.github/workflows/drift.yml` | Weekly: the project no longer builds against cslib-frontier main. This does not move the pin. |
 
 Statement isolation note: Lean puts a theorem's statement and proof in one declaration, so the
 files in `Statements/` import the proofs. The check applies to the statements themselves: every

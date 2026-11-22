@@ -1,0 +1,17 @@
+{
+  "counted_on": "2026-11-22",
+  "pattern": "a line that starts (after optional attributes and modifiers) with `theorem` or `lemma`",
+  "libraries": [
+    {"name": "cslib-frontier (Computability)", "repo": "cslib-community/cslib-frontier", "commit": "9bfe667f8c66a8a2a3e17391ce9a5cc965190544", "subdir": "CslibFrontier/Computability"},
+    {"name": "cslib-frontier (whole repo)", "repo": "cslib-community/cslib-frontier", "commit": "9bfe667f8c66a8a2a3e17391ce9a5cc965190544", "subdir": ""},
+    {"name": "descriptive-complexity (PierreSenellart)", "repo": "PierreSenellart/descriptive-complexity", "commit": "214dd414d0303cabd57caeefcbef1fa2866244fc", "subdir": ""},
+    {"name": "descriptive-complexity (SamuelSchlesinger)", "repo": "SamuelSchlesinger/descriptive-complexity", "commit": "16464bc4ce610f5a2bc9bd7c16fed4ef2dd99358", "subdir": ""},
+    {"name": "CSLib", "repo": "leanprover/cslib", "commit": "be203abd82cdad92e84287ae44e22db05bad5d59", "subdir": ""},
+    {"name": "starpos/lean-np-complete", "repo": "starpos/lean-np-complete", "commit": "10ebb6683345d8d4596e864f8592942dd65f882e", "subdir": ""},
+    {"name": "PleaNP", "repo": "philipdallen/PleaNP", "commit": "f8d43d2bd22b25070da210d67f0e43dccc34c3a2", "subdir": ""},
+    {"name": "millennium-cook-levin", "repo": "JoshuaTan42/millennium-cook-levin", "commit": "879c4835640119ad009abeb62ebd7a96f87eb9e8", "subdir": ""},
+    {"name": "konard/p-vs-np", "repo": "konard/p-vs-np", "commit": "ecedd2b45f1c524d85c00b2da27a9c140025550c", "subdir": ""},
+    {"name": "alonamaloh/complexity-lean", "repo": "alonamaloh/complexity-lean", "commit": "e2030b27d7aa86025c8e26e9974448e73b70f34f", "subdir": ""},
+    {"name": "ShantiDraconis/clay-p-vs-np-statement", "repo": "ShantiDraconis/clay-p-vs-np-statement", "commit": "6375290555338218f009c52ac6078dc0c9c7a15c", "subdir": ""}
+  ]
+}

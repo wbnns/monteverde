@@ -1,0 +1,43 @@
+name: Weekly drift check
+
+# Builds Monteverde against the current cslib-frontier main, so that breaking changes show up
+# early. The pin in lakefile.toml does not move here; moving it is a release step.
+
+on:
+  schedule:
+    - cron: "17 5 * * 1"
+  workflow_dispatch:
+
+jobs:
+  drift:
+    name: Build against cslib-frontier main
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Free disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
+          df -h /
+
+      - name: Use cslib-frontier main and its toolchain
+        run: |
+          sed -i 's/^rev = "[0-9a-f]\{40\}"/rev = "main"/' lakefile.toml
+          curl -fsSL https://raw.githubusercontent.com/cslib-community/cslib-frontier/main/lean-toolchain -o lean-toolchain
+          cat lean-toolchain
+
+      - name: Install elan
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o elan-init.sh
+          sh elan-init.sh -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Update dependencies
+        run: lake update cslib-frontier
+
+      - name: Get the Mathlib cache
+        run: lake exe cache get
+
+      - name: Build
+        run: lake build Vendor Monteverde Audit Tests

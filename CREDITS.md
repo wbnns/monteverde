@@ -1,37 +1,74 @@
 # Credits
 
-Monteverde is by Will Binns. It reuses the definitions and theorems below. Each entry names the
-source commit. The final list, with every author taken from git history, is part of milestone M5.
+Monteverde is by Will Binns. It proves the bridge between two formal statements of P vs NP, and
+it stands on the work below. Every reused definition and theorem is listed with its source
+commit. Authors come from file headers, `CITATION.cff` and git history at the pinned commits.
 
 ## LeanMillenniumPrizeProblems
 
-- Source: https://github.com/lean-dojo/LeanMillenniumPrizeProblems, commit `603053dc267cf3efe422f438eb78098c0ececd6f`
+- Source: https://github.com/lean-dojo/LeanMillenniumPrizeProblems, commit
+  `603053dc267cf3efe422f438eb78098c0ececd6f`
 - License: Apache-2.0
-- Reused: `Problems/PVersusNP/Millennium.lean` (vendored in `Vendor/Millennium/`): `Millennium.ClayPVersusNP`,
-  `Millennium.ClayPVersusNP.Formulations.NegativeBranch`, `InPolynomialTime`,
-  `InNondeterministicPolynomialTime`, `fin_encoding_string`, `pair_encoding` and the rest of the file.
-- Authors: to be completed from git history (M5).
+- Author: Robert Joseph George (`CITATION.cff`, `LICENSE`, and every commit to
+  `Problems/PVersusNP/Millennium.lean`).
+- Reused, vendored in `Vendor/Millennium/`: the whole file `Problems/PVersusNP/Millennium.lean`,
+  including the two official targets `Millennium.ClayPVersusNP` and
+  `Millennium.ClayPVersusNP.Formulations.NegativeBranch`, and `InPolynomialTime`,
+  `InNondeterministicPolynomialTime`, `PolynomialTimeCheckingRelation`, `fin_encoding_string`,
+  `pair_encoding`, `Language`.
 
 ## cslib-frontier
 
-- Source: https://github.com/cslib-community/cslib-frontier, commit `9bfe667f8c66a8a2a3e17391ce9a5cc965190544`
+- Source: https://github.com/cslib-community/cslib-frontier, commit
+  `9bfe667f8c66a8a2a3e17391ce9a5cc965190544`
 - License: Apache-2.0
-- Reused: the classes `P` and `NP`, the encodings, the TM2 bridge in both directions, reductions,
-  `NPComplete.mem_P_iff`, SAT and its NP-completeness, `mem_NP_of_witness`, `PolyTimeEquiv`.
-- Authors: to be completed from git history (M5). This includes Erik Demaine (TM2 bridge) and
-  Samuel Schlesinger (P, NP and reductions).
+- Reused, by direct reference:
 
-## Mathlib
+| Declaration | File (under `CslibFrontier/Computability/`) | Author |
+|-------------|---------------------------------------------|--------|
+| `Cslib.Complexity.P`, `NP`, `IsVerifier` | `Complexity/Classes/P.lean`, `Complexity/Classes/NP.lean` | Samuel Schlesinger |
+| `PolyTimeReducible`, `NPComplete.mem_P_iff`, `P_subset_NP` | `Complexity/Reduction.lean` | Samuel Schlesinger |
+| `PolyTimeReducible.mem_NP`, `mem_NP_of_check` | `Complexity/Classes/NP/Witness.lean` | Samuel Schlesinger |
+| `image_SAT_mem_NP` | `Complexity/Classes/NP/Image.lean` | Samuel Schlesinger |
+| `SAT`, `encCNF` | `Complexity/Problems/SAT.lean` | Samuel Schlesinger |
+| `CookLevin.SAT_npComplete` | `Complexity/CookLevin/Completeness.lean` | Samuel Schlesinger |
+| `haltingProblem_notMem_NP` (test only) | `Complexity/Problems/Halting.lean` | Christian Reitwiessner |
+| `TM2ComputableInPolyTime.computableInPolyTime_encList` (TM2 to multi-tape) | `Machines/Turing/TM2/PolyTime.lean` | Erik Demaine |
+| `ComputableInPolyTime.exists_tm2ComputableInPolyTime` (multi-tape to TM2) | `Machines/Turing/TM2/Reverse/Transfer.lean` | Erik Demaine |
+| `PartialDecoder`, `PartialDecoder.list`, `PartialDecoder.checked` | `Machines/Turing/MultiTape/Encodings/Decoder/Partial.lean` | Erik Demaine |
+| `encList`, `encBits` | `Machines/Turing/MultiTape/Encodings/List.lean` | Christian Reitwiessner |
+| `encFinite` | `Machines/Turing/MultiTape/Encodings/Finite.lean` | Samuel Schlesinger |
+| `ComputableInPolyTime` and its combinators | `Machines/Turing/MultiTape/PolyTime.lean` and `Complexity/PolyTime/` | Samuel Schlesinger, Christian Reitwiessner, Erik Demaine |
 
-- Source: https://github.com/leanprover-community/mathlib4
-- License: Apache-2.0
-- Reused: `Vendor/Millennium/MathlibCompat.lean` copies `Encoding`, `FinEncoding` and
-  `finEncodingBoolBool` from `Mathlib/Computability/Encoding.lean` at commit
-  `fabf563a7c95a166b8d7b6efca11c8b4dc9d911f` (Pim Spelier, Daan van Gent).
+- Authors of all 498 cslib-frontier and CSLib modules in Monteverde's import closure, with the
+  number of module headers that name them: Samuel Schlesinger (358), Christian Reitwiessner
+  (157), Erik Demaine (38), Karn Seth (13), Bolton Bailey (10), Renfei Zhou (6), Devon Tuma (5),
+  Anton Kovsharov (4), Josha Dekker (4), Kexing Ying (4), and from CSLib: Christian Reitwiessner
+  (21), Samuel Schlesinger (12), Bolton Bailey (4), Aviv Bar Natan (4), Devon Tuma, Eric Wieser,
+  Quang Dao, Thomas Waring (2 each), Josha Dekker, Kexing Ying, Fabrizio Montesi, John Jennings,
+  Chris Henson, Jesse Alama (1 each).
 
 ## millennium-cook-levin
 
-- Source: https://github.com/JoshuaTan42/millennium-cook-levin, commit `879c4835640119ad009abeb62ebd7a96f87eb9e8`
+- Source: https://github.com/JoshuaTan42/millennium-cook-levin, commit
+  `879c4835640119ad009abeb62ebd7a96f87eb9e8`
 - License: Apache-2.0
-- Reused: `Comp.lean` (vendored in `Vendor/CookLevin/`), the composition of polynomial-time TM2
-  machines, `PvsNP.tm2ComputableInPolyTime_comp` (Joshua Tan).
+- Author: Joshua Tan
+- Reused, vendored in `Vendor/CookLevin/`: `Comp.lean`, the composition of polynomial-time TM2
+  machines (`PvsNP.tm2ComputableInPolyTime_comp`).
+
+## Mathlib
+
+- Source: https://github.com/leanprover-community/mathlib4 (through cslib-frontier's pin
+  `bbff2954fe5ee3b7a4b33cc26ef873a1c3277d91`)
+- License: Apache-2.0
+- Reused: the TM2 machine model (`Turing.FinTM2`, `TM2ComputableInPolyTime`; Pim Spelier, Daan
+  van Gent), and, copied in `Vendor/Millennium/MathlibCompat.lean`, the bundled `Encoding`,
+  `FinEncoding` and `finEncodingBoolBool` from `Mathlib/Computability/Encoding.lean` at commit
+  `fabf563a7c95a166b8d7b6efca11c8b4dc9d911f` (Pim Spelier, Daan van Gent).
+
+## New in Monteverde
+
+The block code wrapper, the finitization of TM2 work alphabets, the recoder machine, the pair-word
+conversions, the certificate decoder, the forward and reverse bridges, the class bridges, the
+statements and the audit are new work in this repository.
