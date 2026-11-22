@@ -66,7 +66,7 @@
   --faint: #7E8A83;
   --clay: #9BD38A;
   --cslib: #6DB3EC;
-  --bar: #5E6260;
+  --bar: #8A908D;
   --underline: #5C6B63;
   --display: "Martian Mono", ui-monospace, monospace;
   --sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -253,6 +253,7 @@ td .file { font-family: var(--mono); font-size: 13.5px; color: var(--faint); }
 .bars { display: grid; gap: 18px; }
 .bar-row { display: grid; grid-template-columns: minmax(180px, 280px) 1fr 96px; gap: 20px; align-items: center; }
 .bar-name { color: var(--text); font-size: 15px; }
+.bar-name a { padding-block: 4px; }
 .bar-name small { display: block; color: var(--faint); font-family: var(--mono); font-size: 12px; }
 .bar-track { height: 10px; }
 .bar-fill { height: 10px; background: var(--bar); border-radius: 0 4px 4px 0; }
@@ -301,8 +302,9 @@ footer pre { font-size: 13px; line-height: 1.6; color: var(--faint); }
         <li><a href="#bridge">Bridge</a></li>
         <li><a href="#proof">Proof</a></li>
         <li><a href="#results">Results</a></li>
-        <li><a href="#trust">Trust</a></li>
-        <li><a href="#size">Size</a></li>
+        <li><a href="#trust">Check it</a></li>
+        <li><a href="#ecosystem">Ecosystem</a></li>
+        <li><a href="#together">Community</a></li>
         <li><a href="https://github.com/wbnns/monteverde">GitHub</a></li>
       </ul>
     </nav>
@@ -316,12 +318,14 @@ footer pre { font-size: 13px; line-height: 1.6; color: var(--faint); }
     <p class="intro">Monteverde proves in Lean 4 that the
       LeanMillenniumPrizeProblems formulation of the Clay P vs NP
       statement is equivalent to P vs NP in cslib-frontier, the
-      largest Lean complexity library. It does not resolve P vs NP. It connects the two
-      statements, so that a Lean result about one is a Lean result about the other.</p>
+      largest Lean complexity library. It connects two bodies of work, so that progress in
+      either library now counts for both: a Lean result about one statement is a Lean result
+      about the other. It does not resolve P vs NP.</p>
     <div class="actions">
       <a class="btn primary" href="https://github.com/wbnns/monteverde">View on GitHub</a>
       <a class="btn" href="https://github.com/wbnns/monteverde/releases/tag/v1.1.0">Release v1.1.0</a>
       <a class="btn" href="https://github.com/wbnns/monteverde/tree/main/Monteverde/Statements">Read the statements</a>
+      <a class="btn" href="#involved">Get involved</a>
     </div>
 
     <div class="hero-panel" id="theorems">
@@ -458,10 +462,11 @@ footer pre { font-size: 13px; line-height: 1.6; color: var(--faint); }
     <span class="clay">Millennium.ClayPVersusNP.Formulations.NegativeBranch</span> :=
   <span class="thm">clay_negative_iff_cslib</span>.mpr fun h => hP (<span class="kw">by</span> rw [h enc]; exact hNP)</code></pre>
     <ul class="plain" style="margin-top:28px">
-      <li>The theorems do not resolve P vs NP.</li>
-      <li>They do not prove that Mathlib's <code>FinTM2</code> model agrees with Cook's
-        one-tape Turing machine. That is a choice of the LeanMillenniumPrizeProblems
-        formulation, and the result is about that formulation.</li>
+      <li>The theorems do not resolve P vs NP. They make sure that work toward it, in either
+        library, is not split between two incompatible statements.</li>
+      <li>One question stays open, and it is a good next project: a Lean proof that Mathlib's
+        multi-stack <code>FinTM2</code> model and Cook's one-tape Turing machine simulate each
+        other in polynomial time. See <a href="#involved">Get involved</a>.</li>
     </ul>
   </div>
 </section>
@@ -490,10 +495,11 @@ footer pre { font-size: 13px; line-height: 1.6; color: var(--faint); }
 
 <section id="trust">
   <div class="wrap">
-    <h2>What you must trust</h2>
-    <p class="section-lead">Lean checks every proof, so the risk is a wrong statement. To trust
-      the result, read four short statement files, the vendored Clay definitions, and
-      cslib-frontier's definitions of P and NP. You do not need to read the proofs.</p>
+    <h2>Check it yourself</h2>
+    <p class="section-lead">Lean checks every proof, so you only need to check the statements:
+      four short statement files, the vendored Clay definitions, and cslib-frontier's
+      definitions of P and NP. You do not need to read the proofs. CI runs these checks on
+      every change.</p>
     <div class="table-box">
       <table>
         <thead><tr><th scope="col">Check</th><th scope="col">It fails when</th></tr></thead>
@@ -512,19 +518,79 @@ footer pre { font-size: 13px; line-height: 1.6; color: var(--faint); }
   </div>
 </section>
 
-<section id="size">
+<section id="ecosystem">
   <div class="wrap">
-    <h2>The largest Lean complexity library</h2>
-    <p class="section-lead">Theorem and lemma declarations in each public Lean complexity
-      library, counted in full clones at pinned commits on November 22, 2026.</p>
+    <h2>A growing ecosystem</h2>
+    <p class="section-lead">Lean complexity theory is a shared effort across many public
+      projects. Monteverde builds on cslib-frontier, the largest of them. Theorem and lemma
+      declarations, counted in full clones at pinned commits on November 22, 2026:</p>
     <div class="bars">
-      <div class="bar-row"><div class="bar-name">cslib-frontier<small>CslibFrontier/Computability</small></div><div class="bar-track" aria-hidden="true"><div class="bar-fill cslib-bar" style="width:100%"></div></div><div class="bar-num">49,439</div></div>
-      <div class="bar-row"><div class="bar-name">descriptive-complexity<small>PierreSenellart, incl. lax/ archive copies</small></div><div class="bar-track" aria-hidden="true"><div class="bar-fill" style="width:64.6%"></div></div><div class="bar-num">31,938</div></div>
-      <div class="bar-row"><div class="bar-name">starpos/lean-np-complete</div><div class="bar-track" aria-hidden="true"><div class="bar-fill" style="width:11.06%"></div></div><div class="bar-num">5,467</div></div>
-      <div class="bar-row"><div class="bar-name">CSLib</div><div class="bar-track" aria-hidden="true"><div class="bar-fill" style="width:7.0%"></div></div><div class="bar-num">3,463</div></div>
-      <div class="bar-row"><div class="bar-name">konard/p-vs-np</div><div class="bar-track" aria-hidden="true"><div class="bar-fill" style="width:4.94%"></div></div><div class="bar-num">2,444</div></div>
+      <div class="bar-row"><div class="bar-name"><a href="https://github.com/cslib-community/cslib-frontier">cslib-frontier</a><small>CslibFrontier/Computability</small></div><div class="bar-track" aria-hidden="true"><div class="bar-fill cslib-bar" style="width:100%"></div></div><div class="bar-num">49,439</div></div>
+      <div class="bar-row"><div class="bar-name"><a href="https://github.com/PierreSenellart/descriptive-complexity">descriptive-complexity</a><small>PierreSenellart, incl. lax/ archive copies</small></div><div class="bar-track" aria-hidden="true"><div class="bar-fill" style="width:64.6%"></div></div><div class="bar-num">31,938</div></div>
+      <div class="bar-row"><div class="bar-name"><a href="https://github.com/starpos/lean-np-complete">starpos/lean-np-complete</a></div><div class="bar-track" aria-hidden="true"><div class="bar-fill" style="width:11.06%"></div></div><div class="bar-num">5,467</div></div>
+      <div class="bar-row"><div class="bar-name"><a href="https://github.com/leanprover/cslib">CSLib</a></div><div class="bar-track" aria-hidden="true"><div class="bar-fill" style="width:7.0%"></div></div><div class="bar-num">3,463</div></div>
+      <div class="bar-row"><div class="bar-name"><a href="https://github.com/konard/p-vs-np">konard/p-vs-np</a></div><div class="bar-track" aria-hidden="true"><div class="bar-fill" style="width:4.94%"></div></div><div class="bar-num">2,444</div></div>
     </div>
     <p style="margin-top:28px">Full table and method: <a href="https://github.com/wbnns/monteverde/blob/main/Audit/size_table.md">Audit/size_table.md</a>.</p>
+  </div>
+</section>
+
+<section id="together">
+  <div class="wrap">
+    <h2>Built together</h2>
+    <p class="section-lead">Monteverde stands on the work of others. Every reused definition
+      and theorem is credited, with its author and source commit, in
+      <a href="https://github.com/wbnns/monteverde/blob/main/CREDITS.md">CREDITS.md</a>.</p>
+    <div class="grid-2">
+      <div class="card">
+        <h3><span class="dot clay" aria-hidden="true"></span>LeanMillenniumPrizeProblems</h3>
+        <p>Robert Joseph George. The Lean formulation of the Clay statement, after Cook's
+          official problem description.</p>
+      </div>
+      <div class="card">
+        <h3><span class="dot cslib" aria-hidden="true"></span>cslib-frontier</h3>
+        <p>Samuel Schlesinger (P, NP, reductions, Cook-Levin), Erik Demaine (the TM2 bridge),
+          Christian Reitwiessner (encodings) and many more contributors.</p>
+      </div>
+      <div class="card">
+        <h3>millennium-cook-levin</h3>
+        <p>Joshua Tan. The composition of polynomial-time TM2 machines, and a Cook-Levin proof
+          against the Clay definitions.</p>
+      </div>
+      <div class="card">
+        <h3>Mathlib</h3>
+        <p>The Mathlib community, including Pim Spelier and Daan van Gent for the TM2 machine
+          model that the Clay statement uses.</p>
+      </div>
+    </div>
+
+    <h3 id="involved" style="margin-top:56px;font-size:20px">Get involved</h3>
+    <p>There is room for more work, and help is welcome.</p>
+    <div class="grid-2" style="margin-top:24px">
+      <div class="card">
+        <h3>Build on the bridges</h3>
+        <p>Use <code>clayP_iff_cslib</code>, <code>clayNP_iff_cslib</code> and the function
+          bridge in your own project, so that a result in one library also counts in the
+          other.</p>
+      </div>
+      <div class="card">
+        <h3>Review the Cook text audit</h3>
+        <p>The <a href="https://github.com/wbnns/monteverde/blob/main/Audit/cook_text_audit.md">audit</a>
+          maps Cook's official text to the Lean definitions. A review by someone in complexity
+          theory adds confidence for everyone.</p>
+      </div>
+      <div class="card">
+        <h3>Close the machine-model gap</h3>
+        <p>Prove in Lean that Mathlib's <code>FinTM2</code> model and Cook's one-tape Turing
+          machine simulate each other in polynomial time. This is the one gap between Cook's
+          text and the Lean statement.</p>
+      </div>
+      <div class="card">
+        <h3>Ask, suggest, report</h3>
+        <p>Open an <a href="https://github.com/wbnns/monteverde/issues">issue</a> with a
+          question, an idea or a problem. Pull requests are welcome too.</p>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -561,10 +627,8 @@ rev = "v1.1.0"</code></pre>
 <footer>
   <div class="wrap cols">
     <div>
-      <p>Monteverde is by Will Binns, released under the Apache License 2.0. It builds on
-        LeanMillenniumPrizeProblems (Robert Joseph George), cslib-frontier (including Erik
-        Demaine's TM2 bridge and Samuel Schlesinger's P, NP and reductions),
-        millennium-cook-levin (Joshua Tan) and Mathlib. See
+      <p>Monteverde is by Will Binns, with thanks to everyone whose work it builds on.
+        Released under the Apache License 2.0. See
         <a href="https://github.com/wbnns/monteverde/blob/main/CREDITS.md">CREDITS.md</a>.</p>
     </div>
     <div>
