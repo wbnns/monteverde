@@ -29,7 +29,7 @@ negative Clay statement.
 10. [The claim and its evidence](#the-claim-and-its-evidence)
 11. [Build](#build)
 12. [Repository map](#repository-map)
-13. [Notes for agents and contributors](#notes-for-agents-and-contributors)
+13. [Contributing](#contributing)
 14. [History, open questions, citation, credits](#history)
 
 ## At a glance
@@ -320,7 +320,7 @@ Every check runs in CI on every pull request and on `main`.
 | Cook-Levin cross-check | `CrossCheck/`, CI job "Cook-Levin cross-check" | The two Cook-Levin proofs do not transfer through the bridges (see below). |
 | Size count | `Audit/size_count.py --check` | cslib-frontier is not the largest library in the table. |
 | Drift | `drift.yml`, weekly | Monteverde no longer builds against cslib-frontier `main`. This does not move the pin. |
-| Watch | `watch.yml`, weekly | Never fails. It opens an issue when related work appears (see [Notes for agents](#notes-for-agents-and-contributors)). |
+| Watch | `watch.yml`, weekly | Never fails. It opens an issue when related work appears (see [Contributing](#contributing)). |
 
 ### Check it yourself
 
@@ -458,7 +458,7 @@ scripts/          diff_vendor.sh, check_isolation.sh, kernel_check.sh
 .github/workflows ci.yml, kernel-check.yml, drift.yml, watch.yml
 ```
 
-## Notes for agents and contributors
+## Contributing
 
 **Build targets.** `lake build Vendor Monteverde Audit Tests` is the main gate.
 `lake build CrossCheck` is separate and slower. A single module builds with
