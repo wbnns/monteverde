@@ -39,7 +39,7 @@ independent kernel check.
 | Milestone | Content | State |
 |-----------|---------|-------|
 | M0 | Pins, vendored Clay file, diff check, CI | Done |
-| M1 | L0 encodings, L1 forward bridge (Clay machines to cslib-frontier) | Not started |
+| M1 | L0 block code, finite work alphabets, L1 forward bridge, Clay P to cslib P | Done |
 | M2 | L1 reverse bridge (recoder machine, TM2 composition) | Not started |
 | M3 | L2 class bridges for P and NP, bits form | Not started |
 | M4 | Headline theorems, claim check, axiom check, isolation, non-vacuity tests | Not started |
