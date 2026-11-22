@@ -381,7 +381,7 @@ ones:
   hypothesis (`clay_P_subset_NP`).
 
 Claude reviewed the audit on November 22, 2026: every quote against Cook's PDF and every line
-reference against the files. A review by a complexity theorist is welcome but not required.
+reference against the files. A review by a complexity theorist adds confidence; if you write one, publish it wherever you like.
 
 ## Library size
 
@@ -459,6 +459,11 @@ scripts/          diff_vendor.sh, check_isolation.sh, kernel_check.sh
 
 ## Contributing
 
+This repository is a stable reference at v1.1.0, so issues and pull requests here may not get a
+reply. The best way to improve Monteverde is to fork it: it is open source under the Apache
+License 2.0, and you do not need permission to change it or publish your version. Please keep
+`NOTICE` and `CREDITS.md`. The notes below help you work on a fork.
+
 **Build targets.** `lake build Vendor Monteverde Audit Tests` is the main gate.
 `lake build CrossCheck` is separate and slower. A single module builds with
 `lake build +Monteverde.Classes.NP` (note the `+`).
@@ -528,7 +533,7 @@ The recoder took less than a day, so the milestone plan did not change.
 |----------|-------|
 | Final package name | Decided: Monteverde. |
 | Offer the bridges upstream to cslib-frontier? | On hold, by the project owner's decision. |
-| The optional Cook text audit, and its reviewer | Done, reviewed by Claude. A review by a complexity theorist is welcome. |
+| The optional Cook text audit, and its reviewer | Done, reviewed by Claude. Independent reviews can be published anywhere. |
 
 ### Citation
 
