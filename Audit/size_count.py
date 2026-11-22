@@ -65,6 +65,8 @@ def main() -> int:
         scope = f" (`{lib['subdir']}`)" if lib["subdir"] else ""
         lines.append(f"| {rank} | [{lib['name']}](https://github.com/{lib['repo']}){scope} | "
                      f"{decls:,} | {files:,} | `{lib['commit'][:7]}` |")
+    if pins.get("notes"):
+        lines += ["", "Notes:", ""] + [f"- {n}" for n in pins["notes"]]
     whole = next(r for r in rows if r[0]["name"] == "cslib-frontier (whole repo)")
     lines += ["", f"For reference, the whole cslib-frontier repository has {whole[1]:,} "
               f"declarations in {whole[2]:,} files."]

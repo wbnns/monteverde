@@ -4,7 +4,7 @@
 # 1. Vendor/Millennium/Millennium.lean: the diff from upstream must equal port.patch exactly.
 # 2. Vendor/Millennium/MathlibCompat.lean: each BEGIN/END VERBATIM block must appear unchanged
 #    in Mathlib/Computability/Encoding.lean at the Mathlib commit that upstream pins.
-# 3. Vendor/CookLevin/*.lean (when present): the diff must equal Vendor/CookLevin/port.patch.
+# 3. Vendor/CookLevin/*.lean: the combined diff must equal Vendor/CookLevin/port.patch.
 #
 # Needs: bash, curl, diff, python3. Exits non-zero on any mismatch.
 set -euo pipefail
@@ -56,17 +56,21 @@ if bad or extra: sys.exit(1)
 print(f"OK   MathlibCompat.lean: {len(blocks)} blocks are verbatim Mathlib fabf563")
 PY
 
-# 3. The TM2 composition file, when it is vendored.
+# 3. The vendored millennium-cook-levin files (Comp.lean and the Cook-Levin proof). The diffs of
+#    all files, in file-name order, must equal Vendor/CookLevin/port.patch.
 if [ -f Vendor/CookLevin/UPSTREAM_COMMIT ] && [ -f Vendor/CookLevin/port.patch ]; then
   CL_COMMIT="$(cat Vendor/CookLevin/UPSTREAM_COMMIT)"
-  fetch JoshuaTan42/millennium-cook-levin "$CL_COMMIT" Comp.lean "$tmp/comp.lean"
-  diff -u --label upstream/Comp.lean --label Vendor/CookLevin/Comp.lean \
-    "$tmp/comp.lean" Vendor/CookLevin/Comp.lean > "$tmp/comp.patch" || true
-  if diff -q "$tmp/comp.patch" Vendor/CookLevin/port.patch > /dev/null; then
-    echo "OK   Comp.lean differs from upstream $CL_COMMIT only by port.patch"
+  : > "$tmp/cl.patch"
+  for f in $(ls Vendor/CookLevin/*.lean | LC_ALL=C sort); do
+    b="$(basename "$f")"
+    fetch JoshuaTan42/millennium-cook-levin "$CL_COMMIT" "$b" "$tmp/up_$b"
+    diff -u --label "upstream/$b" --label "Vendor/CookLevin/$b" "$tmp/up_$b" "$f" >> "$tmp/cl.patch" || true
+  done
+  if diff -q "$tmp/cl.patch" Vendor/CookLevin/port.patch > /dev/null; then
+    echo "OK   Vendor/CookLevin/*.lean ($(ls Vendor/CookLevin/*.lean | wc -l) files) differ from upstream $CL_COMMIT only by port.patch"
   else
-    echo "FAIL Comp.lean has changes that its port.patch does not list:"
-    diff "$tmp/comp.patch" Vendor/CookLevin/port.patch || true
+    echo "FAIL Vendor/CookLevin has changes that its port.patch does not list:"
+    diff "$tmp/cl.patch" Vendor/CookLevin/port.patch || true
     status=1
   fi
 fi

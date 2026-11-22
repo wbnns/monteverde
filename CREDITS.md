@@ -54,8 +54,13 @@ commit. Authors come from file headers, `CITATION.cff` and git history at the pi
   `879c4835640119ad009abeb62ebd7a96f87eb9e8`
 - License: Apache-2.0
 - Author: Joshua Tan
-- Reused, vendored in `Vendor/CookLevin/`: `Comp.lean`, the composition of polynomial-time TM2
-  machines (`PvsNP.tm2ComputableInPolyTime_comp`).
+- Reused, vendored in `Vendor/CookLevin/`:
+  - `Comp.lean`, the composition of polynomial-time TM2 machines
+    (`PvsNP.tm2ComputableInPolyTime_comp`, `PvsNP.comp`). The bridges use it.
+  - The Cook-Levin proof against the Clay definitions: `Prog.lean`, `Emb.lean`,
+    `CookLevin.lean` (`PvsNP.SAT`, `PvsNP.sat_in_np`), `D3Fam.lean`, `D3OneHot.lean`,
+    `D3Shift.lean`, `Sit.lean`, `D3Acc.lean`, `D3Init.lean`, `Asm.lean`, `Pre.lean` and
+    `Pkg.lean` (`PvsNP.cook_levin`). Only the Cook-Levin cross-check in `CrossCheck/` uses them.
 
 ## Mathlib
 
@@ -71,4 +76,7 @@ commit. Authors come from file headers, `CITATION.cff` and git history at the pi
 
 The block code wrapper, the finitization of TM2 work alphabets, the recoder machine, the pair-word
 conversions, the certificate decoder, the forward and reverse bridges, the class bridges, the
-statements and the audit are new work in this repository.
+statements, the audit and the Cook-Levin cross-check are new work in this repository.
+
+`Audit/cook_text_audit.md` quotes short phrases from Stephen Cook, "The P versus NP Problem", the
+official Clay Mathematics Institute problem description.
