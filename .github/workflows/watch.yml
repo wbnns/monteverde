@@ -2,8 +2,9 @@ name: Weekly watch for related work
 
 # The design doc's first risk: someone else publishes the same link first. Its mitigation is a
 # weekly look at cslib-frontier issues and pull requests and at konard/p-vs-np. This job does
-# that search and opens an issue in this repository when it finds something. The Lean Zulip
-# needs a login, so it stays a manual check (see README).
+# that search and opens an issue in this repository when it finds something. The design doc also
+# names the Lean Zulip. Its API needs a login, so that search runs only when the repository has
+# the secrets ZULIP_EMAIL and ZULIP_API_KEY (a Zulip bot on leanprover.zulipchat.com).
 
 on:
   schedule:
@@ -23,6 +24,8 @@ jobs:
       - name: Search the last 8 days
         env:
           GH_TOKEN: ${{ github.token }}
+          ZULIP_EMAIL: ${{ secrets.ZULIP_EMAIL }}
+          ZULIP_API_KEY: ${{ secrets.ZULIP_API_KEY }}
         run: |
           set -euo pipefail
           since="$(date -u -d '8 days ago' +%Y-%m-%d)"
@@ -38,6 +41,23 @@ jobs:
             gh api "repos/konard/p-vs-np/commits?since=${since}T00:00:00Z&per_page=100" \
               --jq '.[] | select(.commit.message | test("(?i)clay|millennium|lean"))
                     | "- \(.html_url) \(.commit.message | split("\n")[0])"'
+            if [ -n "${ZULIP_EMAIL:-}" ] && [ -n "${ZULIP_API_KEY:-}" ]; then
+              echo
+              echo "### Lean Zulip messages that mention Clay, Millennium or cslib-frontier"
+              cutoff="$(date -u -d "$since" +%s)"
+              for term in "Millennium" "Clay P vs NP" "ClayPVersusNP" "cslib-frontier Clay"; do
+                curl -fsS -G -u "$ZULIP_EMAIL:$ZULIP_API_KEY" \
+                  https://leanprover.zulipchat.com/api/v1/messages \
+                  --data-urlencode anchor=newest --data-urlencode num_before=50 \
+                  --data-urlencode num_after=0 \
+                  --data-urlencode "narrow=[{\"operator\":\"search\",\"operand\":\"$term\"}]" \
+                | jq -r --argjson cutoff "$cutoff" '.messages[] | select(.timestamp >= $cutoff)
+                    | "- #\(.display_recipient) > \(.subject) (message \(.id))"'
+              done | sort -u
+            else
+              echo
+              echo "_The Lean Zulip was not searched: the ZULIP_EMAIL and ZULIP_API_KEY secrets are not set._"
+            fi
           } > report.md
           cat report.md >> "$GITHUB_STEP_SUMMARY"
           hits="$(grep -c '^- ' report.md || true)"

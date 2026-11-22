@@ -74,8 +74,8 @@ commit. Authors come from file headers, `CITATION.cff` and git history at the pi
 
 ## New in Monteverde
 
-The block code wrapper, the finitization of TM2 work alphabets, the recoder and decoder
-machines, the pair-word conversions, the certificate decoder, the forward and reverse bridges,
+The block code wrapper, the finitization of TM2 work alphabets, the recoder, decoder and
+drain machines, the pair-word conversions, the certificate decoder, the forward and reverse bridges,
 the class and reduction bridges, the statements, the audit and the Cook-Levin cross-check are new
 work in this repository.
 

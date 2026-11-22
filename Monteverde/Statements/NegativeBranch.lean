@@ -1,18 +1,20 @@
-import Monteverde.Statements.Clay
+import Vendor.Millennium.Millennium
+import Monteverde.Statements.Defs
 
 /-!
-# L3: the negative Clay target
+# Statement: the negative Clay target
 
-`Millennium.ClayPVersusNP.Formulations.NegativeBranch` is defined as `¬ ClayPVersusNP`, so this
-theorem follows from `clay_iff_cslib` in one line. It is still stated, because the claim names
-both official targets of LeanMillenniumPrizeProblems.
+The statement of the headline theorem `Monteverde.clay_negative_iff_cslib`, as a definition.
+
+Statement isolation: this file imports only the vendored Clay definitions and
+`Statements/Defs.lean` (which imports only cslib-frontier's class definitions). It never imports
+a proof. `Audit/Isolation.lean` checks that the theorem's type is exactly this statement.
 -/
 
-namespace Monteverde
+namespace Monteverde.Statements
 
-/-- **Headline theorem.** The negative Clay target is equivalent to `¬ CslibPEqNP`. -/
-theorem clay_negative_iff_cslib :
-    Millennium.ClayPVersusNP.Formulations.NegativeBranch ↔ ¬ CslibPEqNP :=
-  not_congr clay_iff_cslib
+/-- The negative Clay target is equivalent to `¬ CslibPEqNP`. -/
+def ClayNegativeIffCslib : Prop :=
+  Millennium.ClayPVersusNP.Formulations.NegativeBranch ↔ ¬ CslibPEqNP
 
-end Monteverde
+end Monteverde.Statements

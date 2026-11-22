@@ -26,7 +26,23 @@ The audit helps a reader check that the vendored Lean statement says what Cook's
 
 Audit date: 2026-11-22.
 
-Reviewer: open (to be chosen by the project owner).
+## Review
+
+Reviewed on November 22, 2026 by Claude (an AI model, Anthropic), the author of the Monteverde
+code. The review checked:
+
+- every quote in the table against the text of Cook's PDF, extracted from the file at the URL
+  above;
+- every `Millennium.lean:N` and Mathlib line reference against the files at the pinned commits;
+- each "Match" value and each difference D1 to D8 against the Lean definitions.
+
+Result: 22 of 24 rows were correct as written. Two were fixed: row 6 cited page 10 for a phrase
+on page 9, and row 24 quoted `R ⊆ Σ* × Σ*` where Cook's printed text has `Σ∗ ∪ Σ∗` (a typo in
+the original for `×`). The review also added the note on `#` in D6 and the Lean references in
+D2 and D3. No difference changes the two target statements.
+
+An extra review by a person with complexity-theory background can add credibility to the
+release. The claim does not need it.
 
 ## Match values
 
@@ -45,7 +61,7 @@ Reviewer: open (to be chosen by the project owner).
 | 3 | "a language over Σ is a subset L of Σ*" (p. 1, §1) | `Language α := α → Prop`, Millennium.lean:80; `ClayFiniteAlphabet.Language`, Millennium.lean:463 | Equivalent | A predicate on `List Σ` and a subset of Σ* carry the same data. |
 | 4 | "the Turing machine" (p. 1, §1); "an infinite tape" (p. 9, Appendix) | `TM2ComputableInPolyTime` inside `InPolynomialTime`, Millennium.lean:95-97 (Mathlib `FinTM2`, a multi-stack machine) | Differs | Deterministic multi-stack machine, not one-tape. Only the input stack alphabet must be finite. See D1 and D2. |
 | 5 | "a finite alphabet Γ that includes the blank symbol b"; input alphabet "not including the blank" (p. 9, Appendix) | `TM2ComputableAux.inputAlphabet : tm.Γ tm.k₀ ≃ Γ₀` (Mathlib), used through `InPolynomialTime`, Millennium.lean:96 | Equivalent | Stacks have no blank. A `pop` on an empty stack returns `none`, so the machine can see the end of the input. See D1. |
-| 6 | "a specified finite set Q of possible states"; "transition function" (p. 10, Appendix) | `FinTM2.Λ`, `FinTM2.σ` (both `Fintype`) and `FinTM2.m : Λ → TM2.Stmt` (Mathlib) | Equivalent | Finite control = finite labels × finite internal state. A program step runs one finite statement block, not one tape move. See D1 and D2. |
+| 6 | "a specified finite set Q of possible states" (p. 9, Appendix); "transition function" (p. 10, Appendix) | `FinTM2.Λ`, `FinTM2.σ` (both `Fintype`) and `FinTM2.m : Λ → TM2.Stmt` (Mathlib) | Equivalent | Finite control = finite labels × finite internal state. A program step runs one finite statement block, not one tape move. See D1 and D2. |
 | 7 | "C₀ = q₀w" (p. 10, Appendix) | `initList` (Mathlib): input string on stack `k₀`, other stacks empty | Equivalent | The top of the input stack is the left-most symbol, as the head position in Cook's text. |
 | 8 | "M accepts w ... terminates in the accepting state" (p. 1, §1; p. 10, Appendix) | `InPolynomialTime`: `f a = true`, with output encoded by `finEncodingBoolBool`, Millennium.lean:96-97 | Equivalent | The Lean machine computes a total function `f : α → Bool`. It halts with `[true]` or `[false]` on the output stack. See D4. |
 | 9 | "L(M) = {w ∈ Σ* \| M accepts w}" (p. 1, §1) | `∀ a, L a ↔ f a = true`, Millennium.lean:97 | Equivalent | Same set, written as an equivalence with the decider output. |
@@ -63,7 +79,7 @@ Reviewer: open (to be chosen by the project owner).
 | 21 | "Does P = NP?" (p. 2, §1), answer no | `ClayPVersusNP.Formulations.NegativeBranch := ¬ ClayPVersusNP`, Millennium.lean:1877 | Equivalent | ¬∀ alphabet gives P ≠ NP for one alphabet with at least two symbols. See D3. The file gives no disjunction target, on purpose (Millennium.lean:1880-1899). |
 | 22 | "the answer is independent of the size of the alphabet Σ (we assume \|Σ\| ≥ 2)" (p. 2, §1) | `ClayPVersusNP.for_alphabet`, Millennium.lean:1568; `ClayFiniteAlphabet.PolynomialTimeEqualsNondeterministicPolynomialTime`, Millennium.lean:477 | Equivalent | The file does not prove this independence. It states the target for all alphabets. See D3. |
 | 23 | "For \|Σ\| = 1 the problem is still open" (p. 2, §1) | `[Nontrivial alphabet]` in `ClassEquality`, Millennium.lean:1553 | Exact | The unary case is out of the target, as in Cook's statement. |
-| 24 | "It is trivial to show that P ⊆ NP"; "R ⊆ Σ* × Σ*" with "R(w, y) ⇔ w ∈ L" (p. 2, §1) | `ClayPVersusNP.Support.DeciderAsVerifier`, Millennium.lean:1450; `PolynomialTimeContainedInNondeterministicPolynomialTime.certificate_verifier`, Millennium.lean:1520; `...of_turing_machine_composition`, Millennium.lean:1539 | Differs | Same construction (Γ₁ = Σ, k = 0). The file proves it only with the hypothesis `PolynomialTimeComputableComposition`, Millennium.lean:311. Not part of the target statements. See D8. |
+| 24 | "It is trivial to show that P ⊆ NP"; "R ⊆ Σ∗ ∪ Σ∗" (Cook's typo for Σ∗ × Σ∗) with "R(w, y) ⇐⇒ w ∈ L" (p. 2, §1) | `ClayPVersusNP.Support.DeciderAsVerifier`, Millennium.lean:1450; `PolynomialTimeContainedInNondeterministicPolynomialTime.certificate_verifier`, Millennium.lean:1520; `...of_turing_machine_composition`, Millennium.lean:1539 | Differs | Same construction (Γ₁ = Σ, k = 0). The file proves it only with the hypothesis `PolynomialTimeComputableComposition`, Millennium.lean:311. Not part of the target statements. See D8. |
 
 Rows: 24.
 
@@ -94,7 +110,10 @@ Lean functions, so they can be noncomputable. Why it does not matter: `σ` and `
 the program has a finite number of statements. So a `push` can write only a finite set of
 symbols (the images of a finite number of functions on finite `σ`). Every function on these
 finite domains is a finite table, so noncomputable functions give no extra power. A `FinTM2` is
-therefore a finite machine in Cook's sense. (Milestone M1 of this repo handles finite work
+therefore a finite machine in Cook's sense. Monteverde proves the alphabet part in Lean:
+`Monteverde.TM2ComputableInPolyTime.exists_finite` gives, for every polynomial-time `FinTM2`
+certificate with a finite output alphabet, one with the same function and time bound whose
+stack alphabets are all finite. (Milestone M1 of this repo handles finite work
 alphabets for the bridge.)
 
 **D3. Alphabet quantifier: Lean states P = NP for every finite alphabet with at least two
@@ -128,7 +147,7 @@ Lean does the same. Lean lets `Γ₁` be any finite type, so the certificate alp
 symbol, as in Cook.
 
 **D6. How `w#y` is encoded.** (Rows 14 to 16.) Cook writes L_R over the set union
-Σ ∪ Σ₁ ∪ {#} with # ∉ Σ. Lean uses the disjoint union `Sum Σ (Option Γ₁)`: left symbols are
+Σ ∪ Σ₁ ∪ {#} with # ∉ Σ. (Cook does not say # ∉ Σ₁. In Lean, # is fresh for both alphabets.) Lean uses the disjoint union `Sum Σ (Option Γ₁)`: left symbols are
 `Sum.inl a`, the separator is `Sum.inr none`, right symbols are `Sum.inr (some b)`. Why it does
 not matter: when Σ and Σ₁ share symbols, the single # still splits the string, so the tagged and
 untagged forms convert into each other in linear time. The length is |w| + 1 + |y| in both

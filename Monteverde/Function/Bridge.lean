@@ -22,7 +22,7 @@ theorem tm2_iff_computableInPolyTime {α Γ : Type} [Fintype Γ] {e : α → Lis
 
 /-- **L1, word outputs.** TM2 polynomial time from words over `Γ` to words over `Δ` is
 cslib-frontier polynomial time under the block codes of both alphabets. -/
-theorem tm2_iff_computableInPolyTime_words {α β Γ Δ : Type} [Fintype Γ] [Fintype Δ] [Nonempty Δ]
+theorem tm2_iff_computableInPolyTime_words {α β Γ Δ : Type} [Fintype Γ] [Fintype Δ]
     {e : α → List Γ} {eo : β → List Δ} (he : Function.Injective e) (heo : Function.Injective eo)
     (f : α → β) :
     Nonempty (TM2ComputableInPolyTime e eo f) ↔
