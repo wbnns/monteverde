@@ -50,6 +50,7 @@ negative Clay statement.
 | Website | [monteverde.willbinns.org](https://monteverde.willbinns.org) |
 | Release | [v1.1.0](https://github.com/wbnns/monteverde/releases/tag/v1.1.0), November 22, 2026 |
 | License | Apache-2.0 |
+| Development | Developed with AI assistance (Claude, by Anthropic). Every proof is checked by the Lean kernel and, independently, by nanoda. |
 
 ## The main theorems
 
@@ -534,8 +535,7 @@ The recoder took less than a day, so the milestone plan did not change.
 ```bibtex
 @software{monteverde,
   author  = {Binns, Will},
-  title   = {Monteverde: the Clay P vs NP statement and P vs NP in cslib-frontier are
-             equivalent, in Lean 4},
+  title   = {Monteverde: two Lean statements of P vs NP, proved equivalent},
   version = {1.1.0},
   date    = {2026-11-22},
   url     = {https://github.com/wbnns/monteverde}

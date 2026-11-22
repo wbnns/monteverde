@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Monteverde: Clay P vs NP ↔ P vs NP in cslib-frontier, in Lean 4</title>
+<title>Monteverde: two Lean statements of P vs NP, proved equivalent</title>
 <meta name="description" content="A Lean 4 proof that the LeanMillenniumPrizeProblems formulation of the Clay P vs NP statement is equivalent to P vs NP in cslib-frontier, the largest Lean complexity library. It does not resolve P vs NP; it connects the two statements.">
 <meta name="author" content="Will Binns">
 <meta name="theme-color" content="#0C110F">
@@ -13,19 +13,19 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Monteverde">
 <meta property="og:url" content="https://monteverde.willbinns.org/">
-<meta property="og:title" content="Monteverde: the Clay P vs NP statement and P vs NP in cslib-frontier are equivalent">
+<meta property="og:title" content="Monteverde: two Lean statements of P vs NP, proved equivalent">
 <meta property="og:description" content="A Lean 4 proof that links the two formal statements, so a Lean result about one is a Lean result about the other. It does not resolve P vs NP.">
 <meta property="og:image" content="https://monteverde.willbinns.org/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Monteverde. The Clay P vs NP statement and P vs NP in cslib-frontier are equivalent. theorem clay_iff_cslib : Millennium.ClayPVersusNP ↔ CslibPEqNP">
+<meta property="og:image:alt" content="Monteverde. Two Lean statements of P vs NP, proved equivalent. theorem clay_iff_cslib : Millennium.ClayPVersusNP ↔ CslibPEqNP">
 <meta property="og:locale" content="en_US">
 
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Monteverde: the Clay P vs NP statement and P vs NP in cslib-frontier are equivalent">
+<meta name="twitter:title" content="Monteverde: two Lean statements of P vs NP, proved equivalent">
 <meta name="twitter:description" content="A Lean 4 proof that links the two formal statements. It does not resolve P vs NP.">
 <meta name="twitter:image" content="https://monteverde.willbinns.org/og.png">
-<meta name="twitter:image:alt" content="Monteverde. The Clay P vs NP statement and P vs NP in cslib-frontier are equivalent.">
+<meta name="twitter:image:alt" content="Monteverde. Two Lean statements of P vs NP, proved equivalent.">
 
 <link rel="icon" href="/favicon.ico" sizes="48x48">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -66,7 +66,7 @@
   --faint: #7E8A83;
   --clay: #9BD38A;
   --cslib: #6DB3EC;
-  --bar: #B9C2BC;
+  --bar: #E6C27A;
   --underline: #5C6B63;
   --display: "Martian Mono", ui-monospace, monospace;
   --sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -314,13 +314,13 @@ footer pre { font-size: 13px; line-height: 1.6; color: var(--faint); }
 <main id="main">
 <section class="hero" id="top">
   <div class="wrap">
-    <h1>The Clay P vs NP statement and P vs NP in cslib-frontier are equivalent.</h1>
+    <h1>Two Lean statements of P vs NP, proved equivalent.</h1>
     <p class="intro">Monteverde proves in Lean 4 that the
       LeanMillenniumPrizeProblems formulation of the Clay P vs NP
       statement is equivalent to P vs NP in cslib-frontier, the
-      largest Lean complexity library. It connects two bodies of work, so that progress in
-      either library now counts for both: a Lean result about one statement is a Lean result
-      about the other. It does not resolve P vs NP.</p>
+      largest Lean complexity library. A Lean proof of P = NP, or of P ≠ NP, in one formulation
+      is now a proof in the other, and membership in P and NP carries over between the two
+      libraries for languages over finite alphabets. It does not resolve P vs NP.</p>
     <div class="actions">
       <a class="btn primary" href="https://github.com/wbnns/monteverde">View on GitHub</a>
       <a class="btn" href="https://github.com/wbnns/monteverde/releases/tag/v1.1.0">Release v1.1.0</a>
@@ -570,8 +570,8 @@ footer pre { font-size: 13px; line-height: 1.6; color: var(--faint); }
       <div class="card">
         <h3>Build on the bridges</h3>
         <p>Use <code>clayP_iff_cslib</code>, <code>clayNP_iff_cslib</code> and the function
-          bridge in your own project, so that a result in one library also counts in the
-          other.</p>
+          bridge in your own project, so that results about P, NP and reductions carry over
+          between the two libraries.</p>
       </div>
       <div class="card">
         <h3>Review the Cook text audit</h3>
@@ -627,8 +627,9 @@ rev = "v1.1.0"</code></pre>
 <footer>
   <div class="wrap cols">
     <div>
-      <p>Monteverde is by Will Binns, with thanks to everyone whose work it builds on.
-        Released under the Apache License 2.0. See
+      <p>Monteverde is by Will Binns, with thanks to everyone whose work it builds on. It was
+        developed with AI assistance (Claude, by Anthropic); every proof is checked by the Lean
+        kernel and, independently, by nanoda. Released under the Apache License 2.0. See
         <a href="https://github.com/wbnns/monteverde/blob/main/CREDITS.md">CREDITS.md</a>.</p>
     </div>
     <div>
