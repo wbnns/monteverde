@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build and check
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Free disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
+          df -h /
+
+      - name: Install elan
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o elan-init.sh
+          sh elan-init.sh -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Restore cslib build outputs
+        uses: actions/cache@v4
+        with:
+          path: |
+            .lake/packages/cslib-frontier/.lake
+            .lake/packages/cslib/.lake
+          key: cslib-${{ hashFiles('lean-toolchain', 'lake-manifest.json') }}-${{ github.sha }}
+          restore-keys: cslib-${{ hashFiles('lean-toolchain', 'lake-manifest.json') }}-
+
+      - name: Get the Mathlib cache
+        run: lake exe cache get
+
+      - name: Build
+        run: |
+          set -o pipefail
+          lake build Vendor Monteverde Tests 2>&1 | tee build.log
+
+      - name: No sorry and no new axioms
+        run: |
+          if grep -E "declaration uses .sorry." build.log; then
+            echo "A declaration uses sorry."; exit 1
+          fi
+          if grep -rnE "^\s*(private |protected )?axiom " --include=*.lean Vendor Monteverde Tests Audit 2>/dev/null; then
+            echo "The project must not declare axioms."; exit 1
+          fi
+
+      - name: Vendored files match upstream
+        run: scripts/diff_vendor.sh

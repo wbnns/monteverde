@@ -1,0 +1,145 @@
+--- upstream/Problems/PVersusNP/Millennium.lean
++++ Vendor/Millennium/Millennium.lean
+@@ -1,8 +1,10 @@
++-- Modified by Monteverde: ported to Lean v4.36.0-rc2. See Vendor/Millennium/CHANGES.md.
+ import Mathlib.Tactic.Basic
+ import Mathlib.Computability.TuringMachine.StackTuringMachine
+ import Mathlib.Computability.Primrec.List
+ import Mathlib.Computability.TuringMachine.Computable
+ import Mathlib.Computability.Encoding
++import Vendor.Millennium.MathlibCompat
+ import Mathlib.Data.Finset.Basic
+ import Mathlib.Data.Set.Basic
+ import Mathlib.Order.Basic
+@@ -59,7 +61,8 @@
+ namespace Millennium
+ 
+ open _root_.Turing
+-open Computability
++open Computability hiding Encoding FinEncoding finEncodingBoolBool
++open MathlibV431
+ 
+ /--
+   A language (decision problem) is a predicate on strings.
+@@ -494,12 +497,20 @@
+ /-- Stack identifiers for the projection machine: input, output, and temporary work. -/
+ private inductive StringProjectionStack where
+   | input | output | work
+-  deriving DecidableEq, Fintype
++  deriving DecidableEq
++
++-- PORT (toolchain): `deriving Fintype` fails inside a namespace on this Mathlib; same instance.
++private instance : Fintype StringProjectionStack :=
++  ⟨{.input, .output, .work}, fun c => by cases c <;> decide⟩
+ 
+ /-- Control labels for the phases of the projection machine. -/
+ private inductive StringProjectionLabel where
+   | copy | emit_work | discard_right | drain | emit_output | done
+-  deriving DecidableEq, Fintype
++  deriving DecidableEq
++
++-- PORT (toolchain): `deriving Fintype` fails inside a namespace on this Mathlib; same instance.
++private instance : Fintype StringProjectionLabel :=
++  ⟨{.copy, .emit_work, .discard_right, .drain, .emit_output, .done}, fun c => by cases c <;> decide⟩
+ 
+ /-- Stack alphabets for the left-projection machine: pair input, plain output, and work symbols. -/
+ private def string_projection_alphabet (alphabet : Type) [Fintype alphabet] :
+@@ -637,7 +648,7 @@
+       some
+         (string_projection_cfg alphabet StringProjectionLabel.emit_work (some (Sum.inl a))
+           input output work) := by
+-  simp [Turing.FinTM2.step, left_projection_machine, left_projection_table,
++  simp [Turing.FinTM2.step, Turing.TM2.step, Turing.TM2.stepAux, left_projection_machine, left_projection_table,
+     string_projection_cfg, string_projection_input_label, string_projection_set_input_state]
+   congr
+   ext k
+@@ -655,7 +666,7 @@
+       some
+         (string_projection_cfg alphabet StringProjectionLabel.discard_right (some (Sum.inr none))
+           input output work) := by
+-  simp [Turing.FinTM2.step, left_projection_machine, left_projection_table,
++  simp [Turing.FinTM2.step, Turing.TM2.step, Turing.TM2.stepAux, left_projection_machine, left_projection_table,
+     string_projection_cfg, string_projection_input_label, string_projection_set_input_state]
+   congr
+   ext k
+@@ -674,10 +685,13 @@
+       some
+         (string_projection_cfg alphabet StringProjectionLabel.copy (some (Sum.inl a))
+           input output (a :: work)) := by
+-  simp [Turing.FinTM2.step, left_projection_machine, left_projection_table,
+-    string_projection_cfg, string_projection_state_symbol]
+-  congr
+-  ext k
++  -- PORT (toolchain): the old `simp` call times out on push steps; same steps, unfolded by hand.
++  simp only [Turing.FinTM2.step, Turing.TM2.step, left_projection_machine, left_projection_table,
++    string_projection_cfg]
++  refine congrArg some ?_
++  show Turing.TM2.Cfg.mk _ _ _ = _
++  congr 1
++  funext k
+   cases k <;> rfl
+ 
+ /-- One machine step: discard a right-side input symbol. -/
+@@ -694,7 +708,7 @@
+         (string_projection_cfg alphabet StringProjectionLabel.discard_right
+           (some next) input output work) := by
+   cases next <;>
+-    simp [Turing.FinTM2.step, left_projection_machine, left_projection_table,
++    simp [Turing.FinTM2.step, Turing.TM2.step, Turing.TM2.stepAux, left_projection_machine, left_projection_table,
+       string_projection_cfg, string_projection_discard_label, string_projection_set_input_state]
+   all_goals
+     congr
+@@ -710,7 +724,7 @@
+         (string_projection_cfg alphabet StringProjectionLabel.discard_right state [] output work) =
+       some
+         (string_projection_cfg alphabet StringProjectionLabel.drain none [] output work) := by
+-  simp [Turing.FinTM2.step, left_projection_machine, left_projection_table,
++  simp [Turing.FinTM2.step, Turing.TM2.step, Turing.TM2.stepAux, left_projection_machine, left_projection_table,
+     string_projection_cfg, string_projection_discard_label, string_projection_set_input_state]
+   congr
+   ext k
+@@ -728,7 +742,7 @@
+       some
+         (string_projection_cfg alphabet StringProjectionLabel.emit_output (some (Sum.inl a))
+           input output work) := by
+-  simp [Turing.FinTM2.step, left_projection_machine, left_projection_table,
++  simp [Turing.FinTM2.step, Turing.TM2.step, Turing.TM2.stepAux, left_projection_machine, left_projection_table,
+     string_projection_cfg, string_projection_work_label, string_projection_set_work_state]
+   congr
+   ext k
+@@ -744,7 +758,7 @@
+         (string_projection_cfg alphabet StringProjectionLabel.drain state input output []) =
+       some
+         (string_projection_cfg alphabet StringProjectionLabel.done none input output []) := by
+-  simp [Turing.FinTM2.step, left_projection_machine, left_projection_table,
++  simp [Turing.FinTM2.step, Turing.TM2.step, Turing.TM2.stepAux, left_projection_machine, left_projection_table,
+     string_projection_cfg, string_projection_work_label, string_projection_set_work_state]
+   congr
+   ext k
+@@ -763,10 +777,13 @@
+       some
+         (string_projection_cfg alphabet StringProjectionLabel.drain (some (Sum.inl a))
+           input (a :: output) work) := by
+-  simp [Turing.FinTM2.step, left_projection_machine, left_projection_table,
+-    string_projection_cfg, string_projection_state_symbol]
+-  congr
+-  ext k
++  -- PORT (toolchain): the old `simp` call times out on push steps; same steps, unfolded by hand.
++  simp only [Turing.FinTM2.step, Turing.TM2.step, left_projection_machine, left_projection_table,
++    string_projection_cfg]
++  refine congrArg some ?_
++  show Turing.TM2.Cfg.mk _ _ _ = _
++  congr 1
++  funext k
+   cases k <;> rfl
+ 
+ /-- One machine step: the final label halts by clearing the label field. -/
+@@ -779,7 +796,7 @@
+         (string_projection_cfg alphabet StringProjectionLabel.done state input output work) =
+       some { (string_projection_cfg alphabet StringProjectionLabel.done state input output work) with
+         l := none } := by
+-  simp [Turing.FinTM2.step, left_projection_machine, left_projection_table,
++  simp [Turing.FinTM2.step, Turing.TM2.step, Turing.TM2.stepAux, left_projection_machine, left_projection_table,
+     string_projection_cfg]
+   congr
+ 
