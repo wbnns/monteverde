@@ -1,5 +1,6 @@
 import Monteverde.Encoding.BlockEnc
 import Monteverde.Function.Recoder
+import Monteverde.Function.Decoder
 import Vendor.CookLevin.Comp
 import CslibFrontier.Computability.Machines.Turing.TM2.Reverse.Transfer
 
@@ -34,5 +35,23 @@ theorem tm2_of_computableInPolyTime {α Γ : Type} [Fintype Γ] {e : α → List
   have h₁ : TM2ComputableInPolyTime e ((⟨e, he⟩ : α ↪ List Γ).trans (blockEnc Γ)) id :=
     Recoder.recoder (fun a => frame (encFinite Γ a)) e
   exact PvsNP.tm2ComputableInPolyTime_comp h₁ h₂
+
+/-- **L1 reverse, word outputs.** A cslib-frontier polynomial-time function under the block codes
+is a Mathlib TM2 polynomial-time function between the words themselves. The output alphabet must
+have a symbol, because the decoder machine keeps a symbol index in its state. -/
+theorem tm2_of_computableInPolyTime_words {α β Γ Δ : Type} [Fintype Γ] [Fintype Δ] [Nonempty Δ]
+    {e : α → List Γ} {eo : β → List Δ} (he : Function.Injective e) (heo : Function.Injective eo)
+    {f : α → β}
+    (hc : ComputableInPolyTime f ((⟨e, he⟩ : α ↪ List Γ).trans (blockEnc Γ))
+      ((⟨eo, heo⟩ : β ↪ List Δ).trans (blockEnc Δ))) :
+    Nonempty (TM2ComputableInPolyTime e eo f) := by
+  obtain ⟨h₂, -⟩ := hc.exists_tm2ComputableInPolyTime
+  have h₁ : TM2ComputableInPolyTime e ((⟨e, he⟩ : α ↪ List Γ).trans (blockEnc Γ)) id :=
+    Recoder.recoder (fun a => frame (encFinite Γ a)) e
+  have h₃ : TM2ComputableInPolyTime ((⟨eo, heo⟩ : β ↪ List Δ).trans (blockEnc Δ)) eo id :=
+    Decoder.decoder eo
+  obtain ⟨h₁₂⟩ := PvsNP.tm2ComputableInPolyTime_comp h₁ h₂
+  have h := PvsNP.tm2ComputableInPolyTime_comp h₁₂ h₃
+  exact h
 
 end Monteverde

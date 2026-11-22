@@ -1,0 +1,48 @@
+name: Weekly watch for related work
+
+# The design doc's first risk: someone else publishes the same link first. Its mitigation is a
+# weekly look at cslib-frontier issues and pull requests and at konard/p-vs-np. This job does
+# that search and opens an issue in this repository when it finds something. The Lean Zulip
+# needs a login, so it stays a manual check (see README).
+
+on:
+  schedule:
+    - cron: "41 5 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  watch:
+    name: Search for related work
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Search the last 8 days
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          since="$(date -u -d '8 days ago' +%Y-%m-%d)"
+          {
+            echo "## Related work since $since"
+            echo
+            echo "### cslib-frontier issues and pull requests that mention Clay or Millennium"
+            gh search issues --repo cslib-community/cslib-frontier --include-prs \
+              "Clay OR Millennium OR LeanMillenniumPrizeProblems" --updated ">=$since" \
+              --json url,title --jq '.[] | "- [\(.title)](\(.url))"'
+            echo
+            echo "### konard/p-vs-np commits that mention Clay, Millennium or Lean"
+            gh api "repos/konard/p-vs-np/commits?since=${since}T00:00:00Z&per_page=100" \
+              --jq '.[] | select(.commit.message | test("(?i)clay|millennium|lean"))
+                    | "- \(.html_url) \(.commit.message | split("\n")[0])"'
+          } > report.md
+          cat report.md >> "$GITHUB_STEP_SUMMARY"
+          hits="$(grep -c '^- ' report.md || true)"
+          echo "Found $hits items."
+          if [ "$hits" -gt 0 ]; then
+            gh issue create --repo "$GITHUB_REPOSITORY" \
+              --title "Weekly watch: $hits related items since $since" --body-file report.md
+          fi

@@ -1,3 +1,16 @@
+--- upstream/Asm.lean
++++ Vendor/CookLevin/Asm.lean
+@@ -1,6 +1,7 @@
+-import D3Init
+-import D3Acc
+-import Emb
++-- Modified by Monteverde: ported to Lean v4.36.0-rc2. See Vendor/CookLevin/CHANGES.md.
++import Vendor.CookLevin.D3Init
++import Vendor.CookLevin.D3Acc
++import Vendor.CookLevin.Emb
+ 
+ /-!
+ # Assembly (block D): the five generators as sub-machines of one host
 --- upstream/Comp.lean
 +++ Vendor/CookLevin/Comp.lean
 @@ -1,4 +1,5 @@
@@ -41,3 +54,334 @@
      erw [P₁, P₂, P₃, P₄]
      rfl
    · -- Time bound.
+--- upstream/CookLevin.lean
++++ Vendor/CookLevin/CookLevin.lean
+@@ -1,4 +1,5 @@
+-import Problems.PVersusNP.Millennium
++-- Modified by Monteverde: ported to Lean v4.36.0-rc2. See Vendor/CookLevin/CHANGES.md.
++import Vendor.Millennium.Millennium
+ import Mathlib.Tactic.DeriveFintype
+ import Mathlib.Tactic.Linarith
+ 
+@@ -286,7 +287,9 @@
+ 
+ /-- Work stacks: the input stack, a stash for the formula, and two stacks for the assignment. -/
+ inductive W | inp | F | A | B
+-  deriving DecidableEq, Fintype
++  deriving DecidableEq
++-- PORT (toolchain): Mathlib's enum `deriving Fintype` fails here; same instance, by `derive_fintype%`.
++instance : Fintype W := derive_fintype% W
+ 
+ /-- Work alphabet = the pair alphabet `Bool ⊕ Option Bool` (`inr none` is the separator `#`).
+ Formula and assignment bits are stored as `inl b`. -/
+--- upstream/D3Acc.lean
++++ Vendor/CookLevin/D3Acc.lean
+@@ -1,4 +1,5 @@
+-import Sit
++-- Modified by Monteverde: ported to Lean v4.36.0-rc2. See Vendor/CookLevin/CHANGES.md.
++import Vendor.CookLevin.Sit
+ 
+ /-!
+ # D3 generator for the accept family (row `T`)
+@@ -49,7 +50,9 @@
+ /-- Unit-counter stacks of the generator. -/
+ inductive CK
+   | Tn | Hs | Gc | HG | Wc | Kc | K1 | Vc | TW | CB | P | Q | tmp | md | c1 | c2
+-  deriving DecidableEq, Fintype
++  deriving DecidableEq
++-- PORT (toolchain): Mathlib's enum `deriving Fintype` fails here; same instance, by `derive_fintype%`.
++instance : Fintype CK := derive_fintype% CK
+ 
+ /-- Clause kinds: code clause `u`, cell clause `x`. -/
+ inductive AK (n1 g : ℕ)
+--- upstream/D3Fam.lean
++++ Vendor/CookLevin/D3Fam.lean
+@@ -1,5 +1,6 @@
+-import CookLevin
+-import Prog
++-- Modified by Monteverde: ported to Lean v4.36.0-rc2. See Vendor/CookLevin/CHANGES.md.
++import Vendor.CookLevin.CookLevin
++import Vendor.CookLevin.Prog
+ 
+ /-!
+ # D3 measurement: one real clause family, parametric in the verifier (EXPLORATORY)
+@@ -286,7 +287,9 @@
+ /-- Unit-counter stacks of the generator. -/
+ inductive CK
+   | Tn | Ti | Hs | Gc | HG | Ka | Wc | Vc | TW | P | Q | tmp | md | c1 | c2
+-  deriving DecidableEq, Fintype
++  deriving DecidableEq
++-- PORT (toolchain): Mathlib's enum `deriving Fintype` fails here; same instance, by `derive_fintype%`.
++instance : Fintype CK := derive_fintype% CK
+ 
+ /-- All stacks: the Bool output and the counters. -/
+ inductive GK
+@@ -300,7 +303,9 @@
+ 
+ /-- Stages of a `mul_run` site. -/
+ inductive MS | head | body | l2 | rest
+-  deriving DecidableEq, Fintype
++  deriving DecidableEq
++-- PORT (toolchain): Mathlib's enum `deriving Fintype` fails here; same instance, by `derive_fintype%`.
++instance : Fintype MS := derive_fintype% MS
+ 
+ /-- Precomputation stages. -/
+ inductive PS
+--- upstream/D3Init.lean
++++ Vendor/CookLevin/D3Init.lean
+@@ -1,4 +1,5 @@
+-import Sit
++-- Modified by Monteverde: ported to Lean v4.36.0-rc2. See Vendor/CookLevin/CHANGES.md.
++import Vendor.CookLevin.Sit
+ 
+ /-!
+ # D3 generator for the init family (row 0)
+@@ -240,12 +241,16 @@
+ inductive CK
+   | Tn | Xn | En | Fn | Gc | Mm | Hs | HG | Wc | Vc | KA | ZA | Z45 | Z6 | Z1 | Z2 | N1 | N2
+   | CB | Zr | P | Q | tmp | md | c1 | c2 | Id
+-  deriving DecidableEq, Fintype
++  deriving DecidableEq
++-- PORT (toolchain): Mathlib's enum `deriving Fintype` fails here; same instance, by `derive_fintype%`.
++instance : Fintype CK := derive_fintype% CK
+ 
+ /-- The five runtime-loop phases (in emission order): I6, I5, I4, I2 (`k > k0`), I2 (`k < k0`). -/
+ inductive PH
+   | tail | pre | cert | o2 | o1
+-  deriving DecidableEq, Fintype
++  deriving DecidableEq
++-- PORT (toolchain): Mathlib's enum `deriving Fintype` fails here; same instance, by `derive_fintype%`.
++instance : Fintype PH := derive_fintype% PH
+ 
+ namespace PH
+ 
+@@ -1117,6 +1122,8 @@
+     (k0 * (2 * (n + e + f) + 3) + k0 + 2) + (k0 + 1) + 1 +
+     (q * (2 * (n + e + f) + 3) + q + 2) + (q + 1)
+ 
++-- PORT (toolchain): this proof needs more heartbeats on this toolchain; the proof is unchanged.
++set_option maxHeartbeats 1000000 in
+ /-- The precomputation: from the input counters to `preF`, at the first loop. -/
+ theorem pre_run (T n e f : ℕ) (o : List Bool) :
+     RunLe (prog L ic k0 ycs) (preB L k0 (L.KK - k0 - 1) T n e f)
+--- upstream/D3OneHot.lean
++++ Vendor/CookLevin/D3OneHot.lean
+@@ -1,4 +1,5 @@
+-import D3Fam
++-- Modified by Monteverde: ported to Lean v4.36.0-rc2. See Vendor/CookLevin/CHANGES.md.
++import Vendor.CookLevin.D3Fam
+ 
+ /-!
+ # D3 measurement, second family: cell one-hot, with runtime inner loops (EXPLORATORY)
+@@ -253,7 +254,9 @@
+ /-- Unit-counter stacks of the generator. -/
+ inductive CK
+   | Tn | Ti | Kc | Kd | Hs | Hi | Gc | HG | Wc | Vc | TW | KB | CB | P | Q | tmp | md | c1 | c2
+-  deriving DecidableEq, Fintype
++  deriving DecidableEq
++-- PORT (toolchain): Mathlib's enum `deriving Fintype` fails here; same instance, by `derive_fintype%`.
++instance : Fintype CK := derive_fintype% CK
+ 
+ /-- Clause kinds of one cell. -/
+ inductive CL (g : ℕ)
+--- upstream/D3Shift.lean
++++ Vendor/CookLevin/D3Shift.lean
+@@ -1,4 +1,5 @@
+-import D3OneHot
++-- Modified by Monteverde: ported to Lean v4.36.0-rc2. See Vendor/CookLevin/CHANGES.md.
++import Vendor.CookLevin.D3OneHot
+ 
+ /-!
+ # D3 measurement, third family: cell shifts (the top-indexed shift model) (EXPLORATORY)
+@@ -110,11 +111,15 @@
+ inductive CK
+   | Tn | Ti | Hs | Gc | HG | Wc | Vc | TW | TW1 | KB | U | Ui | R | Ri | CB | CW | P | Q | tmp | md | Ka
+   | c1 | c2
+-  deriving DecidableEq, Fintype
++  deriving DecidableEq
++-- PORT (toolchain): Mathlib's enum `deriving Fintype` fails here; same instance, by `derive_fintype%`.
++instance : Fintype CK := derive_fintype% CK
+ 
+ /-- Base counter of a literal position (`s`: `TW1 = (t+1)·W`, for the situation variable). -/
+ inductive BS | s | cb | cw
+-  deriving DecidableEq, Fintype
++  deriving DecidableEq
++-- PORT (toolchain): Mathlib's enum `deriving Fintype` fails here; same instance, by `derive_fintype%`.
++instance : Fintype BS := derive_fintype% BS
+ 
+ def BS.k : BS → CK
+   | .s => .TW1
+--- upstream/Emb.lean
++++ Vendor/CookLevin/Emb.lean
+@@ -1,4 +1,5 @@
+-import Prog
++-- Modified by Monteverde: ported to Lean v4.36.0-rc2. See Vendor/CookLevin/CHANGES.md.
++import Vendor.CookLevin.Prog
+ 
+ /-!
+ # Stack embedding: running a sub-machine inside a host machine (assembly, block D)
+--- upstream/Pkg.lean
++++ Vendor/CookLevin/Pkg.lean
+@@ -1,4 +1,5 @@
+-import Pre
++-- Modified by Monteverde: ported to Lean v4.36.0-rc2. See Vendor/CookLevin/CHANGES.md.
++import Vendor.CookLevin.Pre
+ 
+ /-!
+ # Block A, items 3–4: halting cleanup and packaging
+@@ -51,7 +52,10 @@
+           rw [he] at h
+           have h' : TM2.step M.m e = some d := h
+           show stepI M (runI M c n) = d
+-          rw [ih e he, stepI, h']
++          -- PORT (toolchain): `rw [stepI]` no longer finds the equation; `show` unfolds it.
++          rw [ih e he]
++          show (TM2.step M.m e).getD e = d
++          rw [h']
+           rfl
+ 
+ /-- **Generic stack growth**: `n` steps of any `FinTM2` add at most `n · depth M` to a stack. -/
+@@ -262,7 +266,7 @@
+ theorem haltList_g (Ys : List (M.Γ M.k₀)) (acc : M.Γ M.k₁) (ι : Fin r → M.Γ M.k₀)
+     (sep : M.Γ M.k₀) (k c e : ℕ) (T : ∀ k, List (FΓ E.layout.g r k)) :
+     haltList (gTM E Ys acc ι sep k c e) (T (.h .out)) =
+-      ⟨none, false, fun q => if q = FK.h .out then T q else []⟩ := by
++      ⟨none, false, fun (q : FK) => if q = FK.h .out then T q else []⟩ := by
+   simp only [haltList]
+   congr 1
+   funext q
+@@ -294,7 +298,8 @@
+   have hg := g_run_gen (fullProg_fin E Ys acc ι sep k c e) ⟨n1, hn1, r1⟩
+   rw [drained] at hg
+   rw [initList_g, show phiOf E Ys acc ι sep k c e s = S (.h .out) from hout.symm, haltList_g]
+-  exact hg.mono (by unfold gB; have := drainB_le hh; omega)
++  refine hg.mono ?_
++  unfold gB; have := drainB_le hh; omega
+ 
+ end Real
+ 
+@@ -377,7 +382,11 @@
+ 
+ namespace PvsNP.CL
+ 
+-open PvsNP.SATDef PvsNP.Sit PvsNP.Asm PvsNP.Pre PvsNP.Pkg Turing Millennium Computability
++open PvsNP.SATDef PvsNP.Sit PvsNP.Asm PvsNP.Pre PvsNP.Pkg Turing Millennium
++-- PORT (toolchain): Mathlib now has an unbundled `FinEncoding`; use the bundled copy that the
++-- vendored Clay file uses (Vendor/Millennium/MathlibCompat.lean).
++open Computability hiding Encoding FinEncoding finEncodingBoolBool
++open MathlibV431
+ 
+ /-! ## [POLY] Every polynomial is bounded by some `(j + c)^e` -/
+ 
+@@ -519,8 +528,10 @@
+   congr 1
+   rw [List.map_map]
+   refine List.map_congr_left fun g _ => ?_
+-  simp [vι, veqv]
+-  rfl
++  -- PORT (toolchain): `simp` no longer unfolds the composition here; the same step, spelled out.
++  change V.inputAlphabet.symm (Sum.inl g : eb.Γ ⊕ Option Γ₁) =
++    V.inputAlphabet.symm (Sum.inl (veqv eb ((veqv eb).symm g)) : eb.Γ ⊕ Option Γ₁)
++  rw [Equiv.apply_symm_apply]
+ 
+ /-- Determinism link: from row `T` on, the verifier's run on `(a, y)` is its output. -/
+ theorem v_run (a : β) (y : List Γ₁) {T : ℕ}
+@@ -561,7 +572,8 @@
+     intro y hy
+     rw [hs, v_run V a y (hT y hy), accepts_haltList]
+     simp [vacc]
+-    exact Iff.rfl
++    -- PORT (toolchain): `simp` stops one step earlier; `Equiv.apply_eq_iff_eq` closes the goal.
++    exact Equiv.apply_eq_iff_eq _
+   constructor
+   · rintro ⟨y, hy, hR⟩
+     rw [← hn] at hy
+--- upstream/Pre.lean
++++ Vendor/CookLevin/Pre.lean
+@@ -1,4 +1,5 @@
+-import Asm
++-- Modified by Monteverde: ported to Lean v4.36.0-rc2. See Vendor/CookLevin/CHANGES.md.
++import Vendor.CookLevin.Asm
+ 
+ /-!
+ # D2: the precomputation, composed with the assembled generator (block D)
+@@ -214,12 +215,16 @@
+ /-- Scratch counters. -/
+ inductive PS
+   | N | P | Q | AD | TMP | KC | Mc | B | Tc | Fx | Dd | Hc
+-  deriving DecidableEq, Fintype
++  deriving DecidableEq
++-- PORT (toolchain): Mathlib's enum `deriving Fintype` fails here; same instance, by `derive_fintype%`.
++instance : Fintype PS := derive_fintype% PS
+ 
+ /-- Target counters (the twelve preloads of `Asm.real_run`). -/
+ inductive PT
+   | uT | uH | sT | sH | hT | hH | aT | aH | iT | iX | iE | iF
+-  deriving DecidableEq, Fintype
++  deriving DecidableEq
++-- PORT (toolchain): Mathlib's enum `deriving Fintype` fails here; same instance, by `derive_fintype%`.
++instance : Fintype PT := derive_fintype% PT
+ 
+ /-- All counters of the counter program. -/
+ inductive CC
+--- upstream/Prog.lean
++++ Vendor/CookLevin/Prog.lean
+@@ -1,3 +1,4 @@
++-- Modified by Monteverde: ported to Lean v4.36.0-rc2. See Vendor/CookLevin/CHANGES.md.
+ import Mathlib.Computability.TuringMachine.StackTuringMachine
+ import Mathlib.Data.List.Sigma
+ 
+--- upstream/Sit.lean
++++ Vendor/CookLevin/Sit.lean
+@@ -1,4 +1,5 @@
+-import D3Shift
++-- Modified by Monteverde: ported to Lean v4.36.0-rc2. See Vendor/CookLevin/CHANGES.md.
++import Vendor.CookLevin.D3Shift
+ 
+ /-!
+ # Block B: situation tables of a real `FinTM2` (B2, B3) and their agreement with `TM2.step` (B1)
+@@ -660,7 +661,7 @@
+     stepI M c = applyEff c.stk (sitStep M c.l c.var (winC M c)) := by
+   obtain ⟨l, v, S⟩ := c
+   cases l with
+-  | none => simp [stepI, TM2.step, sitStep, applyEff]
++  | none => simp [stepI, TM2.step, sitStep, applyEff]; rfl
+   | some l =>
+       simp only [stepI, TM2.step, Option.getD_some, sitStep]
+       have := eff_agree (depth M) S (M.m l) v (fun _ => []) (fun _ => 0)
+@@ -761,7 +762,7 @@
+   have hr := E.res_sitIdx c hc
+   have hs := step_agree M c
+   refine ⟨?_, fun k _ j _ => ?_⟩
+-  · rw [hs, code, na, hr]; rfl
++  · rw [hs]; simp only [code, na]; rw [hr]; rfl
+   · have hpl := E.pl_le (E.sitIdx c) k
+     have hcn := E.cn_le (E.sitIdx c) k
+     unfold pl at hpl; unfold cn at hcn
+@@ -938,7 +939,7 @@
+   congr 1
+   funext k
+   refine decS_of_list _ _ 0 H (fun i => ?_) (hh k)
+-  rw [Nat.zero_add, E.cell_kc]
++  erw [Nat.zero_add, E.cell_kc]
+   exact E.decO_cell _ hc k i
+ 
+ /-- **C1b.** A valid prefix-form row is recovered from its decoding. -/
+@@ -2075,7 +2076,7 @@
+     | none => rw [hs, iterate_bind_none] at h; exact absurd h (by simp)
+     | some c1 =>
+       rw [hs] at h
+-      rw [runI_succ', show stepI M c = c1 by simp [stepI, hs]]
++      rw [runI_succ', show stepI M c = c1 by simp [stepI, hs]; rfl]
+       exact runI_of_iterate M n c1 c' h
+ 
+ theorem runI_add (M : FinTM2) (c : M.Cfg) (a : ℕ) : ∀ b, runI M c (a + b) = runI M (runI M c a) b
+@@ -2091,7 +2092,7 @@
+     rw [runI, runI_halted M c hc t]
+     obtain ⟨l, v, S⟩ := c
+     subst hc
+-    simp [stepI, TM2.step]
++    simp [stepI, TM2.step]; rfl
+ 
+ /-- **Plumbing link.** If the machine outputs `l'` from `initList M s` within `p` steps (the repo's
+ `TM2OutputsInTime`), then from row `p` on the idle-extended run *is* `haltList M l'`. -/

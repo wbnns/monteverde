@@ -1,7 +1,12 @@
-This directory contains a modified copy of Comp.lean from millennium-cook-levin
+This directory contains modified copies of 13 Lean files from millennium-cook-levin
 (https://github.com/JoshuaTan42/millennium-cook-levin), commit
 879c4835640119ad009abeb62ebd7a96f87eb9e8, Copyright 2026 Joshua Tan, licensed under the Apache
-License 2.0 (see LICENSE in this directory).
+License 2.0 (see LICENSE in this directory):
 
-Monteverde ported the file to Lean v4.36.0-rc2. The changes are listed in CHANGES.md and the
+- Comp.lean: the composition of polynomial-time TM2 machines. The Monteverde bridges use it.
+- Prog.lean, Emb.lean, CookLevin.lean, D3Fam.lean, D3OneHot.lean, D3Shift.lean, Sit.lean,
+  D3Acc.lean, D3Init.lean, Asm.lean, Pre.lean, Pkg.lean: the Cook-Levin proof against the Clay
+  definitions. Only the Cook-Levin cross-check (CrossCheck/) uses them.
+
+Monteverde ported the files to Lean v4.36.0-rc2. The changes are listed in CHANGES.md and the
 full diff is port.patch.

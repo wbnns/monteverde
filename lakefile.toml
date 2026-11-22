@@ -15,7 +15,7 @@ rev = "9bfe667f8c66a8a2a3e17391ce9a5cc965190544"
 # Vendored upstream sources (Clay definitions, TM2 composition), ported to this toolchain.
 [[lean_lib]]
 name = "Vendor"
-globs = ["Vendor.+"]
+globs = ["Vendor.Millennium.+", "Vendor.CookLevin.Comp"]
 allowNonModules = true
 
 [[lean_lib]]
@@ -30,4 +30,16 @@ allowNonModules = true
 [[lean_lib]]
 name = "Tests"
 globs = ["Tests.+"]
+allowNonModules = true
+
+# The Cook-Levin cross-check (a test, not part of the claim). It builds the vendored
+# millennium-cook-levin proof, which is large, so it has its own target and CI job.
+[[lean_lib]]
+name = "CookLevin"
+globs = ["Vendor.CookLevin.+"]
+allowNonModules = true
+
+[[lean_lib]]
+name = "CrossCheck"
+globs = ["CrossCheck.+"]
 allowNonModules = true

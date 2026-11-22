@@ -51,7 +51,7 @@ jobs:
           if grep -E "declaration uses .sorry." build.log; then
             echo "A declaration uses sorry."; exit 1
           fi
-          if grep -rnE "^\s*(private |protected )?axiom " --include=*.lean Vendor Monteverde Tests Audit 2>/dev/null; then
+          if grep -rnE "^\s*(private |protected )?axiom " --include=*.lean Vendor Monteverde Tests Audit CrossCheck 2>/dev/null; then
             echo "The project must not declare axioms."; exit 1
           fi
 
@@ -65,3 +65,44 @@ jobs:
         run: |
           lake env lean Audit/Axioms.lean
           lake env lean Audit/Isolation.lean
+
+  cross-check:
+    # The Cook-Levin cross-check from the design doc. It is a test, not part of the claim, so it
+    # runs as its own job: it builds the vendored millennium-cook-levin proof, which is large.
+    name: Cook-Levin cross-check
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Free disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
+          df -h /
+
+      - name: Install elan
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o elan-init.sh
+          sh elan-init.sh -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Restore cslib build outputs
+        uses: actions/cache@v4
+        with:
+          path: |
+            .lake/packages/cslib-frontier/.lake
+            .lake/packages/cslib/.lake
+          key: cslib-${{ hashFiles('lean-toolchain', 'lake-manifest.json') }}-${{ github.sha }}
+          restore-keys: cslib-${{ hashFiles('lean-toolchain', 'lake-manifest.json') }}-
+
+      - name: Get the Mathlib cache
+        run: lake exe cache get
+
+      - name: Build the cross-check (fails on an axiom outside the allowlist)
+        run: |
+          set -o pipefail
+          lake build CrossCheck 2>&1 | tee build.log
+          if grep -E "declaration uses .sorry." build.log; then
+            echo "A declaration uses sorry."; exit 1
+          fi
+          lake env lean CrossCheck/Axioms.lean

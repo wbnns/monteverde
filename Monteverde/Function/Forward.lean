@@ -32,4 +32,15 @@ theorem computableInPolyTime_of_tm2 {α Γ : Type} [Finite Γ] {e : α → List 
     (encFinite Γ) (encFinite Bool) e (fun b : Bool => [b]) f h' hfin he singleton_injective
   exact (ComputableInPolyTime.of_finite (fun b : Bool => b)).comp hc
 
+/-- **L1 forward, word outputs.** A polynomial-time TM2 function from words over `Γ` to words
+over `Δ` is a cslib-frontier polynomial-time function under the block codes of both alphabets. -/
+theorem computableInPolyTime_of_tm2_words {α β Γ Δ : Type} [Finite Γ] [Finite Δ]
+    {e : α → List Γ} {eo : β → List Δ} (he : Function.Injective e) (heo : Function.Injective eo)
+    {f : α → β} (h : TM2ComputableInPolyTime e eo f) :
+    ComputableInPolyTime f ((⟨e, he⟩ : α ↪ List Γ).trans (blockEnc Γ))
+      ((⟨eo, heo⟩ : β ↪ List Δ).trans (blockEnc Δ)) := by
+  obtain ⟨h', hfin⟩ := TM2ComputableInPolyTime.exists_finite h
+  exact @Turing.TM2ComputableInPolyTime.computableInPolyTime_encList _ _ _ _ _
+    (encFinite Γ) (encFinite Δ) e eo f h' hfin he heo
+
 end Monteverde
