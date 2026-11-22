@@ -3,22 +3,21 @@
 [![CI](https://github.com/wbnns/monteverde/actions/workflows/ci.yml/badge.svg)](https://github.com/wbnns/monteverde/actions/workflows/ci.yml)
 [![Independent kernel check](https://github.com/wbnns/monteverde/actions/workflows/kernel-check.yml/badge.svg)](https://github.com/wbnns/monteverde/actions/workflows/kernel-check.yml)
 
-**Monteverde proves in Lean 4 that the LeanMillenniumPrizeProblems formulation of the Clay
-P vs NP statement is equivalent to P vs NP in
-[cslib-frontier](https://github.com/cslib-community/cslib-frontier), the largest Lean complexity
-library.**
+**Monteverde proves in Lean 4 that `ClayPVersusNP ↔ CslibPEqNP`.**
 
-The two statements are:
+* `ClayPVersusNP` is the [LeanMillenniumPrizeProblems](https://github.com/lean-dojo/LeanMillenniumPrizeProblems)
+  formalization of Cook's official problem: P<sub>Σ</sub> = NP<sub>Σ</sub> for every finite
+  alphabet Σ with |Σ| ≥ 2, over Mathlib's multi-stack machines (`FinTM2`) and Cook's checking
+  relations, with certificates bounded by |y| ≤ |w|<sup>k</sup>.
+* `CslibPEqNP` is P(enc) = NP(enc) for every injective binary encoding `enc : α ↪ List Bool`,
+  over the multi-tape machines of [cslib-frontier](https://github.com/cslib-community/cslib-frontier),
+  the largest Lean complexity library. It is the form in which cslib-frontier's own theorems
+  (`NPComplete.mem_P_iff`) state P = NP.
 
-* the Clay statement as [LeanMillenniumPrizeProblems](https://github.com/lean-dojo/LeanMillenniumPrizeProblems)
-  formalizes it (`Millennium.ClayPVersusNP`, after Stephen Cook's official problem description),
-  and
-* P = NP in cslib-frontier, for every encoding of instances.
-
-Monteverde does **not** resolve P vs NP. It connects the two statements, so that a Lean result
-about one is a Lean result about the other. For example, a cslib-frontier proof that SAT is in P
-gives the Clay statement, and a cslib-frontier proof that some NP problem is not in P gives the
-negative Clay statement.
+The proof uses only `propext`, `Classical.choice` and `Quot.sound`. The equivalence is at the
+level of statements; it does not decide either side. On the way it proves bridges for
+polynomial-time functions, P, NP and many-one reductions over every finite alphabet, which
+transfer results between the two libraries.
 
 ## Contents
 
@@ -540,7 +539,7 @@ The recoder took less than a day, so the milestone plan did not change.
 ```bibtex
 @software{monteverde,
   author  = {Binns, Will},
-  title   = {Monteverde: two Lean statements of P vs NP, proved equivalent},
+  title   = {Monteverde: {ClayPVersusNP} is equivalent to {CslibPEqNP}, in Lean 4},
   version = {1.1.0},
   date    = {2026-11-22},
   url     = {https://github.com/wbnns/monteverde}

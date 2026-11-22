@@ -1,6 +1,6 @@
 # Monteverde
 
-> A Lean 4 proof that the LeanMillenniumPrizeProblems formulation of the Clay P vs NP statement is equivalent to P vs NP in cslib-frontier. It does not resolve P vs NP. It connects the two statements, so a Lean result about one is a Lean result about the other.
+> A Lean 4 proof that ClayPVersusNP (the LeanMillenniumPrizeProblems formalization of Cook's P vs NP statement: P = NP over every finite alphabet with at least two symbols, for Mathlib's FinTM2 machines) is equivalent to CslibPEqNP (P = NP for every injective binary encoding, in cslib-frontier). Axioms: propext, Classical.choice, Quot.sound. The equivalence is at the level of statements; it does not decide either side.
 
 Main theorems (namespace `Monteverde`, axioms `propext`, `Classical.choice`, `Quot.sound` only):
 
