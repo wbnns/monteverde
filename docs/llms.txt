@@ -1,0 +1,48 @@
+# Monteverde
+
+> A Lean 4 proof that the LeanMillenniumPrizeProblems formulation of the Clay P vs NP statement is equivalent to P vs NP in cslib-frontier. It does not resolve P vs NP. It connects the two statements, so a Lean result about one is a Lean result about the other.
+
+Main theorems (namespace `Monteverde`, axioms `propext`, `Classical.choice`, `Quot.sound` only):
+
+```lean
+def CslibPEqNP : Prop :=
+  ∀ {α : Type} (enc : α ↪ List Bool), Cslib.Complexity.P enc = Cslib.Complexity.NP enc
+
+theorem cslibPEqNP_iff_bits : CslibPEqNP ↔ P encBits = NP encBits
+theorem clay_iff_cslib : Millennium.ClayPVersusNP ↔ CslibPEqNP
+theorem clay_negative_iff_cslib :
+    Millennium.ClayPVersusNP.Formulations.NegativeBranch ↔ ¬ CslibPEqNP
+```
+
+Reusable bridges: `clayP_iff_cslib`, `clayNP_iff_cslib` (alphabets with at least two symbols), `clayReducible_iff_cslib`, `tm2_iff_computableInPolyTime_words`, `tm2_iff_computableInPolyTime` (any finite alphabets), `TM2ComputableInPolyTime.exists_finite`, `cslibPEqNP_of_image_SAT_mem_P`.
+
+Pins: Lean `leanprover/lean4:v4.36.0-rc2`; cslib-frontier `9bfe667f8c66a8a2a3e17391ce9a5cc965190544`; LeanMillenniumPrizeProblems `603053dc267cf3efe422f438eb78098c0ececd6f` (vendored); millennium-cook-levin `879c4835640119ad009abeb62ebd7a96f87eb9e8` (vendored). Release v1.1.0, 2026-11-22. License Apache-2.0.
+
+Use as a dependency (same toolchain), then `import Monteverde`:
+
+```toml
+[[require]]
+name = "monteverde"
+git = "https://github.com/wbnns/monteverde"
+rev = "v1.1.0"
+```
+
+## Docs
+
+- [README](https://github.com/wbnns/monteverde/blob/main/README.md): full reference. The two definitions of P and NP, the proof by layer, every reusable result, the trust model, build steps, and contributor notes (invariants, build targets, toolchain quirks).
+- [Statements](https://github.com/wbnns/monteverde/tree/main/Monteverde/Statements): the headline statements as definitions. They import only the Clay definitions and cslib-frontier's class definitions.
+- [Usage examples](https://github.com/wbnns/monteverde/blob/main/Tests/ReadmeExamples.lean): checked in CI.
+- [Cook text audit](https://github.com/wbnns/monteverde/blob/main/Audit/cook_text_audit.md): Cook's official Clay problem description mapped to the Lean definitions, with 8 explained differences.
+
+## Checks
+
+- [Axiom check](https://github.com/wbnns/monteverde/blob/main/Audit/Axioms.lean)
+- [Statement isolation](https://github.com/wbnns/monteverde/blob/main/Audit/Isolation.lean): each theorem's type must be exactly its statement.
+- [Cook-Levin cross-check](https://github.com/wbnns/monteverde/blob/main/CrossCheck/CookLevin.lean): each library's SAT is NP-complete for the other library's definitions.
+- [Library size](https://github.com/wbnns/monteverde/blob/main/Audit/size_table.md): theorem counts at pinned commits.
+
+## Optional
+
+- [Repository](https://github.com/wbnns/monteverde)
+- [Release v1.1.0](https://github.com/wbnns/monteverde/releases/tag/v1.1.0)
+- [Credits](https://github.com/wbnns/monteverde/blob/main/CREDITS.md)
