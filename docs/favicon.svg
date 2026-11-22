@@ -1,6 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="14" fill="#0C110F"/>
-  <rect x="21" y="30.5" width="22" height="3" rx="1.5" fill="#4A5A51"/>
-  <circle cx="20" cy="32" r="10" fill="#F0A06A"/>
-  <circle cx="44" cy="32" r="10" fill="#6DB3EC"/>
+  <!-- A hanging bridge over a cloud-forest ridge (Monteverde, Costa Rica).
+       Amber is Clay, blue is cslib-frontier; the two halves of the cable meet in the middle. -->
+  <defs><clipPath id="r"><rect width="64" height="64" rx="14"/></clipPath></defs>
+  <g clip-path="url(#r)">
+    <rect width="64" height="64" fill="#0C110F"/>
+    <path d="M0 50 L10 40 L19 45 L31 31 L43 42 L52 36 L64 44 V64 H0 Z" fill="#18211C"/>
+    <rect x="11" y="18" width="5" height="34" rx="1.5" fill="#F0A06A"/>
+    <rect x="48" y="18" width="5" height="34" rx="1.5" fill="#6DB3EC"/>
+    <path d="M13.5 21 Q22.75 40 32 40" fill="none" stroke="#F0A06A" stroke-width="4" stroke-linecap="butt"/>
+    <path d="M32 40 Q41.25 40 50.5 21" fill="none" stroke="#6DB3EC" stroke-width="4" stroke-linecap="butt"/>
+  </g>
 </svg>
