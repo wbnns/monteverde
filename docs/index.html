@@ -134,7 +134,7 @@ header.site .wrap {
   color: var(--text); text-decoration: none; display: inline-flex; align-items: center; gap: 10px;
   min-height: 44px; padding: 0;
 }
-.wordmark .mark { width: 26px; height: auto; flex: none; }
+.wordmark .mark { width: 36px; height: 36px; flex: none; }
 .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; flex: none; }
 .dot.clay { background: var(--clay); }
 .dot.cslib { background: var(--cslib); }
@@ -223,7 +223,7 @@ pre.block {
 .side.cslib-side { border-right: 2px solid var(--cslib); text-align: right; }
 .side .layer { font-family: var(--display); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
 .side.clay-side::before, .side.cslib-side::after {
-  content: ""; position: absolute; top: 26px; width: 9px; height: 9px; border-radius: 50%;
+  content: ""; position: absolute; top: 24.5px; width: 9px; height: 9px; border-radius: 50%;
 }
 .side.clay-side::before { left: -5.5px; background: var(--clay); }
 .side.cslib-side::after { right: -5.5px; background: var(--cslib); }
@@ -294,7 +294,7 @@ footer pre { font-size: 13px; line-height: 1.6; color: var(--faint); }
 
 <header class="site">
   <div class="wrap">
-    <a class="wordmark" href="#top"><svg class="mark" viewBox="8 15 48 40" aria-hidden="true"><rect x="11" y="18" width="5" height="34" rx="1.5" fill="#F0A06A"/><rect x="48" y="18" width="5" height="34" rx="1.5" fill="#6DB3EC"/><path d="M13.5 21 Q22.75 40 32 40" fill="none" stroke="#F0A06A" stroke-width="4"/><path d="M32 40 Q41.25 40 50.5 21" fill="none" stroke="#6DB3EC" stroke-width="4"/></svg>monteverde</a>
+    <a class="wordmark" href="#top"><img class="mark" src="/favicon.svg" alt="" width="36" height="36">monteverde</a>
     <nav aria-label="Sections">
       <ul>
         <li><a href="#theorems">Theorems</a></li>
