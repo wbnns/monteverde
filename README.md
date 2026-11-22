@@ -3,12 +3,17 @@
 [![CI](https://github.com/wbnns/monteverde/actions/workflows/ci.yml/badge.svg)](https://github.com/wbnns/monteverde/actions/workflows/ci.yml)
 [![Independent kernel check](https://github.com/wbnns/monteverde/actions/workflows/kernel-check.yml/badge.svg)](https://github.com/wbnns/monteverde/actions/workflows/kernel-check.yml)
 
-Monteverde is a Lean 4 proof that two formal statements of the P vs NP problem are equivalent:
+**Monteverde proves in Lean 4 that the LeanMillenniumPrizeProblems formulation of the Clay
+P vs NP statement is equivalent to P vs NP in
+[cslib-frontier](https://github.com/cslib-community/cslib-frontier), the largest Lean complexity
+library.**
 
-* the **Clay statement** as LeanMillenniumPrizeProblems formalizes it
-  (`Millennium.ClayPVersusNP`, after Stephen Cook's official problem description), and
-* **P = NP in [cslib-frontier](https://github.com/cslib-community/cslib-frontier)**, the largest
-  Lean library of complexity theory.
+The two statements are:
+
+* the Clay statement as [LeanMillenniumPrizeProblems](https://github.com/lean-dojo/LeanMillenniumPrizeProblems)
+  formalizes it (`Millennium.ClayPVersusNP`, after Stephen Cook's official problem description),
+  and
+* P = NP in cslib-frontier, for every encoding of instances.
 
 Monteverde does **not** resolve P vs NP. It connects the two statements, so that a Lean result
 about one is a Lean result about the other. For example, a cslib-frontier proof that SAT is in P
@@ -26,7 +31,7 @@ negative Clay statement.
 7. [Trust and verification](#trust-and-verification)
 8. [The Cook-Levin cross-check](#the-cook-levin-cross-check)
 9. [Cook's text against the Lean statement](#cooks-text-against-the-lean-statement)
-10. [The claim and its evidence](#the-claim-and-its-evidence)
+10. [Library size](#library-size)
 11. [Build](#build)
 12. [Repository map](#repository-map)
 13. [Contributing](#contributing)
@@ -181,8 +186,8 @@ What the theorems do **not** say:
 
 * They do not resolve P vs NP.
 * They do not prove that Mathlib's `FinTM2` model agrees with Cook's one-tape Turing machine.
-  That is a choice of the LeanMillenniumPrizeProblems formulation, and the claim is about that
-  formulation. See difference D1 in the [Cook text audit](Audit/cook_text_audit.md).
+  That is a choice of the LeanMillenniumPrizeProblems formulation, and Monteverde's result is
+  about that formulation. See difference D1 in the [Cook text audit](Audit/cook_text_audit.md).
 
 ## How the proof works
 
@@ -290,7 +295,7 @@ empty.
 ### What you must trust
 
 Lean checks every proof. The main risk is a **wrong statement**: a theorem that is true but does
-not say what the claim says. To trust the result, read these, and nothing else:
+not say what it appears to say. To trust the result, read these, and nothing else:
 
 1. **The statements**, in `Monteverde/Statements/` (four short files). They import only the
    vendored Clay definitions and cslib-frontier's class definitions. They never import a proof.
@@ -310,7 +315,7 @@ Every check runs in CI on every pull request and on `main`.
 
 | Check | File | It fails when |
 |-------|------|---------------|
-| Claim check | `Audit/ClaimCheck.lean` | A headline theorem is renamed or its type changes. It also checks the design doc's exact text for the class bridges. |
+| Exact types | `Audit/ClaimCheck.lean` | A headline theorem is renamed or its type changes. It also checks the design doc's exact text for the class bridges. |
 | Axiom check | `Audit/Axioms.lean` | A headline theorem or bridge uses an axiom other than `propext`, `Classical.choice`, `Quot.sound`. A `sorry` is the axiom `sorryAx`, so it fails too. |
 | Statement isolation | `Audit/Isolation.lean`, `scripts/check_isolation.sh` | A statement file imports anything other than Clay and cslib-frontier class definitions; a theorem's type is not exactly its statement, term for term; or a statement mentions a theorem. |
 | Vendored files | `scripts/diff_vendor.sh` | A vendored file differs from its upstream commit by an unlisted change. |
@@ -351,7 +356,7 @@ the definitions were wrong, the two proofs would likely fail to agree through th
 | `cook_levin_agree_clay`, `cook_levin_agree_cslib` | On each side, the two SAT languages are in P together |
 | `clay_P_subset_NP` | Clay's P ⊆ NP, with no hypothesis (the Clay file proves it only from a composition hypothesis, which `Comp.lean` discharges) |
 
-The cross-check is a test. The claim does not use it. It builds the vendored millennium-cook-levin
+The cross-check is a test. The main theorems do not use it. It builds the vendored millennium-cook-levin
 proof (about 12,300 lines), so it is a separate build target and CI job.
 
 ## Cook's text against the Lean statement
@@ -376,20 +381,12 @@ ones:
 Claude reviewed the audit on November 22, 2026: every quote against Cook's PDF and every line
 reference against the files. A review by a complexity theorist is welcome but not required.
 
-## The claim and its evidence
+## Library size
 
-The project was built to make this sentence true:
-
-> I proved in Lean that the LeanMillenniumPrizeProblems formulation of the Clay P vs NP
-> statement is equivalent to P vs NP in cslib-frontier, the largest Lean complexity library.
-
-| Part | Evidence |
-|------|----------|
-| "I proved in Lean" | No `sorry`; only the three standard axioms (`Audit/Axioms.lean`); nanoda re-checks 16,507 declarations with no errors. Reused work is credited in `CREDITS.md`. |
-| "the LeanMillenniumPrizeProblems formulation" | The theorems use the two official targets from commit `603053d`. `scripts/diff_vendor.sh` checks the vendored copy. |
-| "is equivalent to" | Two `↔` theorems, one for each official target (`Audit/ClaimCheck.lean`). |
-| "P vs NP in cslib-frontier" | `CslibPEqNP` is the form of `NPComplete.mem_P_iff`; `cslibPEqNP_iff_bits` covers `P encBits = NP encBits`. |
-| "the largest Lean complexity library" | [`Audit/size_table.md`](Audit/size_table.md): theorems and lemmas at pinned commits, counted in full clones on November 22, 2026. |
+"The largest Lean complexity library" rests on a count of `theorem` and `lemma` declarations in
+each public Lean complexity library, at pinned commits, in full clones, on November 22, 2026
+(`Audit/size_count.py`, full table in [`Audit/size_table.md`](Audit/size_table.md)). CI fails if
+cslib-frontier is not first.
 
 | Library | Theorems and lemmas |
 |---------|--------------------:|
@@ -434,7 +431,7 @@ rev = "v1.1.0"
 | LeanMillenniumPrizeProblems (vendored) | `603053dc267cf3efe422f438eb78098c0ececd6f` | upstream v4.31.0, ported |
 | millennium-cook-levin (vendored) | `879c4835640119ad009abeb62ebd7a96f87eb9e8` | upstream v4.31.0, ported |
 
-The claim refers to these commits. Moving a pin is a deliberate release step.
+The results refer to these commits. Moving a pin is a deliberate release step.
 
 ## Repository map
 
@@ -516,7 +513,7 @@ Monteverde follows a design doc dated November 22, 2026. All milestones were don
 | M1 | Block code, finite work alphabets, L1 forward bridge |
 | M2 | Recoder machine, TM2 composition, L1 reverse bridge |
 | M3 | Class bridges for P and NP, bits form |
-| M4 | Headline theorems, claim check, axiom check, isolation, non-vacuity tests |
+| M4 | Headline theorems, exact-type check, axiom check, isolation, non-vacuity tests |
 | M5 | Size count, independent kernel check, credits, release v1.0.0 |
 | v1.1.0 | L1 for word outputs over every finite alphabet, reduction bridge, statements split from proofs, Cook-Levin cross-check, Cook text audit, weekly watch |
 
