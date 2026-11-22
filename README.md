@@ -47,6 +47,7 @@ negative Clay statement.
 | Independent check | nanoda (a Lean type checker written in Rust) re-checks the exported proofs: 16,507 declarations, no errors |
 | Lean | `leanprover/lean4:v4.36.0-rc2` |
 | Pins | cslib-frontier `9bfe667`, LeanMillenniumPrizeProblems `603053d` (vendored), millennium-cook-levin `879c483` (vendored) |
+| Website | [monteverde.willbinns.org](https://monteverde.willbinns.org) |
 | Release | [v1.1.0](https://github.com/wbnns/monteverde/releases/tag/v1.1.0), November 22, 2026 |
 | License | Apache-2.0 |
 
