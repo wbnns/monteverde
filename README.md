@@ -28,7 +28,7 @@ Add Monteverde to `lakefile.toml`. Your project must use the same toolchain,
 [[require]]
 name = "monteverde"
 git = "https://github.com/wbnns/monteverde"
-rev = "v1.1.0"
+rev = "v1.1.1"
 ```
 
 Then run `lake update monteverde` and use the theorems:
@@ -71,7 +71,7 @@ More examples are in [How to use the results](#how-to-use-the-results).
 | Lean | `leanprover/lean4:v4.36.0-rc2` |
 | Pins | cslib-frontier `9bfe667`, LeanMillenniumPrizeProblems `603053d` (vendored), millennium-cook-levin `879c483` (vendored) |
 | Website | [monteverde.willbinns.org](https://monteverde.willbinns.org) |
-| Release | [v1.1.0](https://github.com/wbnns/monteverde/releases/tag/v1.1.0), November 22, 2026 |
+| Release | [v1.1.1](https://github.com/wbnns/monteverde/releases/tag/v1.1.1), November 23, 2026 |
 | License | Apache-2.0 |
 | Development | Developed with AI assistance (Claude, by Anthropic). Every proof is checked by the Lean kernel and, independently, by nanoda. |
 
@@ -443,7 +443,7 @@ To use Monteverde in another Lake project, add it to `lakefile.toml`. Use the sa
 [[require]]
 name = "monteverde"
 git = "https://github.com/wbnns/monteverde"
-rev = "v1.1.0"
+rev = "v1.1.1"
 ```
 
 ### Pinned versions
@@ -478,11 +478,12 @@ Tests/            NonVacuity, ReadmeExamples, Probe (cslib-frontier names this p
 CrossCheck/       The Cook-Levin cross-check and its axiom check
 scripts/          diff_vendor.sh, check_isolation.sh, kernel_check.sh
 .github/workflows ci.yml, kernel-check.yml, drift.yml, watch.yml
+CITATION.cff      Citation metadata (GitHub "Cite this repository", Zenodo)
 ```
 
 ## Contributing
 
-This repository is a stable reference at v1.1.0, so issues and pull requests here may not get a
+This repository is a stable reference at v1.1.1, so issues and pull requests here may not get a
 reply. The best way to improve Monteverde is to fork it: it is open source under the Apache
 License 2.0, and you do not need permission to change it or publish your version. Please keep
 `NOTICE` and `CREDITS.md`. The notes below help you work on a fork.
@@ -546,6 +547,7 @@ Monteverde follows a design doc dated November 22, 2026. All milestones were don
 | M4 | Headline theorems, exact-type check, axiom check, isolation, non-vacuity tests |
 | M5 | Size count, independent kernel check, credits, release v1.0.0 |
 | v1.1.0 | L1 for word outputs over every finite alphabet, reduction bridge, statements split from proofs, Cook-Levin cross-check, Cook text audit, weekly watch |
+| v1.1.1 | Quick start, `CITATION.cff` with Zenodo archiving. The theorems and proofs are the same as in v1.1.0. |
 
 The design doc asked for a one-week spike on the recoder machine and new estimates after it.
 The recoder took less than a day, so the milestone plan did not change.
@@ -564,8 +566,8 @@ The recoder took less than a day, so the milestone plan did not change.
 @software{monteverde,
   author  = {Binns, Will},
   title   = {Monteverde: {ClayPVersusNP} is equivalent to {CslibPEqNP}, in Lean 4},
-  version = {1.1.0},
-  date    = {2026-11-22},
+  version = {1.1.1},
+  date    = {2026-11-23},
   url     = {https://github.com/wbnns/monteverde}
 }
 ```

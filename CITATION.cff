@@ -1,0 +1,52 @@
+cff-version: 1.2.0
+message: "If you use Monteverde, please cite it as below."
+type: software
+title: "Monteverde: ClayPVersusNP is equivalent to CslibPEqNP, in Lean 4"
+abstract: >-
+  A Lean 4 proof that ClayPVersusNP, the LeanMillenniumPrizeProblems formalization of
+  Cook's P vs NP statement, is equivalent to P = NP for every encoding in cslib-frontier.
+  The proof uses only the axioms propext, Classical.choice and Quot.sound. The equivalence
+  is at the level of statements; it does not decide either side. Developed with AI
+  assistance (Claude, by Anthropic); every proof is checked by the Lean kernel and,
+  independently, by nanoda.
+authors:
+  - family-names: Binns
+    given-names: Will
+    orcid: "https://orcid.org/0009-0006-9850-9551"
+version: 1.1.1
+date-released: 2026-11-23
+license: Apache-2.0
+repository-code: "https://github.com/wbnns/monteverde"
+url: "https://monteverde.willbinns.org"
+keywords:
+  - Lean 4
+  - formal verification
+  - computational complexity
+  - P vs NP
+  - Millennium Prize Problems
+  - Turing machines
+  - Mathlib
+references:
+  - type: software
+    title: LeanMillenniumPrizeProblems
+    authors:
+      - family-names: George
+        given-names: Robert Joseph
+    repository-code: "https://github.com/lean-dojo/LeanMillenniumPrizeProblems"
+    commit: 603053dc267cf3efe422f438eb78098c0ececd6f
+    license: Apache-2.0
+  - type: software
+    title: cslib-frontier
+    authors:
+      - name: cslib-frontier contributors
+    repository-code: "https://github.com/cslib-community/cslib-frontier"
+    commit: 9bfe667f8c66a8a2a3e17391ce9a5cc965190544
+    license: Apache-2.0
+  - type: software
+    title: millennium-cook-levin
+    authors:
+      - family-names: Tan
+        given-names: Joshua
+    repository-code: "https://github.com/JoshuaTan42/millennium-cook-levin"
+    commit: 879c4835640119ad009abeb62ebd7a96f87eb9e8
+    license: Apache-2.0

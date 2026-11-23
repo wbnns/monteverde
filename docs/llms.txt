@@ -18,7 +18,7 @@ Reusable bridges: `clayP_iff_cslib`, `clayNP_iff_cslib` (alphabets with at least
 
 Developed with AI assistance (Claude, by Anthropic). Every proof is checked by the Lean kernel and, independently, by nanoda.
 
-Pins: Lean `leanprover/lean4:v4.36.0-rc2`; cslib-frontier `9bfe667f8c66a8a2a3e17391ce9a5cc965190544`; LeanMillenniumPrizeProblems `603053dc267cf3efe422f438eb78098c0ececd6f` (vendored); millennium-cook-levin `879c4835640119ad009abeb62ebd7a96f87eb9e8` (vendored). Release v1.1.0, 2026-11-22. License Apache-2.0.
+Pins: Lean `leanprover/lean4:v4.36.0-rc2`; cslib-frontier `9bfe667f8c66a8a2a3e17391ce9a5cc965190544`; LeanMillenniumPrizeProblems `603053dc267cf3efe422f438eb78098c0ececd6f` (vendored); millennium-cook-levin `879c4835640119ad009abeb62ebd7a96f87eb9e8` (vendored). Release v1.1.1, 2026-11-23. License Apache-2.0.
 
 Use as a dependency (same toolchain), then `import Monteverde`:
 
@@ -26,7 +26,7 @@ Use as a dependency (same toolchain), then `import Monteverde`:
 [[require]]
 name = "monteverde"
 git = "https://github.com/wbnns/monteverde"
-rev = "v1.1.0"
+rev = "v1.1.1"
 ```
 
 ## Docs
@@ -46,5 +46,5 @@ rev = "v1.1.0"
 ## Optional
 
 - [Repository](https://github.com/wbnns/monteverde)
-- [Release v1.1.0](https://github.com/wbnns/monteverde/releases/tag/v1.1.0)
+- [Release v1.1.1](https://github.com/wbnns/monteverde/releases/tag/v1.1.1)
 - [Credits](https://github.com/wbnns/monteverde/blob/main/CREDITS.md)
