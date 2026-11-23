@@ -1,5 +1,7 @@
 # Monteverde
 
+[![Monteverde: ClayPVersusNP ↔ CslibPEqNP. The LeanMillenniumPrizeProblems formalization of Cook's P vs NP statement is equivalent to P = NP for every encoding in cslib-frontier.](docs/og.png)](https://monteverde.willbinns.org)
+
 [![CI](https://github.com/wbnns/monteverde/actions/workflows/ci.yml/badge.svg)](https://github.com/wbnns/monteverde/actions/workflows/ci.yml)
 [![Independent kernel check](https://github.com/wbnns/monteverde/actions/workflows/kernel-check.yml/badge.svg)](https://github.com/wbnns/monteverde/actions/workflows/kernel-check.yml)
 
