@@ -300,6 +300,7 @@ footer pre { font-size: 13px; line-height: 1.6; color: var(--faint); }
     <a class="wordmark" href="#top"><img class="mark" src="/favicon.svg" alt="" width="36" height="36">monteverde</a>
     <nav aria-label="Sections">
       <ul>
+        <li><a href="#start">Use</a></li>
         <li><a href="#definitions">Definitions</a></li>
         <li><a href="#results">Results</a></li>
         <li><a href="#proof">Proof</a></li>
@@ -347,6 +348,27 @@ footer pre { font-size: 13px; line-height: 1.6; color: var(--faint); }
         <div class="fact"><div class="label">Lean</div><div class="value">v4.36.0-rc2</div></div>
         <div class="fact"><div class="label">License</div><div class="value">Apache-2.0</div></div>
       </div>
+    </div>
+  </div>
+</section>
+
+<section id="start">
+  <div class="wrap">
+    <h2>Quick start</h2>
+    <p class="section-lead">Add Monteverde to <code>lakefile.toml</code>. Your project must use
+      the same toolchain, <code>leanprover/lean4:v4.36.0-rc2</code>. Then run
+      <code>lake update monteverde</code>. More examples are in
+      <a href="#use">Using the results</a>.</p>
+    <div class="grid-2">
+<pre class="block"><code>[[require]]
+name = "monteverde"
+git = "https://github.com/wbnns/monteverde"
+rev = "v1.1.0"</code></pre>
+<pre class="block"><code><span class="kw">import</span> Monteverde
+<span class="kw">open</span> Monteverde
+
+<span class="kw">example</span> (h : <span class="cslib">CslibPEqNP</span>) : <span class="clay">Millennium.ClayPVersusNP</span> :=
+  <span class="thm">clay_iff_cslib</span>.mpr h</code></pre>
     </div>
   </div>
 </section>

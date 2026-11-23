@@ -10,6 +10,9 @@ open Cslib.Complexity Turing.MultiTapeTM
 
 namespace Monteverde.ReadmeExamples
 
+/-- The quick-start example. -/
+example (h : CslibPEqNP) : Millennium.ClayPVersusNP := clay_iff_cslib.mpr h
+
 /-- A cslib-frontier proof of P = NP on binary strings gives the positive Clay target. -/
 example (h : P encBits = NP encBits) : Millennium.ClayPVersusNP :=
   clay_iff_cslib.mpr (cslibPEqNP_iff_bits.mpr h)

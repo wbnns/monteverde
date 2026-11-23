@@ -19,22 +19,46 @@ level of statements; it does not decide either side. On the way it proves bridge
 polynomial-time functions, P, NP and many-one reductions over every finite alphabet, which
 transfer results between the two libraries.
 
+## Quick start
+
+Add Monteverde to `lakefile.toml`. Your project must use the same toolchain,
+`leanprover/lean4:v4.36.0-rc2`.
+
+```toml
+[[require]]
+name = "monteverde"
+git = "https://github.com/wbnns/monteverde"
+rev = "v1.1.0"
+```
+
+Then run `lake update monteverde` and use the theorems:
+
+```lean
+import Monteverde
+open Monteverde
+
+example (h : CslibPEqNP) : Millennium.ClayPVersusNP := clay_iff_cslib.mpr h
+```
+
+More examples are in [How to use the results](#how-to-use-the-results).
+
 ## Contents
 
-1. [At a glance](#at-a-glance)
-2. [The main theorems](#the-main-theorems)
-3. [The two definitions of P and NP](#the-two-definitions-of-p-and-np)
-4. [How to use the results](#how-to-use-the-results)
-5. [How the proof works](#how-the-proof-works)
-6. [Reusable results](#reusable-results)
-7. [Trust and verification](#trust-and-verification)
-8. [The Cook-Levin cross-check](#the-cook-levin-cross-check)
-9. [Cook's text against the Lean statement](#cooks-text-against-the-lean-statement)
-10. [Library size](#library-size)
-11. [Build](#build)
-12. [Repository map](#repository-map)
-13. [Contributing](#contributing)
-14. [History, open questions, citation, credits](#history)
+1. [Quick start](#quick-start)
+2. [At a glance](#at-a-glance)
+3. [The main theorems](#the-main-theorems)
+4. [The two definitions of P and NP](#the-two-definitions-of-p-and-np)
+5. [How to use the results](#how-to-use-the-results)
+6. [How the proof works](#how-the-proof-works)
+7. [Reusable results](#reusable-results)
+8. [Trust and verification](#trust-and-verification)
+9. [The Cook-Levin cross-check](#the-cook-levin-cross-check)
+10. [Cook's text against the Lean statement](#cooks-text-against-the-lean-statement)
+11. [Library size](#library-size)
+12. [Build](#build)
+13. [Repository map](#repository-map)
+14. [Contributing](#contributing)
+15. [History, open questions, citation, credits](#history)
 
 ## At a glance
 
