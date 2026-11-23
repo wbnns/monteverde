@@ -2,9 +2,9 @@
 
 ## Purpose
 
-This file is the optional audit from the design doc: "A table that maps each clause of Cook's
-official Clay text to the Lean definitions." The claim in `README.md` does not need this audit.
-The audit helps a reader check that the vendored Lean statement says what Cook's text says.
+This audit maps each clause of Cook's official Clay problem description to the Lean definitions
+in LeanMillenniumPrizeProblems. It helps a reader check that the Lean statement says what Cook's
+text says. The Monteverde theorems do not depend on this audit.
 
 ## Sources
 
@@ -24,25 +24,27 @@ The audit helps a reader check that the vendored Lean statement says what Cook's
   `Turing.TM2.Stmt` (line 125) and `Turing.TM2.step` (line 169).
 - `Millennium.lean:N` in the table means line N of `Vendor/Millennium/Millennium.lean`.
 
-Audit date: 2026-11-22.
+Audit date: 2026-11-22. Re-checked: 2026-11-23.
 
 ## Review
 
-Reviewed on November 22, 2026 by Claude (an AI model, Anthropic), the author of the Monteverde
-code. The review checked:
+Reviewed by Claude (an AI model, Anthropic), the author of the Monteverde code, on
+November 22 and 23, 2026. The review checked:
 
-- every quote in the table against the text of Cook's PDF, extracted from the file at the URL
-  above;
+- every quote and page number in the table against Cook's PDF at the URL above (text
+  extraction, and the rendered page where the extraction was unclear);
 - every `Millennium.lean:N` and Mathlib line reference against the files at the pinned commits;
-- each "Match" value and each difference D1 to D8 against the Lean definitions.
+- each "Match" value and each difference D1 to D8 against the Lean definitions and the Monteverde
+  theorems that they cite.
 
-Result: 22 of 24 rows were correct as written. Two were fixed: row 6 cited page 10 for a phrase
-on page 9, and row 24 quoted `R ⊆ Σ* × Σ*` where Cook's printed text has `Σ∗ ∪ Σ∗` (a typo in
-the original for `×`). The review also added the note on `#` in D6 and the Lean references in
-D2 and D3. No difference changes the two target statements.
+Corrections from the review: row 6 now cites page 9; row 24 quotes Cook's printed `Σ∗ ∪ Σ∗` (a
+typo for `Σ∗ × Σ∗`, confirmed on the rendered page); row 17 is "Equivalent", because Cook and Lean
+order the existential quantifiers differently; D2 now states exactly what
+`TM2ComputableInPolyTime.exists_finite` proves; the list of Cook's examples under "Other
+observations" now uses Cook's own wording. No correction changes a target statement.
 
-An extra review by a person with complexity-theory background can add credibility to the
-release. The claim does not need it.
+Independent reviews, especially from complexity theorists, are welcome and can be published
+anywhere.
 
 ## Match values
 
@@ -72,7 +74,7 @@ release. The claim does not need it.
 | 14 | "a language L_R over Σ ∪ Σ₁ ∪ {#}" (p. 2, §1) | `pair_symbol` = `Sum ea.Γ (Option eb.Γ)`, Millennium.lean:102 | Equivalent | Lean uses a disjoint (tagged) union. `Sum.inr none` is the symbol #. See D6. |
 | 15 | "L_R = {w#y \| R(w, y)}"; "the symbol # is not in Σ" (p. 2, §1) | `pair_encoding`, Millennium.lean:161; `pair_encoding.encode_eq`, Millennium.lean:183; `pair_encoding.length_eq`, Millennium.lean:191 | Equivalent | Encoding of `(w, y)` is `map inl w ++ # :: map (inr ∘ some) y`. Length is \|w\| + 1 + \|y\|, as in Cook. # is a fresh symbol by construction. See D6. |
 | 16 | "R is polynomial-time iff L_R ∈ P" (p. 2, §1) | `PolynomialTimeCheckingRelation`, Millennium.lean:272 | Equivalent | `InPolynomialTime (pair_encoding ea eb) (fun p => R p.1 p.2)`. The Lean decider must be correct only on well-formed `w#y` strings. See D6. |
-| 17 | "there is k ∈ N and a polynomial-time checking relation R" (p. 2, §1) | `InNondeterministicPolynomialTime`, Millennium.lean:289-292 | Exact | Same quantifier order: ∃ Γ₁, ∃ R, ∃ k, then R polynomial-time and the membership condition. |
+| 17 | "there is k ∈ N and a polynomial-time checking relation R" (p. 2, §1) | `InNondeterministicPolynomialTime`, Millennium.lean:289-292 | Equivalent | Lean: ∃ Γ₁, ∃ R, ∃ k, then R polynomial-time and the membership condition. Cook: k, then R (with Σ₁ inside "checking relation"). Adjacent existential quantifiers commute, so the order does not matter. |
 | 18 | "w ∈ L ⇔ ∃y (\|y\| ≤ \|w\|^k and R(w, y))" (p. 2, §1) | `∀ a, L a ↔ ∃ y : List Γ₁, y.length ≤ (ea.encode a).length ^ k ∧ R a y`, Millennium.lean:292; same as field `membership_iff_exists_bounded_certificate`, Millennium.lean:412-415 | Exact | With `fin_encoding_string`, `(ea.encode a).length` is \|w\|. Lean has `0 ^ 0 = 1`. See D7 for short inputs. |
 | 19 | NP via checking relations (p. 2, §1), packaged | `ClayPolynomialTimeVerification`, Millennium.lean:398; `ClayVerifiableLanguage`, Millennium.lean:420; `ClayVerifiableLanguage.iff_in_nondeterministic_polynomial_time`, Millennium.lean:425 | Exact | A structure with the same fields as row 17 and row 18. The file proves that it is the same as `InNondeterministicPolynomialTime`. |
 | 20 | "Problem Statement. Does P = NP?" (p. 2, §1), answer yes | `ClayPVersusNP`, Millennium.lean:1564 (= `ClayPVersusNP.Formulations.ClassEquality`, Millennium.lean:1552); `PositiveBranch`, Millennium.lean:1873 | Equivalent | `∀ alphabet [Fintype] [Nontrivial] L, InPolynomialTime … L ↔ InNondeterministicPolynomialTime … L`. It quantifies over all alphabets. See D3. |
@@ -111,10 +113,9 @@ the program has a finite number of statements. So a `push` can write only a fini
 symbols (the images of a finite number of functions on finite `σ`). Every function on these
 finite domains is a finite table, so noncomputable functions give no extra power. A `FinTM2` is
 therefore a finite machine in Cook's sense. Monteverde proves the alphabet part in Lean:
-`Monteverde.TM2ComputableInPolyTime.exists_finite` gives, for every polynomial-time `FinTM2`
-certificate with a finite output alphabet, one with the same function and time bound whose
-stack alphabets are all finite. (Milestone M1 of this repo handles finite work
-alphabets for the bridge.)
+`Monteverde.TM2ComputableInPolyTime.exists_finite` (`Monteverde/Function/Finitize.lean`) turns
+every `TM2ComputableInPolyTime ea eb f` with a finite output alphabet into one for the same `ea`,
+`eb` and `f` whose stack alphabets are all finite.
 
 **D3. Alphabet quantifier: Lean states P = NP for every finite alphabet with at least two
 symbols.** (Rows 1, 20 to 22.) Cook fixes one alphabet Σ with |Σ| ≥ 2 and says that "the answer
@@ -124,8 +125,9 @@ its negation: P ≠ NP for at least one such alphabet. Why it does not matter: b
 independence remark (strings over any fixed alphabet code into binary strings with polynomial
 overhead), the "for all alphabets" form, the "for one alphabet" form and the binary form are
 equivalent. The vendored file does not prove this remark, but Monteverde does, for the Lean
-model: `clay_iff_cslib` gets `CslibPEqNP` from the Clay statement at the one alphabet `Bool`, and
-gets the Clay statement for every alphabet back from `CslibPEqNP`. So P = NP at `Bool` gives
+model: the proof of `clay_iff_cslib` uses the Clay statement only at the alphabet `Bool`
+(`Monteverde/Headline/Clay.lean:38`) to get `CslibPEqNP`, and gets the Clay statement for every
+alphabet back from `CslibPEqNP`. So P = NP at `Bool` gives
 P = NP at every alphabet with at least two symbols. Note: the alphabet is in `Type`
 (universe 0). This is no restriction, because every finite alphabet has a copy in `Type`.
 
@@ -147,7 +149,8 @@ Lean does the same. Lean lets `Γ₁` be any finite type, so the certificate alp
 symbol, as in Cook.
 
 **D6. How `w#y` is encoded.** (Rows 14 to 16.) Cook writes L_R over the set union
-Σ ∪ Σ₁ ∪ {#} with # ∉ Σ. (Cook does not say # ∉ Σ₁. In Lean, # is fresh for both alphabets.) Lean uses the disjoint union `Sum Σ (Option Γ₁)`: left symbols are
+Σ ∪ Σ₁ ∪ {#} with # ∉ Σ. (Cook does not say # ∉ Σ₁. In Lean, # is fresh for both alphabets.) Lean uses the
+disjoint union `Sum Σ (Option Γ₁)`: left symbols are
 `Sum.inl a`, the separator is `Sum.inr none`, right symbols are `Sum.inr (some b)`. Why it does
 not matter: when Σ and Σ₁ share symbols, the single # still splits the string, so the tagged and
 untagged forms convert into each other in linear time. The length is |w| + 1 + |y| in both
@@ -183,9 +186,10 @@ P ⊆ NP with no hypothesis. So in this repo
 These items do not change the target statements.
 
 - The module comment (Millennium.lean:36-52) says the listed examples are "from the Clay PDF".
-  Some are not in Cook's text: PATH (reachability), the traveling salesman problem and vertex
-  cover. Cook's text names SAT, 3-SAT, SubsetSum, Hamiltonian cycle, clique, 3-coloring, integer
-  factoring and primes (AKS).
+  Three are not in Cook's text: PATH (reachability), the traveling salesman problem and vertex
+  cover. Cook's text names Satisfiability, 3-SAT, subgraph isomorphism, subset sum (a subset
+  summing to a target T), Hamiltonian cycle, clique, 3-coloring, integer factoring, and the
+  composite numbers (in P by Agrawal, Kayal and Saxena).
 - Millennium.lean:17-20 points to `Problems/PVersusNP/references/clay/pvsnp.pdf`. That path is
   in the upstream repository. This repo does not vendor the PDF.
 - `NondeterministicPolynomialTimeComplete` (Millennium.lean:334) quantifies over every
