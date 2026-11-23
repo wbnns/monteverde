@@ -4,6 +4,7 @@
 
 [![CI](https://github.com/wbnns/monteverde/actions/workflows/ci.yml/badge.svg)](https://github.com/wbnns/monteverde/actions/workflows/ci.yml)
 [![Independent kernel check](https://github.com/wbnns/monteverde/actions/workflows/kernel-check.yml/badge.svg)](https://github.com/wbnns/monteverde/actions/workflows/kernel-check.yml)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24462067.svg)](https://doi.org/10.5281/zenodo.24462067)
 
 **Monteverde proves in Lean 4 that `ClayPVersusNP ↔ CslibPEqNP`.**
 
@@ -60,7 +61,7 @@ More examples are in [How to use the results](#how-to-use-the-results).
 12. [Build](#build)
 13. [Repository map](#repository-map)
 14. [Contributing](#contributing)
-15. [History, open questions, citation, credits](#history)
+15. [History, citation, credits, contact](#history)
 
 ## At a glance
 
@@ -74,6 +75,7 @@ More examples are in [How to use the results](#how-to-use-the-results).
 | Pins | cslib-frontier `9bfe667`, LeanMillenniumPrizeProblems `603053d` (vendored), millennium-cook-levin `879c483` (vendored) |
 | Website | [monteverde.willbinns.org](https://monteverde.willbinns.org) |
 | Release | [v1.1.1](https://github.com/wbnns/monteverde/releases/tag/v1.1.1), November 23, 2026 |
+| DOI | [10.5281/zenodo.24462067](https://doi.org/10.5281/zenodo.24462067) (all versions), [10.5281/zenodo.24462068](https://doi.org/10.5281/zenodo.24462068) (v1.1.1) |
 | License | Apache-2.0 |
 | Development | Developed with AI assistance (Claude, by Anthropic). Every proof is checked by the Lean kernel and, independently, by nanoda. |
 
@@ -551,17 +553,6 @@ Monteverde follows a design doc dated November 22, 2026. All milestones were don
 | v1.1.0 | L1 for word outputs over every finite alphabet, reduction bridge, statements split from proofs, Cook-Levin cross-check, Cook text audit, weekly watch |
 | v1.1.1 | Quick start, `CITATION.cff` with Zenodo archiving. The theorems and proofs are the same as in v1.1.0. |
 
-The design doc asked for a one-week spike on the recoder machine and new estimates after it.
-The recoder took less than a day, so the milestone plan did not change.
-
-### Open questions from the design doc
-
-| Question | State |
-|----------|-------|
-| Final package name | Decided: Monteverde. |
-| Offer the bridges upstream to cslib-frontier? | On hold, by the project owner's decision. |
-| The optional Cook text audit, and its reviewer | Done, reviewed by Claude. Independent reviews can be published anywhere. |
-
 ### Citation
 
 ```bibtex
@@ -570,6 +561,7 @@ The recoder took less than a day, so the milestone plan did not change.
   title   = {Monteverde: {ClayPVersusNP} is equivalent to {CslibPEqNP}, in Lean 4},
   version = {1.1.1},
   date    = {2026-11-23},
+  doi     = {10.5281/zenodo.24462068},
   url     = {https://github.com/wbnns/monteverde}
 }
 ```
@@ -581,3 +573,9 @@ LeanMillenniumPrizeProblems (Robert Joseph George), cslib-frontier (including Er
 bridge and Samuel Schlesinger's P, NP and reductions), millennium-cook-levin (Joshua Tan's TM2
 composition and Cook-Levin proof), CSLib and Mathlib. `CREDITS.md` lists every reused definition
 and theorem with its author and source commit. See also `NOTICE`.
+
+### Contact
+
+Will Binns: [ORCID 0009-0006-9850-9551](https://orcid.org/0009-0006-9850-9551),
+[GitHub](https://github.com/wbnns). To change or extend Monteverde, fork it (see
+[Contributing](#contributing)).
