@@ -14,6 +14,14 @@ authors:
     given-names: Will
     orcid: "https://orcid.org/0009-0006-9850-9551"
 version: 1.1.1
+doi: 10.5281/zenodo.24462067
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.24462067
+    description: "All versions (concept DOI)"
+  - type: doi
+    value: 10.5281/zenodo.24462068
+    description: "Version 1.1.1"
 date-released: 2026-11-23
 license: Apache-2.0
 repository-code: "https://github.com/wbnns/monteverde"

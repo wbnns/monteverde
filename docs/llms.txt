@@ -18,7 +18,7 @@ Reusable bridges: `clayP_iff_cslib`, `clayNP_iff_cslib` (alphabets with at least
 
 Developed with AI assistance (Claude, by Anthropic). Every proof is checked by the Lean kernel and, independently, by nanoda.
 
-Pins: Lean `leanprover/lean4:v4.36.0-rc2`; cslib-frontier `9bfe667f8c66a8a2a3e17391ce9a5cc965190544`; LeanMillenniumPrizeProblems `603053dc267cf3efe422f438eb78098c0ececd6f` (vendored); millennium-cook-levin `879c4835640119ad009abeb62ebd7a96f87eb9e8` (vendored). Release v1.1.1, 2026-11-23. License Apache-2.0.
+Pins: Lean `leanprover/lean4:v4.36.0-rc2`; cslib-frontier `9bfe667f8c66a8a2a3e17391ce9a5cc965190544`; LeanMillenniumPrizeProblems `603053dc267cf3efe422f438eb78098c0ececd6f` (vendored); millennium-cook-levin `879c4835640119ad009abeb62ebd7a96f87eb9e8` (vendored). Release v1.1.1, 2026-11-23. DOI 10.5281/zenodo.24462067 (all versions). License Apache-2.0.
 
 Use as a dependency (same toolchain), then `import Monteverde`:
 
